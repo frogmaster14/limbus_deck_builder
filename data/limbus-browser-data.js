@@ -313,7 +313,6 @@
       "outis_wuthering_butler_cards_3",
       "outis_blade_cards_3"
     ],
-    "덱 섞기": [],
     "체인 관련": [
       "yi_sang_base_6",
       "yi_sang_lcb",
@@ -1167,6 +1166,15 @@
       identityId: "gregor_tides",
       image: "assets/keywords/cards/마비.png",
       tags: ["마비"]
+    },
+    {
+      id: "shared_panic_card",
+      title: "패닉",
+      category: "card",
+      sinnerId: null,
+      identityId: null,
+      image: "assets/keywords/cards/패닉.png",
+      tags: ["침잠"]
     }
   ];
 
@@ -1243,7 +1251,6 @@
     "수감자 교체": "sinner_switch",
     "다른 카드로 취급": "treated_as_other_card",
     자해기믹: "self_damage",
-    "덱 섞기": "deck_shuffle",
     "체인 관련": "chain_related"
   };
 

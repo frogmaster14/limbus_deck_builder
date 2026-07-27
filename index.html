@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.0.2.1" />
+    <link rel="stylesheet" href="./style.css?v=2.0.5.0-beta-note" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -15,8 +15,8 @@
           <p class="title-subline"><strong>L.T</strong> Deck TooL</p>
           <h1 id="app-title">림.딱 빌더</h1>
           <div class="version-row" aria-label="현재 버전">
-            <span class="version-badge" id="current-version">2.0.2.1 beta</span>
-            <span class="build-note" id="current-summary">도감 베타 배포</span>
+            <span class="version-badge" id="current-version">2.0.5.0 beta</span>
+            <span class="build-note" id="current-summary">베타 테스트 공개</span>
           </div>
         </div>
 
@@ -33,16 +33,8 @@
             <span class="menu-mark"></span>
             <span>저장 목록</span>
           </button>
-          <button class="menu-button" type="button" data-view="guide">
-            <span class="menu-mark"></span>
-            <span>이용 방법</span>
-          </button>
-          <button class="menu-button" type="button" data-view="feedback">
-            <span class="menu-mark"></span>
-            <span>피드백</span>
-          </button>
         </nav>
-        <p class="menu-hint">도감/피드백은 더블클릭으로 들어가요. 나머지는 준비 중.</p>
+        <p class="menu-hint">덱 만들기/도감/저장 목록은 더블클릭으로 들어가요.</p>
 
         <section class="archive-panel" aria-labelledby="archive-title">
           <div class="archive-heading">
@@ -129,11 +121,7 @@
           <div class="preview-frame" id="identity-preview">
             <span>인격에 마우스를 올리면 크게 표시.</span>
           </div>
-          <div class="preview-help">
-            <span class="preview-help-kicker">(Tip!)</span>
-            <strong>카드 위에 마우스를 올려두면 확대가 가능합니다.</strong>
-            <span>스택/상태/키워드도 확대해서 볼수 있어요!</span>
-          </div>
+          <div class="preview-filter-summary" id="identity-preview-filters" aria-label="적용 필터"></div>
           <button class="swap-slot-button" type="button" data-action="swap-slots" disabled>전방/후방 교체</button>
           <button class="next-step-button" type="button" data-action="next-step" disabled>다음</button>
         </aside>
@@ -196,16 +184,146 @@
             <div class="deck-included-grid" id="deck-included-grid"></div>
             <div class="deck-extra-grid" id="deck-extra-grid" aria-label="덱 외 카드"></div>
           </section>
+
+          <section class="deck-review-section" id="deck-review-section" aria-label="덱 확인" hidden>
+            <div class="deck-review-heading">
+              <div>
+                <p class="eyebrow">Deck Check</p>
+                <h3>덱 확인</h3>
+              </div>
+              <button class="deck-action-button" type="button" data-action="edit-deck">수정</button>
+            </div>
+            <div class="deck-review-summary">
+              <div class="deck-review-block deck-review-identities-block">
+                <div class="deck-section-heading">
+                  <h3>전방 / 후방</h3>
+                </div>
+                <div class="deck-review-identities" id="deck-review-identities"></div>
+              </div>
+              <div class="deck-review-block">
+                <div class="deck-section-heading">
+                  <h3>EGO / 강화</h3>
+                </div>
+                <div class="deck-review-extra-grid" id="deck-review-extra"></div>
+              </div>
+              <div class="deck-review-block">
+                <div class="deck-section-heading">
+                  <h3>키워드</h3>
+                </div>
+                <div class="deck-review-keyword-row" id="deck-review-keywords"></div>
+              </div>
+            </div>
+            <div class="deck-review-block">
+              <div class="deck-section-heading">
+                <h3>20장</h3>
+                <span class="deck-count">20 / 20</span>
+              </div>
+              <div class="deck-review-card-grid" id="deck-review-main"></div>
+            </div>
+            <section class="deck-save-panel" aria-label="덱 저장">
+              <div class="deck-section-heading">
+                <h3>덱 저장</h3>
+              </div>
+              <div class="deck-save-topline">
+                <label class="deck-save-field deck-save-name-field">
+                  <span>이름</span>
+                  <input id="deck-save-name" type="text" maxlength="60" autocomplete="off" />
+                </label>
+                <div class="deck-save-field deck-save-filter-field">
+                  <span>중심 필터</span>
+                  <div class="deck-save-keywords" id="deck-save-keywords"></div>
+                </div>
+              </div>
+              <label class="deck-save-field">
+                <span>설명 / 사용 방식</span>
+                <textarea id="deck-save-notes" rows="7" placeholder="오른쪽 패널 아래 카드 삽입 기능으로 설명에 카드를 직접 첨부할 수 있습니다."></textarea>
+              </label>
+              <button class="deck-action-button" type="button" data-action="open-card-search">카드 삽입</button>
+              <div class="deck-note-preview" id="deck-note-preview" aria-label="설명 미리보기"></div>
+              <div class="deck-save-actions">
+                <button class="deck-action-button" type="button" data-action="save-deck-local">저장</button>
+                <button class="deck-action-button primary" type="button" data-action="copy-deck-code">코드 복사</button>
+              </div>
+              <output class="deck-save-status" id="deck-save-status"></output>
+            </section>
+          </section>
+        </section>
+
+        <section class="card-search-popover" id="card-search-popover" aria-label="카드 검색" hidden>
+          <div class="card-search-panel">
+            <div class="card-search-header">
+              <div>
+                <p class="eyebrow">Card Insert</p>
+                <h3>카드 삽입</h3>
+              </div>
+              <div class="card-search-header-actions">
+                <button class="deck-action-button" type="button" data-action="reset-card-insert">필터 초기화</button>
+                <button class="deck-action-button" type="button" data-action="close-card-search">닫기</button>
+              </div>
+            </div>
+
+            <aside class="card-search-filter-panel" aria-label="삽입 카드 필터">
+              <section class="deck-filter-scroll">
+                <div class="deck-filter-section">
+                  <p class="filter-label">수감자</p>
+                  <div class="deck-filter-buttons" id="card-insert-sinner-filters"></div>
+                </div>
+                <div class="deck-filter-section">
+                  <p class="filter-label">죄악</p>
+                  <div class="deck-filter-buttons" id="card-insert-sin-filters"></div>
+                </div>
+                <div class="deck-filter-section">
+                  <p class="filter-label">유형</p>
+                  <div class="deck-filter-buttons" id="card-insert-attack-type-filters"></div>
+                </div>
+                <div class="deck-filter-section">
+                  <p class="filter-label">키워드</p>
+                  <div class="deck-filter-buttons" id="card-insert-keyword-filters"></div>
+                  <details class="special-keyword-panel">
+                    <summary>특수 키워드</summary>
+                    <div class="deck-filter-buttons" id="card-insert-special-keyword-filters"></div>
+                  </details>
+                </div>
+                <div class="deck-filter-section">
+                  <p class="filter-label">기타 필터</p>
+                  <div class="deck-filter-buttons" id="card-insert-effect-filters"></div>
+                </div>
+              </section>
+            </aside>
+
+            <section class="card-search-center-panel" aria-label="삽입 카드 목록">
+              <nav class="deck-bookmarks" id="card-search-tabs" aria-label="삽입 카드 분류"></nav>
+              <div class="deck-section-heading">
+                <h3 id="card-search-heading">전체</h3>
+                <span class="deck-count" id="card-search-count">0</span>
+              </div>
+              <div class="card-search-grid" id="card-search-grid"></div>
+            </section>
+
+            <aside class="card-search-preview-panel" aria-label="삽입 카드 미리보기">
+              <div class="preview-frame" id="card-search-preview">
+                <span>카드를 클릭하면 크게 표시.</span>
+              </div>
+              <div class="preview-filter-summary" id="card-search-preview-filters" aria-label="적용 필터"></div>
+              <button class="deck-action-button primary" type="button" id="card-search-insert-button" data-action="insert-selected-card" disabled>
+                이 카드 삽입하기
+              </button>
+            </aside>
+          </div>
         </section>
 
         <aside class="deck-preview-panel" aria-label="카드 미리보기">
           <div class="preview-frame" id="deck-preview">
             <span>카드에 마우스를 올리면 크게 표시.</span>
           </div>
-          <div class="preview-help">
-            <span class="preview-help-kicker">(Tip!)</span>
-            <strong>위쪽 카드 풀에서 고르고, 아래쪽에서 20장을 확인합니다.</strong>
-            <span>필터는 왼쪽에서 길게 스크롤하며 조정해요.</span>
+          <div class="preview-filter-summary" id="deck-preview-filters" aria-label="적용 필터"></div>
+          <div class="deck-action-row deck-next-action-row">
+            <button class="deck-action-button primary" type="button" data-action="next-deck-step" disabled>다음</button>
+          </div>
+          <div class="deck-action-row deck-review-action-row">
+            <button class="deck-action-button" type="button" data-action="open-card-search">카드 삽입</button>
+            <button class="deck-action-button primary" type="button" data-action="save-deck-local">저장</button>
+            <button class="deck-action-button" type="button" data-action="copy-deck-code">코드 복사</button>
           </div>
         </aside>
       </section>
@@ -264,11 +382,47 @@
           <div class="preview-frame" id="codex-preview">
             <span>항목에 마우스를 올리면 크게 표시.</span>
           </div>
-          <div class="codex-preview-filters" id="codex-preview-filters" aria-label="적용 필터"></div>
+          <div class="preview-filter-summary" id="codex-preview-filters" aria-label="적용 필터"></div>
           <div class="preview-help">
             <span class="preview-help-kicker">(Tip!)</span>
             <strong>도감은 전체 자료를 빠르게 훑어보는 화면입니다.</strong>
             <span>카드와 아이콘 위에 마우스를 올리면 확대됩니다.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <main class="saves-shell view" id="saves-view" hidden>
+      <header class="builder-topbar">
+        <button class="topbar-button" type="button" data-action="back-home-saves">뒤로</button>
+        <div>
+          <p class="eyebrow">Saved Decks</p>
+          <h2>저장 목록</h2>
+        </div>
+        <button class="topbar-button danger" type="button" data-action="reset-save-import">입력 비우기</button>
+      </header>
+
+      <section class="saves-layout" aria-label="저장 목록 화면">
+        <aside class="save-import-panel" aria-label="덱 코드 불러오기">
+          <div class="deck-section-heading">
+            <h3>코드 불러오기</h3>
+          </div>
+          <textarea id="save-import-code" rows="8" placeholder="LTDB2: 코드 입력"></textarea>
+          <button class="deck-action-button primary" type="button" data-action="import-deck-code">저장목록에 추가</button>
+          <output class="deck-save-status" id="save-import-status"></output>
+        </aside>
+
+        <section class="saved-list-panel" aria-label="저장된 덱">
+          <div class="deck-section-heading">
+            <h3>저장된 덱</h3>
+            <span class="deck-count" id="saved-deck-count">0</span>
+          </div>
+          <div class="saved-deck-list" id="saved-deck-list"></div>
+        </section>
+
+        <aside class="saved-detail-panel" aria-label="저장 덱 보기">
+          <div class="saved-detail" id="saved-deck-detail">
+            <span class="deck-save-empty">저장된 덱을 선택하면 보기.</span>
           </div>
         </aside>
       </section>
@@ -332,8 +486,8 @@
       </section>
     </main>
 
-    <script src="./version-history.js?v=2.0.2.1"></script>
-    <script src="./data/limbus-browser-data.js?v=2.0.2.1"></script>
-    <script src="./script.js?v=2.0.2.1"></script>
+    <script src="./version-history.js?v=2.0.5.0-beta-note"></script>
+    <script src="./data/limbus-browser-data.js?v=2.0.5.0-beta-note"></script>
+    <script src="./script.js?v=2.0.5.0-beta-note"></script>
   </body>
 </html>

@@ -215,6 +215,15 @@ export const SHARED_SPECIAL_CARDS = [
     identityId: "gregor_tides",
     image: "assets/keywords/cards/마비.png",
     tags: ["마비"]
+  },
+  {
+    id: "shared_panic_card",
+    title: "패닉",
+    category: "card",
+    sinnerId: null,
+    identityId: null,
+    image: "assets/keywords/cards/패닉.png",
+    tags: ["침잠"]
   }
 ];
 
@@ -455,7 +464,6 @@ export const CARD_EFFECTS = {
     "outis_wuthering_butler_cards_3",
     "outis_blade_cards_3"
   ],
-  "덱 섞기": [],
   "체인 관련": [
     "yi_sang_base_6",
     "yi_sang_lcb",
