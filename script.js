@@ -443,20 +443,29 @@ function renderVersion(version) {
 
   archiveCopyElement.textContent = version.copy;
   noticeTitle.textContent = "개발자 노트";
+  const developerNoteVersion = getDeveloperNoteVersionFor(version);
 
-  if (!version.developerNote) {
+  if (!developerNoteVersion) {
     noticeState.textContent = "대기중";
     developerNote.classList.add("is-empty");
     developerNote.textContent = "큰 기능 업데이트 때만 개발자 노트 표시.";
     return;
   }
 
-  noticeState.textContent = version.label;
+  noticeState.textContent = developerNoteVersion.label;
   developerNote.classList.remove("is-empty");
   developerNote.innerHTML = `
-    <h3>${version.developerNote.title}</h3>
-    ${version.developerNote.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
+    <h3>${developerNoteVersion.developerNote.title}</h3>
+    ${developerNoteVersion.developerNote.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
   `;
+}
+
+function getDeveloperNoteVersionFor(version) {
+  if (version.developerNote) return version;
+
+  const versionIndex = versionHistory.findIndex((item) => item.version === version.version);
+  const olderVersions = versionIndex >= 0 ? versionHistory.slice(versionIndex + 1) : versionHistory;
+  return olderVersions.find((item) => item.developerNote) || null;
 }
 
 function renderArchive() {
