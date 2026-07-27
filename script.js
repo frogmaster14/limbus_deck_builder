@@ -3222,7 +3222,7 @@ function renderSavedDeckDetail(deck) {
       </div>
     </div>
 
-    <section class="saved-detail-summary">
+    <section class="saved-detail-summary saved-detail-overview">
       <div class="saved-detail-box">
         <h4>전방 / 후방</h4>
         <div class="saved-identity-pair is-large">
@@ -3236,38 +3236,37 @@ function renderSavedDeckDetail(deck) {
           ${renderSavedFilterChips(deck.featuredFilters)}
         </div>
       </div>
-    </section>
-
-    <section class="saved-detail-box">
-      <div class="saved-section-heading">
-        <h4>20장</h4>
-        <span>${snapshot.mainCards.length} / ${DECK_LIMIT}</span>
-      </div>
-      <div class="saved-card-grid">
-        ${renderSavedCardGrid(snapshot.mainCards)}
-      </div>
-    </section>
-
-    <section class="saved-detail-row">
-      <div class="saved-detail-box">
-        <h4>EGO / 강화</h4>
-        <div class="saved-extra-row">
-          ${extraCards.length ? renderSavedCardGrid(extraCards, true) : `<span class="deck-save-empty">선택 없음</span>`}
-        </div>
-      </div>
       <div class="saved-detail-box">
         <h4>추가 키워드</h4>
         <div class="saved-keyword-row">
           ${snapshot.selectedKeywordItems.length ? renderSavedKeywordItems(snapshot.selectedKeywordItems) : `<span class="deck-save-empty">없음</span>`}
         </div>
       </div>
+      <div class="saved-detail-box">
+        <h4>EGO / 강화</h4>
+        <div class="saved-extra-row">
+          ${extraCards.length ? `<div class="saved-card-grid saved-extra-card-grid">${renderSavedCardGrid(extraCards, true)}</div>` : `<span class="deck-save-empty">선택 없음</span>`}
+        </div>
+      </div>
     </section>
 
-    <section class="saved-detail-box saved-note-box">
-      <h4>설명 / 사용방식</h4>
-      <div class="saved-note-content">
-        ${deck.notes?.trim() ? renderDeckNoteContent(deck.notes) : `<span class="deck-save-empty">설명 없음</span>`}
-      </div>
+    <section class="saved-detail-main-layout">
+      <section class="saved-detail-box saved-note-box">
+        <h4>설명 / 사용방식</h4>
+        <div class="saved-note-content">
+          ${deck.notes?.trim() ? renderDeckNoteContent(deck.notes) : `<span class="deck-save-empty">설명 없음</span>`}
+        </div>
+      </section>
+
+      <section class="saved-detail-box saved-main-card-box">
+        <div class="saved-section-heading">
+          <h4>20장</h4>
+          <span>${snapshot.mainCards.length} / ${DECK_LIMIT}</span>
+        </div>
+        <div class="saved-card-grid saved-main-card-grid">
+          ${renderSavedCardGrid(snapshot.mainCards)}
+        </div>
+      </section>
     </section>
   `;
 }
