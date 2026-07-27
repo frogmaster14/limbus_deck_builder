@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.0.5.0 beta";
+const APP_VERSION = "2.0.5.1 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -2782,8 +2782,8 @@ async function copyCurrentDeckCode() {
     return;
   }
 
-  const code = encodeDeckPayload(buildCurrentDeckPayload({ includeNotes: false }));
   try {
+    const code = encodeDeckPayload(buildCurrentDeckPayload());
     await copyTextToClipboard(code);
     setDeckSaveStatus("코드 복사됨.");
   } catch {
@@ -2809,6 +2809,10 @@ async function copyTextToClipboard(text) {
 }
 
 function encodeDeckPayload(payload) {
+  return encodeCompactDeckPayload(payload);
+}
+
+function encodeLegacyDeckPayload(payload) {
   const json = JSON.stringify(payload);
   const bytes = new TextEncoder().encode(json);
   let binary = "";
@@ -2821,6 +2825,13 @@ function encodeDeckPayload(payload) {
 function decodeDeckPayload(code) {
   const rawCode = code.trim();
   if (!rawCode) throw new Error("empty deck code");
+
+  if (rawCode.startsWith("LTDB3:")) {
+    const encodedCode = rawCode.slice(6).replace(/\s+/g, "");
+    const json = new TextDecoder().decode(Uint8Array.from(atob(encodedCode), (character) => character.charCodeAt(0)));
+    return normalizeDeckPayload(expandCompactDeckPayload(JSON.parse(json)));
+  }
+
   const encodedCode = rawCode.startsWith("LTDB2:")
     ? rawCode.slice(6).replace(/\s+/g, "")
     : "";
@@ -2830,6 +2841,223 @@ function decodeDeckPayload(code) {
     : rawCode;
 
   return normalizeDeckPayload(JSON.parse(json));
+}
+
+function encodeCompactDeckPayload(payload) {
+  const normalizedPayload = normalizeDeckPayload(payload);
+  const indexes = getDeckShareIndexes();
+  const compactPayload = {
+    v: 3,
+    i: [
+      getCompactIndex(indexes.identities, normalizedPayload.identities.front, "front identity"),
+      getCompactIndex(indexes.identities, normalizedPayload.identities.back, "back identity")
+    ],
+    c: compactCardCounts(normalizedPayload.cards, indexes.mainCards)
+  };
+
+  if (normalizedPayload.ego) {
+    compactPayload.e = getCompactIndex(indexes.egoCards, normalizedPayload.ego, "ego");
+  }
+
+  if (normalizedPayload.upgrades.length) {
+    compactPayload.u = normalizedPayload.upgrades.map((cardId) => getCompactIndex(indexes.upgradeCards, cardId, "upgrade"));
+  }
+
+  if (normalizedPayload.name && normalizedPayload.name !== "이름 없는 덱") {
+    compactPayload.n = normalizedPayload.name;
+  }
+
+  const compactFilters = compactFeaturedFilters(normalizedPayload.featuredFilters, indexes.featuredFilters);
+  if (compactFilters.some((values) => values.length)) {
+    compactPayload.h = compactFilters;
+  }
+
+  if (normalizedPayload.notes.trim()) {
+    compactPayload.d = compactDeckNoteTokens(normalizedPayload.notes, indexes.noteCards);
+  }
+
+  return `LTDB3:${encodeUtf8Base64(JSON.stringify(compactPayload))}`;
+}
+
+function encodeUtf8Base64(value) {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
+}
+
+function expandCompactDeckPayload(compactPayload) {
+  if (!compactPayload || typeof compactPayload !== "object" || compactPayload.v !== 3) {
+    throw new Error("invalid compact deck payload");
+  }
+
+  const indexes = getDeckShareIndexes();
+  const identities = Array.isArray(compactPayload.i) ? compactPayload.i : [];
+
+  return {
+    version: APP_VERSION,
+    savedAt: new Date().toISOString(),
+    name: typeof compactPayload.n === "string" && compactPayload.n.trim() ? compactPayload.n.trim() : "이름 없는 덱",
+    identities: {
+      front: getIdByCompactIndex(indexes.identities, identities[0]),
+      back: getIdByCompactIndex(indexes.identities, identities[1])
+    },
+    cards: expandCompactCardCounts(compactPayload.c, indexes.mainCards),
+    ego: getIdByCompactIndex(indexes.egoCards, compactPayload.e),
+    upgrades: Array.isArray(compactPayload.u)
+      ? compactPayload.u.map((index) => getIdByCompactIndex(indexes.upgradeCards, index)).filter(Boolean)
+      : [],
+    featuredFilters: expandCompactFeaturedFilters(compactPayload.h, indexes.featuredFilters),
+    notes: typeof compactPayload.d === "string"
+      ? expandCompactDeckNoteTokens(compactPayload.d, indexes.noteCards)
+      : ""
+  };
+}
+
+function getDeckShareIndexes() {
+  const keywordFilters = getDeckSaveFilterGroups().find((group) => group.key === "tags")?.filters || [];
+
+  return {
+    identities: LIMBUS_DATA.identities.map((identity) => identity.id),
+    mainCards: getDeckShareMainCardIds(),
+    egoCards: LIMBUS_DATA.sinners.map((sinner) => `${sinner.id}_base_ego`),
+    upgradeCards: LIMBUS_DATA.identities.flatMap((identity) => identity.upgradeCards.map((card) => card.id)),
+    noteCards: getShareNoteCardIds(),
+    featuredFilters: {
+      sins: sinFilters.map((filter) => filter.label),
+      attackTypes: attackTypeFilters.map((filter) => filter.label),
+      tags: keywordFilters.map((filter) => filter.value),
+      effects: effectFilters.map((filter) => filter.label)
+    }
+  };
+}
+
+function getDeckShareMainCardIds() {
+  const cardIds = [];
+
+  LIMBUS_DATA.sinners.forEach((sinner) => {
+    const [baseCount,, identitySet] = LIMBUS_DATA.raw.cardSets[sinner.id];
+
+    for (let index = 1; index <= baseCount; index += 1) {
+      cardIds.push(`${sinner.id}_base_${index}`);
+    }
+
+    Object.entries(identitySet).forEach(([identityKey, [cardCount]]) => {
+      for (let index = 1; index <= cardCount; index += 1) {
+        cardIds.push(`${sinner.id}_${identityKey}_cards_${index}`);
+      }
+    });
+  });
+
+  return cardIds;
+}
+
+function getShareNoteCardIds() {
+  const seen = new Set();
+  const cardIds = [];
+
+  getCodexItems(() => true)
+    .filter((item) => item.shape === "card")
+    .forEach((item) => {
+      if (seen.has(item.id)) return;
+      seen.add(item.id);
+      cardIds.push(item.id);
+    });
+
+  return cardIds;
+}
+
+function getCompactIndex(source, value, label) {
+  const index = source.indexOf(value);
+  if (index < 0) throw new Error(`unknown ${label}`);
+  return index;
+}
+
+function getIdByCompactIndex(source, index) {
+  return Number.isInteger(index) && index >= 0 && index < source.length
+    ? source[index]
+    : null;
+}
+
+function compactCardCounts(cardIds, source) {
+  const countsByIndex = new Map();
+
+  cardIds.forEach((cardId) => {
+    const index = getCompactIndex(source, cardId, "deck card");
+    countsByIndex.set(index, (countsByIndex.get(index) || 0) + 1);
+  });
+
+  return [...countsByIndex.entries()];
+}
+
+function expandCompactCardCounts(compactCards, source) {
+  if (!Array.isArray(compactCards)) return [];
+
+  return compactCards.flatMap((entry) => {
+    if (Number.isInteger(entry)) {
+      const cardId = getIdByCompactIndex(source, entry);
+      return cardId ? [cardId] : [];
+    }
+
+    if (!Array.isArray(entry)) return [];
+    const [index, count] = entry;
+    const cardId = getIdByCompactIndex(source, index);
+    const cardCount = Number.isInteger(count) ? Math.max(0, Math.min(count, DECK_LIMIT)) : 0;
+    return cardId ? Array.from({ length: cardCount }, () => cardId) : [];
+  });
+}
+
+function compactFeaturedFilters(featuredFilters, filterIndexes) {
+  const normalizedFilters = normalizeFeaturedFilters(featuredFilters);
+
+  return [
+    compactFilterValues(normalizedFilters.sins, filterIndexes.sins),
+    compactFilterValues(normalizedFilters.attackTypes, filterIndexes.attackTypes),
+    compactFilterValues(normalizedFilters.tags, filterIndexes.tags),
+    compactFilterValues(normalizedFilters.effects, filterIndexes.effects)
+  ];
+}
+
+function compactFilterValues(values, source) {
+  return values.map((value) => {
+    const index = source.indexOf(value);
+    return index >= 0 ? index : value;
+  });
+}
+
+function expandCompactFeaturedFilters(compactFilters, filterIndexes) {
+  if (!Array.isArray(compactFilters)) return normalizeFeaturedFilters();
+
+  return normalizeFeaturedFilters({
+    sins: expandCompactFilterValues(compactFilters[0], filterIndexes.sins),
+    attackTypes: expandCompactFilterValues(compactFilters[1], filterIndexes.attackTypes),
+    tags: expandCompactFilterValues(compactFilters[2], filterIndexes.tags),
+    effects: expandCompactFilterValues(compactFilters[3], filterIndexes.effects)
+  });
+}
+
+function expandCompactFilterValues(values, source) {
+  if (!Array.isArray(values)) return [];
+
+  return values
+    .map((value) => (Number.isInteger(value) ? source[value] : value))
+    .filter((value) => typeof value === "string" && value);
+}
+
+function compactDeckNoteTokens(note, source) {
+  return note.replace(/\[\[card:([^\]]+)\]\]/g, (match, cardId) => {
+    const index = source.indexOf(cardId);
+    return index >= 0 ? `[[c:${index}]]` : match;
+  });
+}
+
+function expandCompactDeckNoteTokens(note, source) {
+  return note.replace(/\[\[c:(\d+)\]\]/g, (match, rawIndex) => {
+    const cardId = getIdByCompactIndex(source, Number(rawIndex));
+    return cardId ? `[[card:${cardId}]]` : match;
+  });
 }
 
 function normalizeSavedDeckRecord(deck) {
@@ -3210,7 +3438,6 @@ async function copySavedDeckCode(deckId) {
   }
 
   const payload = normalizeDeckPayload(deck);
-  delete payload.notes;
 
   try {
     await copyTextToClipboard(encodeDeckPayload(payload));

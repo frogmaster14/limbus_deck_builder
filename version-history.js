@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.0.5.1",
+    label: "2.0.5.1 beta",
+    state: "beta",
+    summary: "공유 코드 압축",
+    copy: "공유 코드를 LTDB3 숫자 압축 포맷으로 변경. 덱 이름, 중심필터, 설명 포함. LTDB2 불러오기 유지."
+  },
+  {
     version: "2.0.5.0",
     label: "2.0.5.0 beta",
     state: "beta",
