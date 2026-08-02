@@ -19,7 +19,7 @@
 // - 인격 카드: `assets/sinners/${sinnerId}/${identityKey}/${nn}.png`
 // - 인격 고유 추가 카드: `assets/sinners/${sinnerId}/${identityKey}/unique/${nn}.png`
 // - 인격 강화 카드: `assets/sinners/${sinnerId}/${identityKey}/unique/upgrade/${nn}.png`
-// - 기본 에고 카드: `assets/sinners/${sinnerId}/ego/base.png`
+// - EGO 카드: `assets/sinners/${sinnerId}/ego/${egoKey}.png`
 // - 키워드 카드: `assets/keywords/cards/${tagAssetId}.png`
 // - 키워드 아이콘: `assets/keywords/icons/${tagAssetId}.png`
 // - 키워드+ 저장소: `assets/keywords/keyword_+/`
@@ -30,46 +30,52 @@
 // 한글 태그의 이미지 파일명은 TAG_ASSET_IDS에서 관리한다.
 
 export const CARD_SETS = {
-  yi_sang: [8, 0, {
+  yi_sang: [9, 0, {
     lcb: [3, 0],
     mourning: [3, 2],
     bullet: [3, 1],
-    ring: [3, 0]
+    ring: [3, 0],
+    heishou_wu: [3, 2]
   }],
 
-  faust: [8, 0, {
+  faust: [9, 0, {
     lcb: [3, 1],
     gripper: [3, 0],
     seven_south: [3, 0],
-    index: [3, 2]
+    index: [3, 2],
+    lobotomy_remnant: [3, 0]
   }],
 
-  don_quixote: [8, 0, {
+  don_quixote: [9, 0, {
     lcb: [3, 0],
     blade: [3, 0],
     cinq_east: [3, 1],
-    wcorp: [3, 1]
+    wcorp: [3, 1],
+    love_and_hate: [6, 5]
   }],
 
-  ryoshu: [8, 0, {
+  ryoshu: [9, 0, {
     lcb: [3, 1],
     wcorp: [3, 0],
     edgar_butler: [3, 0],
-    chef: [3, 1]
+    chef: [3, 1],
+    red_eyes_penance: [3, 4]
   }],
 
-  meursault: [8, 0, {
+  meursault: [9, 0, {
     lcb: [3, 1],
     cinq_west: [3, 1],
     thumb_east: [3, 3],
-    dead_rabbits: [3, 0]
+    dead_rabbits: [3, 0],
+    blade_mentor: [4, 2]
   }],
 
-  hong_lu: [8, 0, {
+  hong_lu: [9, 0, {
     lcb: [3, 0],
     kk_boss: [3, 0],
     rcorp_reindeer: [3, 1],
-    full_stop_office: [4, 2]
+    full_stop_office: [4, 2],
+    kcorp_excision: [3, 2]
   }],
 
   heathcliff: [8, 0, {
@@ -116,30 +122,65 @@ export const CARD_SETS = {
   }]
 };
 
+// 기본 EGO 외에 추가로 선택할 수 있는 EGO 키.
+export const EXTRA_EGO_CARD_SETS = {
+  yi_sang: ["fell_bullet"],
+  faust: ["ardor_blossom"],
+  don_quixote: ["fluid_sac"],
+  ryoshu: ["red_eyes"],
+  meursault: ["pursuance"],
+  hong_lu: ["snare"]
+};
+
+// EGO 사용으로 함께 확인해야 하는 상태/스택 카드 수.
+export const EGO_UNIQUE_CARD_SETS = {
+  hong_lu: {
+    snare: 1
+  }
+};
+
 export const UPGRADE_CARD_SETS = {
+  yi_sang_heishou_wu: 1,
+  ryoshu_red_eyes_penance: 1,
   meursault_thumb_east: 1,
   rodion_lamancha: 1
 };
 
 export const UNIQUE_CARD_TYPES = {
+  yi_sang_heishou_wu_unique_1: "status",
+  yi_sang_heishou_wu_unique_2: "stack",
   yi_sang_mourning_unique_1: "stack",
-  yi_sang_mourning_unique_2: "status",
+  yi_sang_mourning_unique_2: "stack",
   yi_sang_bullet_unique_1: "stack",
   faust_lcb_unique_1: "status",
   faust_index_unique_1: "stack",
   faust_index_unique_2: "stack",
+  don_quixote_love_and_hate_unique_1: "status",
+  don_quixote_love_and_hate_unique_2: "status",
+  don_quixote_love_and_hate_unique_3: "status",
+  don_quixote_love_and_hate_unique_4: "stack",
+  don_quixote_love_and_hate_unique_5: "stack",
   don_quixote_cinq_east_unique_1: "status",
   don_quixote_wcorp_unique_1: "status",
   ryoshu_lcb_unique_1: "status",
   ryoshu_chef_unique_1: "stack",
+  ryoshu_red_eyes_penance_unique_1: "status",
+  ryoshu_red_eyes_penance_unique_2: "status",
+  ryoshu_red_eyes_penance_unique_3: "stack",
+  ryoshu_red_eyes_penance_unique_4: "stack",
   meursault_lcb_unique_1: "status",
   meursault_cinq_west_unique_1: "status",
   meursault_thumb_east_unique_1: "status",
   meursault_thumb_east_unique_2: "stack",
   meursault_thumb_east_unique_3: "stack",
+  meursault_blade_mentor_unique_1: "status",
+  meursault_blade_mentor_unique_2: "stack",
   hong_lu_rcorp_reindeer_unique_1: "stack",
   hong_lu_full_stop_office_unique_1: "stack",
   hong_lu_full_stop_office_unique_2: "stack",
+  hong_lu_kcorp_excision_unique_1: "status",
+  hong_lu_kcorp_excision_unique_2: "status",
+  hong_lu_snare_ego_unique_1: "status",
   heathcliff_fox_rain_unique_1: "stack",
   heathcliff_fox_rain_unique_2: "status",
   heathcliff_kurokumo_unique_1: "status",
@@ -231,16 +272,21 @@ export const SHARED_SPECIAL_CARDS = [
 // "이 인격을 고르면 어떤 덱 축/키워드를 기대할 수 있는가?"에 가깝다.
 // 현재는 최신 main 데이터의 확실한 키워드 매핑에서 인격 카드만 추려 넣었다.
 export const IDENTITY_TAGS = {
-  진동: [],
-  출혈: [],
-  침잠: [],
-  호흡: [],
-  화상: [],
-  파열: [],
-  충전: [],
-  못: [],
-  "산나비+죽은나비": [],
-  "찢어진 추억": []
+  진동: ["meursault_thumb_east", "outis_molars", "yi_sang_ring"],
+  출혈: ["rodion_lamancha", "yi_sang_ring"],
+  침잠: ["heathcliff_fox_rain", "yi_sang_ring"],
+  호흡: ["don_quixote_cinq_east", "hong_lu_full_stop_office", "yi_sang_ring"],
+  화상: ["gregor_survivor", "rodion_liu"],
+  파열: ["faust_seven_south", "meursault_dead_rabbits"],
+  충전: ["don_quixote_wcorp", "ryoshu_wcorp", "yi_sang_ring"],
+  못: ["faust_gripper", "sinclair_grip"],
+  마비: ["gregor_tides"],
+  "투.식.": ["ishmael_edgar_butler", "ryoshu_edgar_butler"],
+  "조리 중": ["gregor_tides", "ryoshu_chef"],
+  진동폭발: ["meursault_thumb_east", "outis_molars"],
+  "축제의 열기": ["rodion_lamancha"],
+  "산나비+죽은나비": ["yi_sang_mourning"],
+  "찢어진 추억": ["yi_sang_bullet"]
 };
 
 // 카드 필터용 태그.
@@ -280,6 +326,7 @@ export const CARD_TAGS = {
     "hong_lu_full_stop_office_cards_4"
   ],
   화상: [
+    "faust_ardor_blossom_ego",
     "yi_sang_base_4",
     "rodion_base_6",
     "rodion_liu_cards_1",
@@ -289,6 +336,10 @@ export const CARD_TAGS = {
     "gregor_survivor_cards_3"
   ],
   파열: [
+    "hong_lu_base_9",
+    "hong_lu_kcorp_excision_cards_1",
+    "hong_lu_kcorp_excision_unique_1",
+    "hong_lu_kcorp_excision_unique_2",
     "yi_sang_base_4",
     "faust_seven_south_cards_1",
     "faust_seven_south_cards_2",
@@ -316,6 +367,7 @@ export const CARD_TAGS = {
     "sinclair_grip_cards_3"
   ],
   마비: [
+    "hong_lu_snare_ego_unique_1",
     "gregor_tides_cards_2",
     "gregor_tides_cards_3"
   ],
@@ -358,6 +410,9 @@ export const CARD_TAGS = {
 // 명확히 효과에 적힌 카드만 추후 수작업으로 채운다.
 export const CARD_EFFECTS = {
   가드회복: [
+    "don_quixote_base_9",
+    "ryoshu_base_9",
+    "yi_sang_heishou_wu_unique_1",
     "yi_sang_base_8",
     "yi_sang_mourning_unique_2",
     "faust_base_ego",
@@ -377,6 +432,12 @@ export const CARD_EFFECTS = {
     "gregor_zwei_south_cards_3"
   ],
   체력회복: [
+    "ryoshu_base_9",
+    "hong_lu_base_9",
+    "hong_lu_kcorp_excision_cards_3",
+    "hong_lu_kcorp_excision_unique_2",
+    "meursault_pursuance_ego",
+    "faust_ardor_blossom_ego",
     "ryoshu_base_ego",
     "yi_sang_mourning_unique_2",
     "ryoshu_lcb_unique_1",
@@ -389,6 +450,14 @@ export const CARD_EFFECTS = {
     "gregor_base_7"
   ],
   드로우: [
+    "don_quixote_base_9",
+    "ryoshu_base_9",
+    "meursault_base_9",
+    "hong_lu_kcorp_excision_unique_1",
+    "meursault_blade_mentor_cards_4",
+    "don_quixote_love_and_hate_unique_2",
+    "faust_lobotomy_remnant_cards_1",
+    "faust_lobotomy_remnant_cards_3",
     "yi_sang_base_1",
     "yi_sang_base_3",
     "yi_sang_base_ego",
@@ -434,6 +503,9 @@ export const CARD_EFFECTS = {
     "gregor_base_2"
   ],
   버리기: [
+    "faust_base_9",
+    "meursault_blade_mentor_cards_3",
+    "don_quixote_love_and_hate_unique_2",
     "yi_sang_base_5",
     "don_quixote_base_3",
     "don_quixote_base_6",
@@ -465,6 +537,7 @@ export const CARD_EFFECTS = {
     "outis_blade_cards_3"
   ],
   "체인 관련": [
+    "don_quixote_love_and_hate_unique_1",
     "yi_sang_base_6",
     "yi_sang_lcb",
     "meursault_cinq_west_cards_3",
@@ -472,7 +545,14 @@ export const CARD_EFFECTS = {
     "rodion_lobotomy_unique_2",
     "sinclair_southern_shank_unique_1"
   ],
+  "덱 이동": [
+    "meursault_blade_mentor_cards_2",
+    "meursault_blade_mentor_cards_3"
+  ],
   필중: [
+    "ryoshu_red_eyes_penance_unique_1",
+    "ryoshu_red_eyes_penance_unique_2",
+    "yi_sang_fell_bullet_ego",
     "yi_sang_base_7",
     "faust_seven_south_cards_3",
     "ryoshu_base_4",
@@ -487,6 +567,7 @@ export const CARD_EFFECTS = {
     "hong_lu_kk_boss_cards_3"
   ],
   재사용: [
+    "meursault_blade_mentor_cards_3",
     "yi_sang_lcb_cards_2",
     "don_quixote_cinq_east_cards_2",
     "meursault_lcb_cards_1",
@@ -499,6 +580,12 @@ export const CARD_EFFECTS = {
     "ishmael_base_5"
   ],
   "상태 변경": [
+    "hong_lu_kcorp_excision",
+    "hong_lu_snare_ego",
+    "meursault_blade_mentor",
+    "don_quixote_love_and_hate",
+    "don_quixote_love_and_hate_cards_2",
+    "don_quixote_love_and_hate_cards_5",
     "faust_base_6",
     "meursault_lcb_cards_3",
     "meursault_thumb_east_unique_2",
@@ -507,7 +594,20 @@ export const CARD_EFFECTS = {
     "ishmael_base_3",
     "outis_base_2"
   ],
+  "특수 키워드 획득": [
+    "ryoshu_red_eyes_penance",
+    "ryoshu_red_eyes_penance_cards_1",
+    "ryoshu_red_eyes_penance_cards_2"
+  ],
+  "상대 방해": [
+    "ryoshu_red_eyes_ego"
+  ],
+  "효과 변경": [
+    "meursault_blade_mentor_unique_1"
+  ],
   "수감자 교체": [
+    "yi_sang_base_9",
+    "yi_sang_heishou_wu_unique_1",
     "meursault_base_7",
     "gregor_zwei_south_unique_2"
   ],
@@ -515,6 +615,7 @@ export const CARD_EFFECTS = {
     "yi_sang_base_2"
   ],
   자해기믹: [
+    "yi_sang_fell_bullet_ego",
     "faust_base_6",
     "ryoshu_lcb_cards_1",
     "ryoshu_lcb_cards_3",
@@ -524,6 +625,7 @@ export const CARD_EFFECTS = {
     "sinclair_grip_unique_1"
   ],
   위력증가: [
+    "faust_lobotomy_remnant_cards_2",
     "yi_sang_lcb_cards_1",
     "faust_base_8",
     "faust_lcb_cards_3",
@@ -563,6 +665,19 @@ export const CARD_EFFECTS = {
     "yi_sang_base_ego"
   ],
   "전체 데미지 증가": [
+    "faust_base_9",
+    "hong_lu_kcorp_excision_cards_2",
+    "hong_lu_kcorp_excision_unique_1",
+    "meursault_blade_mentor_cards_2",
+    "meursault_blade_mentor_cards_4",
+    "don_quixote_love_and_hate_cards_3",
+    "don_quixote_love_and_hate_unique_4",
+    "don_quixote_love_and_hate_unique_5",
+    "faust_lobotomy_remnant_cards_2",
+    "yi_sang_fell_bullet_ego",
+    "yi_sang_heishou_wu_cards_1",
+    "yi_sang_heishou_wu_cards_3",
+    "yi_sang_heishou_wu_unique_2",
     "yi_sang_mourning_unique_1",
     "yi_sang_mourning_cards_3",
     "don_quixote_base_ego",
@@ -611,6 +726,11 @@ export const CARD_EFFECTS = {
     "gregor_zwei_south_unique_2"
   ],
   "가드뎀 증가": [
+    "ryoshu_red_eyes_penance_cards_3",
+    "ryoshu_red_eyes_penance_unique_3",
+    "yi_sang_heishou_wu",
+    "yi_sang_heishou_wu_cards_2",
+    "yi_sang_heishou_wu_upgrade_1",
     "faust_lcb_cards_2",
     "faust_gripper_cards_3",
     "heathcliff_kurokumo_cards_2",
@@ -622,6 +742,8 @@ export const CARD_EFFECTS = {
     "gregor_zwei_south_cards_2"
   ],
   "체력뎀 증가": [
+    "ryoshu_red_eyes_penance_cards_3",
+    "ryoshu_red_eyes_penance_unique_4",
     "heathcliff_kurokumo_cards_1",
     "heathcliff_shi_south_cards_2",
     "ishmael_office_cards_4",
@@ -630,6 +752,9 @@ export const CARD_EFFECTS = {
     "gregor_lcb_cards_2"
   ],
   "효과 데미지": [
+    "don_quixote_love_and_hate_cards_6",
+    "don_quixote_fluid_sac_ego",
+    "yi_sang_fell_bullet_ego",
     "yi_sang_ring_cards_3",
     "ryoshu_base_ego",
     "ryoshu_base_2",
@@ -652,6 +777,8 @@ export const CARD_EFFECTS = {
     "sinclair_base_2"
   ],
   "받는 데미지 감소": [
+    "hong_lu_snare_ego_unique_1",
+    "faust_lobotomy_remnant",
     "ryoshu_base_7",
     "meursault_base_6",
     "meursault_lcb_unique_1",
@@ -673,6 +800,22 @@ export const CARD_EFFECTS = {
 // 상태/스택 고유카드는 공격유형이 없으므로 제외한다.
 export const CARD_ATTACK_TYPES = {
   참격: [
+    "faust_base_9",
+    "faust_lobotomy_remnant_cards_1",
+    "faust_lobotomy_remnant_cards_2",
+    "ryoshu_red_eyes_ego",
+    "meursault_base_9",
+    "meursault_blade_mentor_cards_1",
+    "meursault_blade_mentor_cards_2",
+    "meursault_blade_mentor_cards_3",
+    "meursault_blade_mentor_cards_4",
+    "hong_lu_kcorp_excision_cards_2",
+    "hong_lu_kcorp_excision_cards_3",
+    "yi_sang_base_9",
+    "yi_sang_heishou_wu_cards_1",
+    "yi_sang_heishou_wu_cards_2",
+    "yi_sang_heishou_wu_cards_3",
+    "yi_sang_heishou_wu_upgrade_1",
     "yi_sang_lcb_cards_2",
     "yi_sang_lcb_cards_3",
     "faust_base_1",
@@ -753,6 +896,7 @@ export const CARD_ATTACK_TYPES = {
     "gregor_tides_cards_3"
   ],
   관통: [
+    "faust_lobotomy_remnant_cards_3",
     "yi_sang_base_5",
     "yi_sang_base_6",
     "yi_sang_base_7",
@@ -825,6 +969,22 @@ export const CARD_ATTACK_TYPES = {
     "gregor_lcb_cards_3"
   ],
   타격: [
+    "faust_ardor_blossom_ego",
+    "don_quixote_base_9",
+    "don_quixote_love_and_hate_cards_1",
+    "don_quixote_love_and_hate_cards_2",
+    "don_quixote_love_and_hate_cards_3",
+    "don_quixote_love_and_hate_cards_4",
+    "don_quixote_love_and_hate_cards_5",
+    "don_quixote_love_and_hate_cards_6",
+    "don_quixote_fluid_sac_ego",
+    "ryoshu_red_eyes_penance_cards_1",
+    "ryoshu_red_eyes_penance_cards_2",
+    "ryoshu_red_eyes_penance_cards_3",
+    "ryoshu_red_eyes_penance_upgrade_1",
+    "meursault_pursuance_ego",
+    "hong_lu_kcorp_excision_cards_1",
+    "hong_lu_snare_ego",
     "yi_sang_base_3",
     "yi_sang_bullet_cards_3",
     "faust_base_5",
@@ -890,6 +1050,8 @@ export const CARD_ATTACK_TYPES = {
     "gregor_tides_cards_1"
   ],
   스킬: [
+    "ryoshu_base_9",
+    "hong_lu_base_9",
     "yi_sang_base_1",
     "yi_sang_base_2",
     "yi_sang_base_4",
@@ -948,6 +1110,10 @@ export const CARD_ATTACK_TYPES = {
 // 추후 피드백으로 틀린 항목만 직접 교정한다.
 export const CARD_SINS = {
   분노: [
+    "faust_ardor_blossom_ego",
+    "don_quixote_love_and_hate_cards_1",
+    "don_quixote_love_and_hate_cards_4",
+    "meursault_blade_mentor_cards_3",
     "yi_sang_bullet_cards_3",
     "don_quixote_base_5",
     "don_quixote_cinq_east_cards_2",
@@ -982,6 +1148,11 @@ export const CARD_SINS = {
     "gregor_survivor_cards_2"
   ],
   색욕: [
+    "faust_lobotomy_remnant_cards_1",
+    "ryoshu_base_9",
+    "ryoshu_red_eyes_penance_cards_3",
+    "ryoshu_red_eyes_penance_upgrade_1",
+    "ryoshu_red_eyes_ego",
     "yi_sang_base_4",
     "yi_sang_bullet_cards_1",
     "yi_sang_ring_cards_3",
@@ -1027,6 +1198,9 @@ export const CARD_SINS = {
     "gregor_tides_cards_1"
   ],
   나태: [
+    "meursault_pursuance_ego",
+    "hong_lu_kcorp_excision_cards_2",
+    "yi_sang_heishou_wu_cards_1",
     "yi_sang_base_5",
     "yi_sang_base_ego",
     "yi_sang_lcb_cards_2",
@@ -1065,6 +1239,12 @@ export const CARD_SINS = {
     "gregor_zwei_south_cards_1"
   ],
   탐식: [
+    "hong_lu_base_9",
+    "hong_lu_kcorp_excision_cards_1",
+    "hong_lu_snare_ego",
+    "yi_sang_base_9",
+    "yi_sang_heishou_wu_cards_3",
+    "yi_sang_heishou_wu_upgrade_1",
     "faust_base_1",
     "faust_base_5",
     "faust_lcb_cards_3",
@@ -1099,6 +1279,9 @@ export const CARD_SINS = {
     "gregor_tides_cards_2"
   ],
   우울: [
+    "faust_lobotomy_remnant_cards_3",
+    "don_quixote_fluid_sac_ego",
+    "ryoshu_red_eyes_penance_cards_2",
     "yi_sang_base_1",
     "yi_sang_base_2",
     "yi_sang_base_6",
@@ -1139,6 +1322,11 @@ export const CARD_SINS = {
     "gregor_zwei_south_cards_2"
   ],
   오만: [
+    "meursault_blade_mentor_cards_1",
+    "meursault_blade_mentor_cards_2",
+    "meursault_blade_mentor_cards_4",
+    "hong_lu_kcorp_excision_cards_3",
+    "yi_sang_fell_bullet_ego",
     "yi_sang_base_7",
     "yi_sang_mourning_cards_2",
     "yi_sang_bullet_cards_2",
@@ -1189,6 +1377,16 @@ export const CARD_SINS = {
     "outis_blade_cards_2"
   ],
   질투: [
+    "faust_base_9",
+    "faust_lobotomy_remnant_cards_2",
+    "don_quixote_base_9",
+    "don_quixote_love_and_hate_cards_2",
+    "don_quixote_love_and_hate_cards_3",
+    "don_quixote_love_and_hate_cards_5",
+    "don_quixote_love_and_hate_cards_6",
+    "ryoshu_red_eyes_penance_cards_1",
+    "meursault_base_9",
+    "yi_sang_heishou_wu_cards_2",
     "yi_sang_base_3",
     "yi_sang_base_8",
     "yi_sang_lcb_cards_1",

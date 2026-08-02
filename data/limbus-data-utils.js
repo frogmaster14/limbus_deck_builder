@@ -4,6 +4,8 @@ import {
   CARD_SETS,
   CARD_SINS,
   CARD_TAGS,
+  EGO_UNIQUE_CARD_SETS,
+  EXTRA_EGO_CARD_SETS,
   IDENTITY_TAGS,
   TAG_ASSET_IDS,
   TAG_GROUPS,
@@ -28,7 +30,8 @@ export const CARD_TYPES = {
   identityUnique: "identityUnique",
   identityUpgrade: "identityUpgrade",
   baseUnique: "baseUnique",
-  ego: "ego"
+  ego: "ego",
+  egoUnique: "egoUnique"
 };
 
 export function getIdentityId(sinnerId, identityKey) {
@@ -57,6 +60,10 @@ export function getIdentityUpgradeCardId(sinnerId, identityKey, number) {
 
 export function getEgoCardId(sinnerId, egoKey = "base") {
   return `${sinnerId}_${egoKey}_ego`;
+}
+
+export function getEgoUniqueCardId(sinnerId, egoKey, number) {
+  return `${getEgoCardId(sinnerId, egoKey)}_unique_${number}`;
 }
 
 export function formatImageNumber(number) {
@@ -96,6 +103,10 @@ export function getCardImagePath({ type, sinnerId, identityKey = null, number })
 
   if (type === CARD_TYPES.ego) {
     return `assets/sinners/${sinnerId}/ego/${identityKey || "base"}.png`;
+  }
+
+  if (type === CARD_TYPES.egoUnique) {
+    return `assets/sinners/${sinnerId}/ego/${identityKey}_unique_${imageNumber}.png`;
   }
 
   return `assets/cards/${sinnerId}_${identityKey || "unknown"}_${number}.png`;
@@ -171,6 +182,8 @@ export function buildLimbusData() {
   const cardById = {};
   const egoById = {};
   const egoBySinnerId = {};
+  const egosBySinnerId = {};
+  const egoUniqueCardsByEgoId = {};
 
   const identitiesBySinnerId = {};
   const baseCardsBySinnerId = {};
@@ -243,21 +256,44 @@ export function buildLimbusData() {
       baseUniqueCardsBySinnerId[sinnerId].push(card);
     }
 
-    const ego = addCard(makeCard({
-      id: getEgoCardId(sinnerId, "base"),
-      type: CARD_TYPES.ego,
-      sinnerId,
-      identityKey: "base",
-      number: 1,
-      deckable: false,
-      countsTowardDeck: false,
-      includedWithSelection: false,
-      selectable: true,
-      maxCopies: 1
-    }));
+    const egoKeys = ["base", ...(EXTRA_EGO_CARD_SETS[sinnerId] || [])];
+    const sinnerEgos = egoKeys.map((egoKey) => {
+      const ego = addCard(makeCard({
+        id: getEgoCardId(sinnerId, egoKey),
+        type: CARD_TYPES.ego,
+        sinnerId,
+        identityKey: egoKey,
+        number: 1,
+        deckable: false,
+        countsTowardDeck: false,
+        includedWithSelection: false,
+        selectable: true,
+        maxCopies: 1
+      }));
 
-    egoById[ego.id] = ego;
-    egoBySinnerId[sinnerId] = ego;
+      egoById[ego.id] = ego;
+
+      const egoUniqueCount = EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0;
+      egoUniqueCardsByEgoId[ego.id] = [];
+      for (let number = 1; number <= egoUniqueCount; number += 1) {
+        const uniqueCard = addCard(makeCard({
+          id: getEgoUniqueCardId(sinnerId, egoKey, number),
+          type: CARD_TYPES.egoUnique,
+          sinnerId,
+          identityId: ego.id,
+          identityKey: egoKey,
+          number,
+          deckable: false,
+          includedWithSelection: true
+        }));
+        egoUniqueCardsByEgoId[ego.id].push(uniqueCard);
+      }
+
+      return ego;
+    });
+
+    egosBySinnerId[sinnerId] = sinnerEgos;
+    egoBySinnerId[sinnerId] = sinnerEgos[0];
 
     Object.entries(identitySet).forEach(([identityKey, [cardCount, uniqueCount]]) => {
       const identityId = getIdentityId(sinnerId, identityKey);
@@ -328,7 +364,8 @@ export function buildLimbusData() {
   const deckableCards = cards.filter((card) => card.deckable);
   const uniqueCards = cards.filter((card) => (
     card.type === CARD_TYPES.baseUnique ||
-    card.type === CARD_TYPES.identityUnique
+    card.type === CARD_TYPES.identityUnique ||
+    card.type === CARD_TYPES.egoUnique
   ));
   const upgradeCards = cards.filter((card) => card.type === CARD_TYPES.identityUpgrade);
   const egos = cards.filter((card) => card.type === CARD_TYPES.ego);
@@ -379,6 +416,8 @@ export function buildLimbusData() {
     rules: DECK_RULES,
     raw: {
       cardSets: CARD_SETS,
+      extraEgoCardSets: EXTRA_EGO_CARD_SETS,
+      egoUniqueCardSets: EGO_UNIQUE_CARD_SETS,
       identityTags: IDENTITY_TAGS,
       cardTags: CARD_TAGS,
       cardEffects: CARD_EFFECTS,
@@ -402,6 +441,8 @@ export function buildLimbusData() {
     cardById,
     egoById,
     egoBySinnerId,
+    egosBySinnerId,
+    egoUniqueCardsByEgoId,
     identitiesBySinnerId,
     baseCardsBySinnerId,
     baseUniqueCardsBySinnerId,
@@ -446,6 +487,6 @@ export function getEligibleEgosForIdentityIds(identityIds, data = LIMBUS_DATA) {
   });
 
   return [...sinnerIds]
-    .map((sinnerId) => data.egoBySinnerId[sinnerId])
+    .flatMap((sinnerId) => data.egosBySinnerId?.[sinnerId] || [data.egoBySinnerId[sinnerId]])
     .filter(Boolean);
 }
