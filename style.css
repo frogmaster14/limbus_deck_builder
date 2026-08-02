@@ -222,13 +222,12 @@ img {
 
 .app-shell {
   display: grid;
-  grid-template-columns: minmax(300px, 390px) minmax(420px, 1fr);
-  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
   height: 100vh;
+  height: 100dvh;
   min-height: 0;
   overflow: hidden;
-  padding: 34px;
-  gap: 28px;
+  padding: clamp(20px, 5vw, 64px);
 }
 
 .home-panel,
@@ -242,9 +241,12 @@ img {
 }
 
 .home-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
+  display: grid;
+  align-content: center;
+  width: min(100%, 960px);
+  max-height: 100%;
+  padding: clamp(28px, 4vw, 48px);
+  overflow: hidden;
 }
 
 .notice-panel {
@@ -255,8 +257,9 @@ img {
 }
 
 .brand-block {
-  padding-bottom: 24px;
+  padding-bottom: 28px;
   border-bottom: 1px solid rgba(243, 170, 22, 0.18);
+  text-align: center;
 }
 
 .eyebrow {
@@ -308,6 +311,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -332,8 +336,9 @@ h2 {
 
 .main-menu {
   display: grid;
-  gap: 10px;
-  margin-top: 26px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
 }
 
 .menu-hint {
@@ -341,19 +346,20 @@ h2 {
   color: rgba(208, 161, 115, 0.58);
   font-size: 12px;
   font-weight: 800;
+  text-align: center;
 }
 
 .menu-button {
   display: grid;
   grid-template-columns: 26px 1fr;
   align-items: center;
-  min-height: 52px;
-  padding: 0 16px;
+  min-height: 88px;
+  padding: 0 20px;
   border: 1px solid rgba(243, 170, 22, 0.16);
   background: var(--tile);
   color: var(--text);
   cursor: pointer;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 900;
   text-align: left;
 }
@@ -3568,15 +3574,12 @@ h2 {
 
 @media (max-width: 900px) {
   .app-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     padding: 18px;
-    gap: 16px;
   }
 
   .home-panel,
   .notice-panel {
-    padding: 20px;
+    padding: 28px;
   }
 
   h1 {
@@ -3835,6 +3838,31 @@ h2 {
 
   .mobile-menu-hint {
     display: inline;
+  }
+
+  .app-shell {
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+
+  .home-panel {
+    width: 100%;
+    padding: 24px 18px;
+  }
+
+  .brand-block {
+    padding-bottom: 22px;
+  }
+
+  .main-menu {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .menu-button {
+    min-height: 64px;
+    padding: 0 18px;
+    font-size: 17px;
   }
 
   .deck-shell,

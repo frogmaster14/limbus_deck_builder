@@ -1,38 +1,12 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.2.1 beta";
+const APP_VERSION = "2.1.3.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
 const SAVED_DECKS_KEY = "limttak_saved_decks";
 
-const menuCopy = {
-  deck: {
-    title: "덱 만들기",
-    copy: "한 작업대에서 전방/후방 인격과 20장 덱, EGO, 강화카드를 구성합니다."
-  },
-  codex: {
-    title: "도감",
-    copy: "이번 베타에서 사용 가능한 핵심 기능입니다. 카드, EGO, 스택/상태, 필터를 확인합니다."
-  },
-  saves: {
-    title: "저장 목록",
-    copy: "저장된 덱을 확인하고, 공유 코드로 받은 덱을 저장목록에 추가합니다."
-  },
-  feedback: {
-    title: "피드백",
-    copy: "누락 이미지, 필터 오류, 카드 누락, UI 불편을 정해진 양식으로 복사해 제보합니다."
-  }
-};
-
 const buttons = document.querySelectorAll(".menu-button");
-const archiveList = document.querySelector("#archive-list");
-const selectedTitle = document.querySelector("#selected-title");
-const selectedCopy = document.querySelector("#selected-copy");
-const archiveCopyElement = document.querySelector("#archive-copy");
-const developerNote = document.querySelector("#developer-note");
-const noticeTitle = document.querySelector("#notice-title");
-const noticeState = document.querySelector("#notice-state");
 const currentVersion = document.querySelector("#current-version");
 const currentSummary = document.querySelector("#current-summary");
 const homeView = document.querySelector("#home-view");
@@ -413,31 +387,7 @@ setupImageInteractionGuards();
 
 buttons.forEach((button) => {
   button.classList.toggle("is-locked", !ENABLED_BETA_VIEWS.has(button.dataset.view));
-  button.classList.remove("primary");
-});
-
-const defaultMenuButton = document.querySelector("[data-view='deck']");
-if (defaultMenuButton) {
-  defaultMenuButton.classList.add("primary", "is-selected");
-  selectedTitle.textContent = menuCopy.deck.title;
-  selectedCopy.textContent = menuCopy.deck.copy;
-}
-
-buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    const view = button.dataset.view;
-    const detail = menuCopy[view];
-    if (!detail) return;
-
-    buttons.forEach((item) => {
-      item.classList.remove("is-selected");
-      item.classList.remove("primary");
-    });
-
-    button.classList.add("is-selected");
-    selectedTitle.textContent = detail.title;
-    selectedCopy.textContent = detail.copy;
-
     if (window.matchMedia("(max-width: 640px), (pointer: coarse)").matches) {
       openMenuView(button);
     }
@@ -457,66 +407,15 @@ function openMenuView(button) {
   if (button.dataset.view === "feedback") openFeedback();
 }
 
-function renderVersion(version) {
-  if (!version) return;
-
-  archiveCopyElement.textContent = version.copy;
-  noticeTitle.textContent = "개발자 노트";
-  const developerNoteVersion = getDeveloperNoteVersionFor(version);
-
-  if (!developerNoteVersion) {
-    noticeState.textContent = "대기중";
-    developerNote.classList.add("is-empty");
-    developerNote.textContent = "새 기능 업데이트 때만 개발자 노트 표시.";
-    return;
-  }
-
-  noticeState.textContent = developerNoteVersion.label;
-  developerNote.classList.remove("is-empty");
-  developerNote.innerHTML = `
-    <h3>${developerNoteVersion.developerNote.title}</h3>
-    ${developerNoteVersion.developerNote.paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join("")}
-  `;
-}
-
-function getDeveloperNoteVersionFor(version) {
-  if (version.developerNote) return version;
-
-  const versionIndex = versionHistory.findIndex((item) => item.version === version.version);
-  const olderVersions = versionIndex >= 0 ? versionHistory.slice(versionIndex + 1) : versionHistory;
-  return olderVersions.find((item) => item.developerNote) || null;
-}
-
-function renderArchive() {
+function renderCurrentVersion() {
   if (!versionHistory.length) return;
 
   const latest = versionHistory[0];
   currentVersion.textContent = latest.label;
   currentSummary.textContent = latest.summary;
-
-  archiveList.innerHTML = versionHistory.map((version, index) => `
-    <button class="archive-item ${index === 0 ? "is-selected" : ""}" type="button" data-version="${version.version}">
-      <span>${version.label}</span>
-      <small>${version.summary}</small>
-    </button>
-  `).join("");
-
-  renderVersion(latest);
 }
 
-renderArchive();
-
-archiveList.addEventListener("click", (event) => {
-  const button = event.target.closest(".archive-item");
-  if (!button) return;
-
-  const version = versionHistory.find((item) => item.version === button.dataset.version);
-  if (!version) return;
-
-  archiveList.querySelectorAll(".archive-item").forEach((item) => item.classList.remove("is-selected"));
-  button.classList.add("is-selected");
-  renderVersion(version);
-});
+renderCurrentVersion();
 
 builderBackButton.addEventListener("click", () => {
   if (builderState.identityPickerReturnView === "deck") {
