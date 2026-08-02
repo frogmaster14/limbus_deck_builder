@@ -3,8 +3,8 @@ window.VERSION_HISTORY = [
     version: "2.1.3.0",
     label: "2.1.3.0 beta",
     state: "beta",
-    summary: "메인 화면 정리",
-    copy: "메인 화면에서 메뉴 설명, 개발자 노트, 업데이트 기록 제거."
+    summary: "모바일 메인 화면 정리",
+    copy: "모바일 메인 화면을 세 메뉴 중심으로 정리."
   },
   {
     version: "2.1.2.1",

@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.1.3.0-clean-home" />
+    <link rel="stylesheet" href="./style.css?v=2.1.3.0-mobile-home-only" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -16,7 +16,7 @@
           <h1 id="app-title">림.딱 빌더</h1>
           <div class="version-row" aria-label="현재 버전">
             <span class="version-badge" id="current-version">2.1.3.0 beta</span>
-            <span class="build-note" id="current-summary">메인 화면 정리</span>
+            <span class="build-note" id="current-summary">모바일 메인 화면 정리</span>
           </div>
         </div>
 
@@ -25,7 +25,7 @@
             <span class="menu-mark"></span>
             <span>덱 만들기</span>
           </button>
-          <button class="menu-button" type="button" data-view="codex">
+          <button class="menu-button primary" type="button" data-view="codex">
             <span class="menu-mark"></span>
             <span>도감</span>
           </button>
@@ -38,6 +38,35 @@
           <span class="desktop-menu-hint">더블클릭으로 들어갑니다.</span>
           <span class="mobile-menu-hint">한 번 눌러 들어갑니다.</span>
         </p>
+
+        <section class="archive-panel" aria-labelledby="archive-title">
+          <div class="archive-heading">
+            <p class="eyebrow">Archive</p>
+            <h2 id="archive-title">업데이트 기록</h2>
+          </div>
+          <div class="archive-list" id="archive-list" role="list"></div>
+          <p id="archive-copy" class="archive-copy"></p>
+        </section>
+      </section>
+
+      <section class="notice-panel" aria-labelledby="notice-title">
+        <div class="notice-header">
+          <div>
+            <p class="eyebrow">Developer Note</p>
+            <h2 id="notice-title">개발자 노트</h2>
+          </div>
+          <span class="notice-date" id="notice-state">대기중</span>
+        </div>
+
+        <article class="developer-note is-empty" id="developer-note" aria-live="polite">
+          큰 기능 업데이트 때만 개발자 노트 표시.
+        </article>
+
+        <div class="menu-detail" aria-live="polite">
+          <p class="detail-label">선택한 메뉴</p>
+          <h3 id="selected-title">도감</h3>
+          <p id="selected-copy">이번 베타에서 사용 가능한 핵심 기능입니다. 카드, EGO, 스택/상태, 필터를 확인합니다.</p>
+        </div>
       </section>
     </main>
 
@@ -521,8 +550,8 @@
       </section>
     </main>
 
-    <script src="./version-history.js?v=2.1.3.0-clean-home"></script>
+    <script src="./version-history.js?v=2.1.3.0-mobile-home-only"></script>
     <script src="./data/limbus-browser-data.js?v=2.1.0.0-workspace"></script>
-    <script src="./script.js?v=2.1.3.0-clean-home"></script>
+    <script src="./script.js?v=2.1.3.0-mobile-home-only"></script>
   </body>
 </html>

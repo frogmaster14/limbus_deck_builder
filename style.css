@@ -222,12 +222,13 @@ img {
 
 .app-shell {
   display: grid;
-  place-items: center;
+  grid-template-columns: minmax(300px, 390px) minmax(420px, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   height: 100vh;
-  height: 100dvh;
   min-height: 0;
   overflow: hidden;
-  padding: clamp(20px, 5vw, 64px);
+  padding: 34px;
+  gap: 28px;
 }
 
 .home-panel,
@@ -241,12 +242,9 @@ img {
 }
 
 .home-panel {
-  display: grid;
-  align-content: center;
-  width: min(100%, 960px);
-  max-height: 100%;
-  padding: clamp(28px, 4vw, 48px);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
 }
 
 .notice-panel {
@@ -257,9 +255,8 @@ img {
 }
 
 .brand-block {
-  padding-bottom: 28px;
+  padding-bottom: 24px;
   border-bottom: 1px solid rgba(243, 170, 22, 0.18);
-  text-align: center;
 }
 
 .eyebrow {
@@ -311,7 +308,6 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 8px;
 }
 
@@ -336,9 +332,8 @@ h2 {
 
 .main-menu {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 28px;
+  gap: 10px;
+  margin-top: 26px;
 }
 
 .menu-hint {
@@ -346,20 +341,19 @@ h2 {
   color: rgba(208, 161, 115, 0.58);
   font-size: 12px;
   font-weight: 800;
-  text-align: center;
 }
 
 .menu-button {
   display: grid;
   grid-template-columns: 26px 1fr;
   align-items: center;
-  min-height: 88px;
-  padding: 0 20px;
+  min-height: 52px;
+  padding: 0 16px;
   border: 1px solid rgba(243, 170, 22, 0.16);
   background: var(--tile);
   color: var(--text);
   cursor: pointer;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 900;
   text-align: left;
 }
@@ -3574,12 +3568,15 @@ h2 {
 
 @media (max-width: 900px) {
   .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     padding: 18px;
+    gap: 16px;
   }
 
   .home-panel,
   .notice-panel {
-    padding: 28px;
+    padding: 20px;
   }
 
   h1 {
@@ -3841,16 +3838,35 @@ h2 {
   }
 
   .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    place-items: center;
+    height: 100dvh;
     padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    gap: 0;
   }
 
   .home-panel {
+    display: grid;
+    align-content: center;
     width: 100%;
+    max-height: 100%;
     padding: 24px 18px;
+    overflow: hidden;
+  }
+
+  .notice-panel,
+  .archive-panel {
+    display: none;
   }
 
   .brand-block {
     padding-bottom: 22px;
+    text-align: center;
+  }
+
+  .version-row {
+    justify-content: center;
   }
 
   .main-menu {
@@ -3863,6 +3879,17 @@ h2 {
     min-height: 64px;
     padding: 0 18px;
     font-size: 17px;
+  }
+
+  .menu-button.is-selected,
+  .menu-button.primary {
+    border-color: rgba(243, 170, 22, 0.16);
+    background: var(--tile);
+    box-shadow: none;
+  }
+
+  .menu-hint {
+    text-align: center;
   }
 
   .deck-shell,
