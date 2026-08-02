@@ -4861,7 +4861,7 @@ function resetDeckSaveDraft() {
   setDeckSaveStatus("");
 }
 
-function attachCardPreviewListeners(root, renderPreviewItem) {
+function attachCardPreviewListeners(root, renderPreviewItem, { onClick } = {}) {
   root.querySelectorAll(".deck-preview-source").forEach((button) => {
     const showPreview = () => {
       const previewId = button.dataset.previewId || button.dataset.previewAlt;
@@ -4879,7 +4879,10 @@ function attachCardPreviewListeners(root, renderPreviewItem) {
     button.addEventListener("mouseover", showPreview);
     button.addEventListener("pointerenter", showPreview);
     button.addEventListener("focus", showPreview);
-    button.addEventListener("click", showPreview);
+    button.addEventListener("click", () => {
+      showPreview();
+      onClick?.();
+    });
   });
 }
 
@@ -4888,9 +4891,8 @@ function attachDeckPreviewListeners(root) {
 }
 
 function attachSavedViewPreviewListeners(root) {
-  attachCardPreviewListeners(root, (item) => {
-    renderSavedViewPreview(item);
-    setMobileSavedViewPane("preview");
+  attachCardPreviewListeners(root, renderSavedViewPreview, {
+    onClick: () => setMobileSavedViewPane("preview")
   });
 }
 
