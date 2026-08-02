@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.5.0",
+    label: "2.1.5.0 beta",
+    state: "beta",
+    summary: "덱 작업대 진입 변경",
+    copy: "덱 만들기에서 빈 작업대로 바로 진입. 모바일 인격 선택 기본안을 상세로 변경."
+  },
+  {
     version: "2.1.4.0",
     label: "2.1.4.0 beta",
     state: "beta",

@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.4.0 beta";
+const APP_VERSION = "2.1.5.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -302,7 +302,7 @@ const builderState = {
   upgradeCards: [],
   isDeckReviewing: false,
   mobileDeckPane: "cards",
-  mobileIdentityLayout: "balanced",
+  mobileIdentityLayout: "detail",
   deckSave: {
     featuredFilters: {
       sins: [],
@@ -801,13 +801,6 @@ function openBuilder() {
   builderState.mobileDeckPane = "cards";
   showView("deck");
   renderDeckBuilder();
-
-  const emptySlot = !builderState.selected.front
-    ? "front"
-    : !builderState.selected.back
-      ? "back"
-      : null;
-  if (emptySlot) openDeckIdentityPicker(emptySlot);
 }
 
 function openDeckIdentityPicker(slotName) {
@@ -1811,7 +1804,7 @@ function syncMobileIdentityLayout() {
   const layouts = ["detail", "pool", "balanced"];
   const activeLayout = layouts.includes(builderState.mobileIdentityLayout)
     ? builderState.mobileIdentityLayout
-    : "balanced";
+    : "detail";
 
   builderState.mobileIdentityLayout = activeLayout;
   layouts.forEach((layout) => {
