@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.1.5.0-detail-only" />
+    <link rel="stylesheet" href="./style.css?v=2.1.6.0-mobile-saves-final" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -15,8 +15,8 @@
           <p class="title-subline"><strong>L.T</strong> Deck TooL</p>
           <h1 id="app-title">림.딱 빌더</h1>
           <div class="version-row" aria-label="현재 버전">
-            <span class="version-badge" id="current-version">2.1.5.0 beta</span>
-            <span class="build-note" id="current-summary">덱 작업대 진입 변경</span>
+            <span class="version-badge" id="current-version">2.1.6.0 beta</span>
+            <span class="build-note" id="current-summary">모바일 저장 목록 개편</span>
           </div>
         </div>
 
@@ -479,6 +479,18 @@
           <div class="saved-detail-actions saved-preview-actions" id="saved-deck-actions"></div>
         </aside>
       </section>
+
+      <nav class="mobile-saves-nav" aria-label="모바일 저장 목록 전환">
+        <button class="mobile-saves-nav-button is-active" type="button" data-mobile-saves-pane="list" aria-pressed="true">
+          목록 <span id="mobile-saved-deck-count">0</span>
+        </button>
+        <button class="mobile-saves-nav-button" type="button" data-mobile-saves-pane="preview" aria-pressed="false" disabled>
+          요약
+        </button>
+        <button class="mobile-saves-nav-button" type="button" data-mobile-saves-pane="import" aria-pressed="false">
+          불러오기
+        </button>
+      </nav>
     </main>
 
     <main class="saved-view-shell view" id="saved-deck-view" hidden>
@@ -502,6 +514,12 @@
           <div class="saved-detail-actions saved-view-preview-actions" id="saved-view-actions"></div>
         </aside>
       </section>
+
+      <nav class="mobile-saved-view-nav" aria-label="모바일 저장 덱 보기 전환">
+        <button class="mobile-saved-view-nav-button is-active" type="button" data-mobile-saved-view-pane="summary" aria-pressed="true">구성</button>
+        <button class="mobile-saved-view-nav-button" type="button" data-mobile-saved-view-pane="detail" aria-pressed="false">설명</button>
+        <button class="mobile-saved-view-nav-button" type="button" data-mobile-saved-view-pane="preview" aria-pressed="false">확대·작업</button>
+      </nav>
     </main>
 
     <main class="feedback-shell view" id="feedback-view" hidden>
@@ -562,8 +580,8 @@
       </section>
     </main>
 
-    <script src="./version-history.js?v=2.1.5.0-builder-entry"></script>
+    <script src="./version-history.js?v=2.1.6.0-mobile-saves-final"></script>
     <script src="./data/limbus-browser-data.js?v=2.1.0.0-workspace"></script>
-    <script src="./script.js?v=2.1.5.0-builder-entry"></script>
+    <script src="./script.js?v=2.1.6.0-mobile-saves-final"></script>
   </body>
 </html>

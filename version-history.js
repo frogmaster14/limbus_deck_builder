@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.6.0",
+    label: "2.1.6.0 beta",
+    state: "beta",
+    summary: "모바일 저장 목록 개편",
+    copy: "모바일 저장 목록과 덱 보기를 작업별 화면으로 분리."
+  },
+  {
     version: "2.1.5.0",
     label: "2.1.5.0 beta",
     state: "beta",

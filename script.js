@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.5.0 beta";
+const APP_VERSION = "2.1.6.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -123,6 +123,8 @@ const savedDeckCount = document.querySelector("#saved-deck-count");
 const savedDeckList = document.querySelector("#saved-deck-list");
 const savedDeckPreview = document.querySelector("#saved-deck-preview");
 const savedDeckActions = document.querySelector("#saved-deck-actions");
+const mobileSavesNav = document.querySelector(".mobile-saves-nav");
+const mobileSavedDeckCount = document.querySelector("#mobile-saved-deck-count");
 const savedViewBackButton = document.querySelector("[data-action='back-saves-from-view']");
 const savedViewTitle = document.querySelector("#saved-view-title");
 const savedViewSummary = document.querySelector("#saved-view-summary");
@@ -130,6 +132,7 @@ const savedViewDetail = document.querySelector("#saved-view-detail");
 const savedViewPreview = document.querySelector("#saved-view-preview");
 const savedViewPreviewFilters = document.querySelector("#saved-view-preview-filters");
 const savedViewActions = document.querySelector("#saved-view-actions");
+const mobileSavedViewNav = document.querySelector(".mobile-saved-view-nav");
 const savedViewStatus = document.querySelector("#saved-view-status");
 const feedbackForm = document.querySelector("#feedback-form");
 const feedbackTarget = document.querySelector("#feedback-target");
@@ -336,10 +339,12 @@ const cardInsertState = {
 };
 const savedViewState = {
   mode: "saved",
-  activeDeckId: null
+  activeDeckId: null,
+  mobilePane: "summary"
 };
 const savedListState = {
-  selectedDeckId: null
+  selectedDeckId: null,
+  mobilePane: "list"
 };
 
 function removeNativeTooltips(root = document) {
@@ -831,6 +836,7 @@ function openCodex() {
 }
 
 function openSaves() {
+  savedListState.mobilePane = "list";
   showView("saves");
   renderSavedDecks();
 }
@@ -3703,6 +3709,7 @@ async function importDeckCodeToSaves() {
   try {
     const payload = await decodeDeckPayload(saveImportCode?.value || "");
     addImportedDeckToSaves(payload);
+    savedListState.mobilePane = "preview";
     if (saveImportCode) saveImportCode.value = "";
     setSaveImportStatus("저장목록에 추가됨.");
     renderSavedDecks();
@@ -3716,6 +3723,7 @@ async function importDeckFileToSaves(file) {
     if (file.size > 2 * 1024 * 1024) throw new Error("deck file too large");
     const payload = await decodeDeckPayload(await file.text());
     addImportedDeckToSaves(payload);
+    savedListState.mobilePane = "preview";
     setSaveImportStatus("덱 파일 추가됨.");
     renderSavedDecks();
   } catch {
@@ -4031,6 +4039,18 @@ function openSavesFromDeckReview() {
 }
 
 function handleSavedDeckAction(event) {
+  const mobileSavedViewPaneButton = event.target.closest("[data-mobile-saved-view-pane]");
+  if (mobileSavedViewPaneButton) {
+    setMobileSavedViewPane(mobileSavedViewPaneButton.dataset.mobileSavedViewPane);
+    return;
+  }
+
+  const mobilePaneButton = event.target.closest("[data-mobile-saves-pane]");
+  if (mobilePaneButton) {
+    setMobileSavesPane(mobilePaneButton.dataset.mobileSavesPane);
+    return;
+  }
+
   const currentActionButton = event.target.closest("[data-current-view-action]");
   if (currentActionButton) {
     handleCurrentDeckViewAction(currentActionButton.dataset.currentViewAction);
@@ -4039,6 +4059,7 @@ function handleSavedDeckAction(event) {
 
   const selectButton = event.target.closest("[data-saved-select]");
   if (selectButton) {
+    savedListState.mobilePane = "preview";
     renderSavedDecks(selectButton.dataset.savedSelect);
     return;
   }
@@ -4093,6 +4114,41 @@ function renderSavedDecks(selectedDeckId = savedListState.selectedDeckId) {
     : `<div class="saved-empty-panel">저장된 덱 없음.</div>`;
 
   renderSavedDeckPreviewPanel(selectedDeck);
+  syncMobileSavesPane(Boolean(selectedDeck));
+}
+
+function setMobileSavesPane(pane) {
+  const panes = ["list", "preview", "import"];
+  if (!panes.includes(pane)) return;
+  if (pane === "preview" && !savedListState.selectedDeckId) return;
+
+  savedListState.mobilePane = pane;
+  syncMobileSavesPane(Boolean(savedListState.selectedDeckId));
+}
+
+function syncMobileSavesPane(hasSelectedDeck) {
+  const panes = ["list", "preview", "import"];
+  const activePane = panes.includes(savedListState.mobilePane)
+    ? savedListState.mobilePane
+    : "list";
+  const resolvedPane = activePane === "preview" && !hasSelectedDeck ? "list" : activePane;
+
+  savedListState.mobilePane = resolvedPane;
+  panes.forEach((pane) => {
+    savesView?.classList.toggle(`is-mobile-pane-${pane}`, resolvedPane === pane);
+  });
+
+  if (mobileSavedDeckCount && savedDeckCount) {
+    mobileSavedDeckCount.textContent = savedDeckCount.textContent;
+  }
+
+  mobileSavesNav?.querySelectorAll("[data-mobile-saves-pane]").forEach((button) => {
+    const pane = button.dataset.mobileSavesPane;
+    const isActive = pane === resolvedPane;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+    if (pane === "preview") button.disabled = !hasSelectedDeck;
+  });
 }
 
 function renderSavedDeckListCard(deck, isSelected = false) {
@@ -4118,7 +4174,7 @@ function renderSavedDeckPreviewPanel(deck) {
   if (!savedDeckPreview || !savedDeckActions) return;
 
   if (!deck) {
-    savedDeckPreview.innerHTML = `<span class="deck-save-empty">?깆쓣 ?대┃?섎㈃ ?뺣낫 ?쒖떆.</span>`;
+    savedDeckPreview.innerHTML = `<span class="deck-save-empty">덱을 클릭하면 정보 표시.</span>`;
     savedDeckActions.innerHTML = "";
     return;
   }
@@ -4249,6 +4305,7 @@ function renderSavedDeckView(deck, { mode = "saved" } = {}) {
   ];
 
   savedViewState.mode = mode;
+  savedViewState.mobilePane = "summary";
   if (savedViewTitle) savedViewTitle.textContent = deck.name;
   if (savedViewBackButton) savedViewBackButton.textContent = mode === "current" ? "덱 만들기" : "저장 목록";
   setSavedDeckActionStatus("");
@@ -4262,7 +4319,34 @@ function renderSavedDeckView(deck, { mode = "saved" } = {}) {
   renderSavedViewPreview(null);
   attachSavedViewPreviewListeners(savedViewSummary);
   attachSavedViewPreviewListeners(savedViewDetail);
+  syncMobileSavedViewPane();
   removeNativeTooltips(savedDeckView);
+}
+
+function setMobileSavedViewPane(pane) {
+  const panes = ["summary", "detail", "preview"];
+  if (!panes.includes(pane)) return;
+
+  savedViewState.mobilePane = pane;
+  syncMobileSavedViewPane();
+}
+
+function syncMobileSavedViewPane() {
+  const panes = ["summary", "detail", "preview"];
+  const activePane = panes.includes(savedViewState.mobilePane)
+    ? savedViewState.mobilePane
+    : "summary";
+
+  savedViewState.mobilePane = activePane;
+  panes.forEach((pane) => {
+    savedDeckView?.classList.toggle(`is-mobile-pane-${pane}`, activePane === pane);
+  });
+
+  mobileSavedViewNav?.querySelectorAll("[data-mobile-saved-view-pane]").forEach((button) => {
+    const isActive = button.dataset.mobileSavedViewPane === activePane;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 }
 
 function renderSavedDeckViewSummary(deck, snapshot, extraCards) {
@@ -4804,7 +4888,10 @@ function attachDeckPreviewListeners(root) {
 }
 
 function attachSavedViewPreviewListeners(root) {
-  attachCardPreviewListeners(root, renderSavedViewPreview);
+  attachCardPreviewListeners(root, (item) => {
+    renderSavedViewPreview(item);
+    setMobileSavedViewPane("preview");
+  });
 }
 
 function renderDeckPreview(item) {
