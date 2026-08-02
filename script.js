@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.1.0 beta";
+const APP_VERSION = "2.1.2.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -55,6 +55,7 @@ const builderTitle = document.querySelector("#builder-title");
 const builderResetIdentities = document.querySelector("#builder-reset-identities");
 const swapSlotButton = document.querySelector("[data-action='swap-slots']");
 const nextStepButton = document.querySelector("[data-action='next-step']");
+const mobileIdentityLayoutButtons = document.querySelectorAll("[data-mobile-identity-layout]");
 const deckSwapIdentitiesButton = document.querySelector("[data-action='swap-deck-identities']");
 const deckSideSummary = document.querySelector("#deck-side-summary");
 const mobileDeckSummary = document.querySelector("#mobile-deck-summary");
@@ -298,6 +299,7 @@ const builderState = {
   upgradeCards: [],
   isDeckReviewing: false,
   mobileDeckPane: "cards",
+  mobileIdentityLayout: "balanced",
   deckSave: {
     featuredFilters: {
       sins: [],
@@ -593,6 +595,13 @@ document.querySelector("[data-action='open-mobile-identity-filter']")?.addEventL
 
 document.querySelector("[data-action='close-mobile-identity-filter']")?.addEventListener("click", () => {
   builderView.classList.remove("is-mobile-filter-open");
+});
+
+mobileIdentityLayoutButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    builderState.mobileIdentityLayout = button.dataset.mobileIdentityLayout;
+    syncMobileIdentityLayout();
+  });
 });
 
 document.querySelector("[data-action='next-deck-step']").addEventListener("click", () => {
@@ -1739,6 +1748,25 @@ function renderBuilderChrome() {
   if (builderResetIdentities) builderResetIdentities.hidden = isDeckPicker;
   if (swapSlotButton) swapSlotButton.hidden = isDeckPicker;
   if (nextStepButton) nextStepButton.hidden = isDeckPicker;
+  syncMobileIdentityLayout();
+}
+
+function syncMobileIdentityLayout() {
+  const layouts = ["detail", "pool", "balanced"];
+  const activeLayout = layouts.includes(builderState.mobileIdentityLayout)
+    ? builderState.mobileIdentityLayout
+    : "balanced";
+
+  builderState.mobileIdentityLayout = activeLayout;
+  layouts.forEach((layout) => {
+    builderView.classList.toggle(`is-mobile-identity-${layout}`, activeLayout === layout);
+  });
+
+  mobileIdentityLayoutButtons.forEach((button) => {
+    const isActive = button.dataset.mobileIdentityLayout === activeLayout;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 }
 
 function updateNextStepButton() {
@@ -2244,7 +2272,7 @@ function renderDeckCardPool() {
 
   deckCardPool.innerHTML = cards.map((card) => {
     const selectedCount = getSelectedDeckCardCount(card.id);
-    const isAdded = selectedCount > 0;
+    const isAdded = isDeckCardSelected(card);
     const isMaxed = card.countsTowardDeck && selectedCount >= getDeckCardCopyLimit(card);
     const isFullBlocked = card.countsTowardDeck && builderState.deckCards.length >= DECK_LIMIT && !isAdded;
     const isDisabled = !card.selectable || isFullBlocked;

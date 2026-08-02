@@ -710,6 +710,10 @@ h2 {
   display: none;
 }
 
+.mobile-identity-layout-switch {
+  display: none;
+}
+
 .builder-shell.is-deck-picker {
   position: fixed;
   inset: 0;
@@ -3891,6 +3895,30 @@ h2 {
     grid-row: 1;
   }
 
+  .mobile-identity-layout-switch {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .mobile-identity-layout-switch button {
+    min-width: 0;
+    min-height: 34px;
+    padding: 0 5px;
+    border: 1px solid rgba(243, 170, 22, 0.18);
+    background: rgba(35, 18, 13, 0.72);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .mobile-identity-layout-switch button.is-active {
+    border-color: var(--gold);
+    background: rgba(82, 48, 25, 0.74);
+    color: #ffe4ad;
+  }
+
   .mobile-deck-summary {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr) 56px;
@@ -4244,30 +4272,180 @@ h2 {
   .slot-panel {
     grid-column: 1;
     grid-row: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-height: 112px;
+    max-height: none;
     padding: 6px;
     overflow: hidden;
   }
 
   .slot-box {
-    grid-template-columns: 36px minmax(0, 1fr);
-    align-items: center;
-    gap: 6px;
+    position: relative;
+    min-width: 0;
   }
 
-  .slot-label {
+  .slot-panel .slot-label {
     text-align: left;
   }
 
   .identity-slot,
   .identity-slot.has-identity {
-    height: 90px;
-    aspect-ratio: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--card-aspect);
+    padding: 2px;
+  }
+
+  .slot-panel .slot-image {
+    object-fit: contain;
+  }
+
+  .slot-panel .slot-extra {
+    min-width: 0;
+  }
+
+  .slot-panel .slot-extra-label {
+    text-align: left;
+  }
+
+  .slot-panel .slot-extra-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .slot-panel .slot-extra-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .builder-shell.is-mobile-identity-detail .slot-panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    height: 276px;
+  }
+
+  .builder-shell.is-mobile-identity-detail .slot-box {
+    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
     padding: 3px;
   }
 
-  .slot-extra {
+  .builder-shell.is-mobile-identity-detail .slot-label,
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active .slot-label {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 3;
+    padding: 2px 4px;
+    background: rgba(20, 10, 8, 0.9);
+  }
+
+  .builder-shell.is-mobile-identity-detail .identity-slot {
+    grid-column: 1;
+    grid-row: 1;
+    width: 78px;
+  }
+
+  .builder-shell.is-mobile-identity-detail .slot-extra {
+    display: grid;
+    grid-column: 2;
+    grid-row: 1;
+    align-content: start;
+    gap: 7px;
+    padding-top: 2px;
+  }
+
+  .builder-shell.is-mobile-identity-detail .slot-unique-card,
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active .slot-unique-card {
+    width: 44px;
+  }
+
+  .builder-shell.is-mobile-identity-detail .slot-keyword,
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active .slot-keyword {
+    width: 34px;
+    height: 34px;
+  }
+
+  .builder-shell.is-mobile-identity-pool .slot-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    height: 88px;
+  }
+
+  .builder-shell.is-mobile-identity-pool .slot-box {
+    grid-template-columns: auto 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .builder-shell.is-mobile-identity-pool .identity-slot {
+    width: 50px;
+  }
+
+  .builder-shell.is-mobile-identity-pool .slot-extra {
+    display: none;
+  }
+
+  .builder-shell.is-mobile-identity-pool .identity-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+    height: 174px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active {
+    order: -1;
+    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
+    min-height: 112px;
+    padding: 3px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active .identity-slot {
+    grid-column: 1;
+    grid-row: 1;
+    width: 78px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box.is-active .slot-extra {
+    display: grid;
+    grid-column: 2;
+    grid-row: 1;
+    align-content: start;
+    gap: 7px;
+    padding-top: 2px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box:not(.is-active) {
+    grid-template-columns: 42px 34px;
+    align-items: center;
+    justify-content: start;
+    gap: 7px;
+    min-height: 42px;
+    padding: 1px 4px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box:not(.is-active) .slot-label {
+    position: static;
+    grid-column: 1;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box:not(.is-active) .identity-slot {
+    grid-column: 2;
+    width: 34px;
+  }
+
+  .builder-shell.is-mobile-identity-balanced .slot-box:not(.is-active) .slot-extra {
     display: none;
   }
 

@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.2.0",
+    label: "2.1.2.0 beta",
+    state: "beta",
+    summary: "모바일 인격 선택 비교",
+    copy: "모바일 인격 선택 배치 3종 비교 추가. EGO/강화 선택 테두리 보정."
+  },
+  {
     version: "2.1.1.0",
     label: "2.1.1.0 beta",
     state: "beta",

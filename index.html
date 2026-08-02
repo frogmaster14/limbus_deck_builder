@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.1.1.0-mobile-shell" />
+    <link rel="stylesheet" href="./style.css?v=2.1.2.0-mobile-identity-layouts" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -79,6 +79,11 @@
         </div>
         <button class="topbar-button danger" id="builder-reset-identities" type="button" data-action="reset-identities">초기화</button>
         <button class="topbar-button mobile-builder-filter-trigger" type="button" data-action="open-mobile-identity-filter">필터</button>
+        <nav class="mobile-identity-layout-switch" aria-label="모바일 인격 선택 배치">
+          <button type="button" data-mobile-identity-layout="detail">1안 상세</button>
+          <button type="button" data-mobile-identity-layout="pool">2안 풀 우선</button>
+          <button class="is-active" type="button" data-mobile-identity-layout="balanced">3안 균형</button>
+        </nav>
       </header>
 
       <section class="builder-layout" aria-label="인격 선택 화면">
@@ -545,8 +550,8 @@
       </section>
     </main>
 
-    <script src="./version-history.js?v=2.1.1.0-mobile-shell"></script>
+    <script src="./version-history.js?v=2.1.2.0-mobile-identity-layouts"></script>
     <script src="./data/limbus-browser-data.js?v=2.1.0.0-workspace"></script>
-    <script src="./script.js?v=2.1.1.0-mobile-shell"></script>
+    <script src="./script.js?v=2.1.2.0-mobile-identity-layouts"></script>
   </body>
 </html>
