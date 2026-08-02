@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.3.0 beta";
+const APP_VERSION = "2.1.4.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -113,6 +113,9 @@ const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
 const codexEffectFilters = document.querySelector("#codex-effect-filters");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
+const mobileCodexNav = document.querySelector(".mobile-codex-nav");
+const mobileCodexCardCount = document.querySelector("#mobile-codex-card-count");
+const mobileCodexFilterCount = document.querySelector("#mobile-codex-filter-count");
 const saveImportCode = document.querySelector("#save-import-code");
 const saveImportFile = document.querySelector("#save-import-file");
 const saveImportStatus = document.querySelector("#save-import-status");
@@ -318,7 +321,8 @@ const codexState = {
   activeAttackTypes: [],
   activeEffects: [],
   expandedFolders: [],
-  previewItemId: ""
+  previewItemId: "",
+  mobilePane: "cards"
 };
 const cardInsertState = {
   activeTab: "all",
@@ -715,6 +719,13 @@ mobileDeckNav?.addEventListener("click", (event) => {
   setMobileDeckPane(button.dataset.mobileDeckPane);
 });
 
+mobileCodexNav?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-mobile-codex-pane]");
+  if (!button || button.disabled) return;
+
+  setMobileCodexPane(button.dataset.mobileCodexPane);
+});
+
 nextStepButton.addEventListener("click", () => {
   if (!builderState.selected.front || !builderState.selected.back) return;
 
@@ -820,6 +831,8 @@ function closeDeckIdentityPicker() {
 }
 
 function openCodex() {
+  codexState.previewItemId = "";
+  codexState.mobilePane = "cards";
   showView("codex");
   renderCodex();
 }
@@ -949,11 +962,44 @@ async function copyFeedbackText() {
   }
 }
 
+function setMobileCodexPane(paneName) {
+  if (!["cards", "filters", "preview"].includes(paneName)) return;
+  if (paneName === "preview" && !codexState.previewItemId) return;
+
+  codexState.mobilePane = paneName;
+  syncMobileCodexPane();
+}
+
+function syncMobileCodexPane() {
+  const paneName = codexState.mobilePane || "cards";
+
+  ["cards", "filters", "preview"].forEach((name) => {
+    codexView.classList.toggle(`is-mobile-pane-${name}`, paneName === name);
+  });
+
+  mobileCodexNav?.querySelectorAll("[data-mobile-codex-pane]").forEach((button) => {
+    const isActive = button.dataset.mobileCodexPane === paneName;
+    const needsPreview = button.dataset.mobileCodexPane === "preview";
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+    button.disabled = needsPreview && !codexState.previewItemId;
+  });
+
+  const activeFilterCount = codexState.activeSinners.length
+    + codexState.activeTags.length
+    + codexState.activeSins.length
+    + codexState.activeAttackTypes.length
+    + codexState.activeEffects.length;
+  if (mobileCodexCardCount) mobileCodexCardCount.textContent = codexCount.textContent || "0";
+  if (mobileCodexFilterCount) mobileCodexFilterCount.textContent = String(activeFilterCount);
+}
+
 function renderCodex() {
   renderCodexFilters();
   renderCodexTabs();
   renderCodexGrid();
   renderCodexPreview(null);
+  syncMobileCodexPane();
 }
 
 function renderCodexFilters() {
@@ -1030,12 +1076,13 @@ function renderCodexGrid() {
 
   if (!items.length) {
     codexGrid.innerHTML = `<div class="deck-empty-note">해당 항목 없음.</div>`;
+    syncMobileCodexPane();
     return;
   }
 
   codexGrid.innerHTML = items.map((item) => `
     <button
-      class="codex-item codex-preview-source ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCodexFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""}"
+      class="codex-item codex-preview-source ${item.id === codexState.previewItemId ? "is-selected" : ""} ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCodexFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""}"
       type="button"
       title="${item.title}"
       data-codex-item-id="${item.id}"
@@ -1052,6 +1099,7 @@ function renderCodexGrid() {
   codexGrid.querySelectorAll("[data-codex-folder-id]").forEach((button) => {
     button.addEventListener("click", () => toggleCodexFolder(button.dataset.codexFolderId));
   });
+  syncMobileCodexPane();
 }
 
 function getFilteredCodexItems() {
@@ -1477,14 +1525,17 @@ function resetCodexState() {
   codexState.activeEffects = [];
   codexState.expandedFolders = [];
   codexState.previewItemId = "";
+  codexState.mobilePane = "cards";
 }
 
 function toggleCodexFolder(folderId) {
+  const previousScrollTop = codexGrid.scrollTop;
   codexState.expandedFolders = isCodexFolderExpanded(folderId)
     ? codexState.expandedFolders.filter((id) => id !== folderId)
     : [...codexState.expandedFolders, folderId];
 
   renderCodexGrid();
+  codexGrid.scrollTop = previousScrollTop;
 }
 
 function isCodexFolderExpanded(folderId) {
@@ -1493,18 +1544,33 @@ function isCodexFolderExpanded(folderId) {
 
 function attachCodexPreviewListeners(root) {
   root.querySelectorAll(".codex-preview-source").forEach((button) => {
-    const showPreview = () => {
+    const showPreview = (event) => {
+      const isMobileFolder = button.dataset.codexFolderId
+        && window.matchMedia("(max-width: 640px)").matches;
+      if (isMobileFolder) return;
+
       const codexItem = button.dataset.codexItemId
         ? getCodexItems().find((item) => item.id === button.dataset.codexItemId)
         : null;
 
-      if (codexItem) codexState.previewItemId = codexItem.id;
+      if (codexItem) {
+        codexState.previewItemId = codexItem.id;
+        codexGrid.querySelectorAll("[data-codex-item-id]").forEach((itemButton) => {
+          itemButton.classList.toggle("is-selected", itemButton.dataset.codexItemId === codexItem.id);
+        });
+      }
 
       renderCodexPreview({
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
         filters: codexItem ? getCodexPreviewFilters(codexItem) : []
       });
+
+      if (codexItem && event.type === "click" && window.matchMedia("(max-width: 640px)").matches) {
+        setMobileCodexPane("preview");
+      } else {
+        syncMobileCodexPane();
+      }
     };
 
     button.addEventListener("mouseenter", showPreview);

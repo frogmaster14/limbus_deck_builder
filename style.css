@@ -213,6 +213,7 @@ img {
 
 .mobile-deck-summary,
 .mobile-deck-nav,
+.mobile-codex-nav,
 .mobile-deck-toolbar,
 .mobile-filter-header,
 .mobile-builder-filter-trigger,
@@ -942,6 +943,11 @@ h2 {
 .deck-included-card:hover::before,
 .deck-included-card:focus-visible::before {
   border-color: rgba(243, 170, 22, 0.72);
+}
+
+.codex-item.is-selected::before {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 2px rgba(245, 185, 57, 0.18);
 }
 
 .identity-card.is-selected::before {
@@ -3938,6 +3944,188 @@ h2 {
     min-height: 44px;
     padding: 0 6px;
     font-size: 12px;
+  }
+
+  .codex-shell {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100vh;
+    height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+    gap: 0;
+  }
+
+  .codex-shell .builder-topbar {
+    grid-template-columns: 56px minmax(0, 1fr) 76px;
+    gap: 8px;
+    min-height: 58px;
+    padding: 7px 9px;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .codex-shell .builder-topbar .eyebrow {
+    display: none;
+  }
+
+  .codex-shell .builder-topbar h2 {
+    overflow: hidden;
+    font-size: 18px;
+    line-height: 1.2;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .codex-shell .topbar-button {
+    min-height: 44px;
+    padding: 0 5px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .codex-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .codex-filter-panel,
+  .codex-center-panel,
+  .codex-shell .deck-preview-panel {
+    display: none;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .codex-shell.is-mobile-pane-filters .codex-filter-panel,
+  .codex-shell.is-mobile-pane-cards .codex-center-panel,
+  .codex-shell.is-mobile-pane-preview .deck-preview-panel {
+    display: grid;
+  }
+
+  .codex-filter-panel .deck-filter-scroll {
+    padding: 12px 12px 88px;
+    scroll-padding-block: 64px;
+  }
+
+  .codex-center-panel {
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px 9px;
+  }
+
+  .codex-center-panel .deck-section-heading {
+    min-height: 32px;
+  }
+
+  .codex-center-panel .deck-section-heading h3 {
+    font-size: 17px;
+  }
+
+  .codex-grid {
+    gap: 8px;
+    padding: 2px 3px 16px 1px;
+  }
+
+  .codex-item,
+  .codex-item.is-icon {
+    flex-basis: calc((100% - 16px) / 3);
+  }
+
+  .codex-item.is-icon {
+    padding: 16px;
+  }
+
+  .codex-folder-label {
+    padding: 4px 3px;
+    font-size: 10px;
+  }
+
+  .codex-shell .deck-preview-panel {
+    align-content: stretch;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 8px;
+    justify-items: center;
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .codex-shell .deck-preview-panel .preview-frame {
+    grid-row: 1;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .codex-shell .deck-preview-panel .preview-filter-summary {
+    grid-row: 2;
+    width: 100%;
+    min-height: 64px;
+    max-height: 64px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .codex-shell .deck-preview-panel .preview-filter-chip {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    padding: 7px;
+  }
+
+  .codex-shell .deck-preview-panel .preview-help {
+    display: none;
+  }
+
+  .mobile-codex-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: calc(58px + env(safe-area-inset-bottom));
+    padding: 0 8px env(safe-area-inset-bottom);
+    border-top: 1px solid rgba(243, 170, 22, 0.28);
+    background: rgba(35, 18, 13, 0.98);
+    z-index: 40;
+  }
+
+  .mobile-codex-nav-button {
+    min-width: 0;
+    min-height: 58px;
+    border: 0;
+    border-top: 3px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .mobile-codex-nav-button.is-active {
+    border-top-color: var(--gold);
+    background: rgba(82, 48, 25, 0.56);
+    color: #ffe4ad;
+  }
+
+  .mobile-codex-nav-button:disabled {
+    color: var(--dim);
+    opacity: 0.48;
+  }
+
+  .mobile-codex-nav-button span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 20px;
+    margin-left: 4px;
+    padding: 0 4px;
+    border: 1px solid rgba(243, 170, 22, 0.24);
+    color: var(--gold);
+    font-size: 10px;
   }
 
   .builder-shell #builder-reset-identities {

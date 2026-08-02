@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.4.0",
+    label: "2.1.4.0 beta",
+    state: "beta",
+    summary: "모바일 도감 개편",
+    copy: "모바일 도감을 카드, 필터, 확대 화면으로 분리."
+  },
+  {
     version: "2.1.3.0",
     label: "2.1.3.0 beta",
     state: "beta",
