@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.2.1",
+    label: "2.1.2.1 beta",
+    state: "beta",
+    summary: "인격 선택 화면 유지",
+    copy: "인격 선택 뒤 화면 유지. 뒤로 버튼으로 덱 작업대 복귀."
+  },
+  {
     version: "2.1.2.0",
     label: "2.1.2.0 beta",
     state: "beta",

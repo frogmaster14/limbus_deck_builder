@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.2.0 beta";
+const APP_VERSION = "2.1.2.1 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -1700,12 +1700,7 @@ function chooseIdentity(identityId) {
   if (activeIdentity?.id === identity.id) {
     builderState.selected[builderState.activeSlot] = null;
     builderState.hovered = null;
-    if (returnsToDeck) {
-      closeDeckIdentityPicker();
-      return;
-    }
-
-    resetDeckState();
+    if (!returnsToDeck) resetDeckState();
     renderBuilder();
     return;
   }
@@ -1717,12 +1712,7 @@ function chooseIdentity(identityId) {
 
   builderState.selected[builderState.activeSlot] = identity.id;
   builderState.hovered = identity.id;
-  if (returnsToDeck) {
-    closeDeckIdentityPicker();
-    return;
-  }
-
-  resetDeckState();
+  if (!returnsToDeck) resetDeckState();
   renderBuilder();
 }
 
@@ -1743,7 +1733,7 @@ function renderBuilderChrome() {
   const isDeckPicker = builderState.identityPickerReturnView === "deck";
   const slotLabel = builderState.activeSlot === "front" ? "전방" : "후방";
 
-  if (builderBackButton) builderBackButton.textContent = isDeckPicker ? "닫기" : "뒤로";
+  if (builderBackButton) builderBackButton.textContent = "뒤로";
   if (builderTitle) builderTitle.textContent = isDeckPicker ? `${slotLabel} 인격 선택` : "전방 / 후방 인격 선택";
   if (builderResetIdentities) builderResetIdentities.hidden = isDeckPicker;
   if (swapSlotButton) swapSlotButton.hidden = isDeckPicker;
