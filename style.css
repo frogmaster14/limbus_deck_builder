@@ -715,6 +715,10 @@ h2 {
   display: none;
 }
 
+.mobile-identity-layout-switch[hidden] {
+  display: none !important;
+}
+
 .builder-shell.is-deck-picker {
   position: fixed;
   inset: 0;
