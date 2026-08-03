@@ -4819,7 +4819,8 @@ h2 {
   }
 
   .deck-shell.is-mobile-pane-save .deck-save-panel {
-    min-height: 100%;
+    align-self: start;
+    min-height: 0;
     gap: 16px;
     padding: 14px 12px 118px;
     border-color: rgba(243, 170, 22, 0.22);
