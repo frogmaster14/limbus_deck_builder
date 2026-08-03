@@ -4041,6 +4041,17 @@ function openSavesFromDeckReview() {
 }
 
 function handleSavedDeckAction(event) {
+  const mobileSavedViewEditButton = event.target.closest("[data-mobile-saved-view-edit]");
+  if (mobileSavedViewEditButton) {
+    if (savedViewState.mode === "current") {
+      showView("deck");
+      renderDeckBuilder();
+    } else if (savedViewState.activeDeckId) {
+      loadSavedDeckForEdit(savedViewState.activeDeckId);
+    }
+    return;
+  }
+
   const mobileSavedViewPaneButton = event.target.closest("[data-mobile-saved-view-pane]");
   if (mobileSavedViewPaneButton) {
     setMobileSavedViewPane(mobileSavedViewPaneButton.dataset.mobileSavedViewPane);
@@ -4326,7 +4337,7 @@ function renderSavedDeckView(deck, { mode = "saved" } = {}) {
 }
 
 function setMobileSavedViewPane(pane) {
-  const panes = ["summary", "detail", "preview"];
+  const panes = ["summary", "preview"];
   if (!panes.includes(pane)) return;
 
   savedViewState.mobilePane = pane;
@@ -4334,7 +4345,7 @@ function setMobileSavedViewPane(pane) {
 }
 
 function syncMobileSavedViewPane() {
-  const panes = ["summary", "detail", "preview"];
+  const panes = ["summary", "preview"];
   const activePane = panes.includes(savedViewState.mobilePane)
     ? savedViewState.mobilePane
     : "summary";
