@@ -219,7 +219,7 @@ img {
 .mobile-deck-toolbar,
 .mobile-filter-header,
 .mobile-builder-filter-trigger,
-.mobile-deck-save-button {
+.mobile-deck-save-actions {
   display: none;
 }
 
@@ -2159,6 +2159,12 @@ h2 {
   min-width: 0;
   max-width: 100%;
   padding: 12px;
+}
+
+.deck-save-footer {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
 }
 
 .deck-save-topline {
@@ -4651,6 +4657,10 @@ h2 {
     overflow: hidden;
   }
 
+  .deck-shell.is-reviewing .deck-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .deck-side-panel,
   .deck-preview-panel {
     display: none;
@@ -4795,6 +4805,99 @@ h2 {
     padding: 2px 2px 18px;
   }
 
+  .deck-shell.is-mobile-pane-save .deck-review-section {
+    display: grid !important;
+    align-content: start;
+    gap: 0;
+    padding: 8px 9px 18px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-review-heading,
+  .deck-shell.is-mobile-pane-save .deck-review-summary,
+  .deck-shell.is-mobile-pane-save .deck-review-section > .deck-review-block {
+    display: none !important;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-panel {
+    min-height: 100%;
+    gap: 16px;
+    padding: 14px 12px 118px;
+    border-color: rgba(243, 170, 22, 0.22);
+    background: rgba(35, 18, 13, 0.76);
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-topline {
+    display: contents;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-name-field {
+    order: 1;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-intro-field {
+    order: 2;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-filter-field {
+    order: 3;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-notes-field {
+    order: 4;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-insert-button {
+    order: 5;
+    min-height: 48px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-note-preview {
+    order: 6;
+    min-height: 110px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-panel::after {
+    content: "";
+    display: block;
+    order: 7;
+    height: 90px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-footer {
+    position: fixed;
+    right: max(9px, env(safe-area-inset-right));
+    bottom: calc(58px + env(safe-area-inset-bottom));
+    left: max(9px, env(safe-area-inset-left));
+    z-index: 39;
+    order: 8;
+    gap: 6px;
+    padding: 7px 10px 9px;
+    border-top: 1px solid rgba(243, 170, 22, 0.3);
+    background: rgba(35, 18, 13, 0.98);
+    box-shadow: 0 -8px 18px rgba(15, 7, 5, 0.34);
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-field {
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-field input {
+    min-height: 48px;
+    padding: 0 12px;
+    font-size: 15px;
+  }
+
+  .deck-shell.is-mobile-pane-save #deck-save-intro {
+    min-height: 96px;
+    resize: none;
+  }
+
+  .deck-shell.is-mobile-pane-save #deck-save-notes {
+    min-height: 240px;
+    resize: none;
+  }
+
   .deck-review-summary,
   .deck-save-topline {
     grid-template-columns: minmax(0, 1fr);
@@ -4804,10 +4907,30 @@ h2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .mobile-deck-save-button {
-    display: block;
-    width: 100%;
-    min-height: 48px;
+  .deck-shell.is-mobile-pane-save .deck-save-filter-group {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-filter-tokens {
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 6px;
+    max-height: 126px;
+  }
+
+  .deck-shell.is-mobile-pane-save .deck-save-keyword {
+    max-width: 38px;
+    height: 38px;
+  }
+
+  .mobile-deck-save-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .mobile-deck-save-actions .deck-action-button {
+    min-height: 46px;
   }
 
   .mobile-deck-nav {

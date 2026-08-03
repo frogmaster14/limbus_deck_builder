@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.1.6.0-mobile-saves-final" />
+    <link rel="stylesheet" href="./style.css?v=2.1.7.0-mobile-deck-save" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -15,8 +15,8 @@
           <p class="title-subline"><strong>L.T</strong> Deck TooL</p>
           <h1 id="app-title">림.딱 빌더</h1>
           <div class="version-row" aria-label="현재 버전">
-            <span class="version-badge" id="current-version">2.1.6.0 beta</span>
-            <span class="build-note" id="current-summary">모바일 저장 목록 개편</span>
+            <span class="version-badge" id="current-version">2.1.7.0 beta</span>
+            <span class="build-note" id="current-summary">모바일 덱 저장 화면 정리</span>
           </div>
         </div>
 
@@ -245,9 +245,9 @@
               </div>
               <div class="deck-review-card-grid" id="deck-review-main"></div>
             </div>
-            <section class="deck-save-panel" aria-label="덱 저장">
+            <section class="deck-save-panel" aria-label="덱 정보">
               <div class="deck-section-heading">
-                <h3>덱 저장</h3>
+                <h3>덱 정보</h3>
               </div>
               <div class="deck-save-topline">
                 <label class="deck-save-field deck-save-name-field">
@@ -259,18 +259,23 @@
                   <div class="deck-save-keywords" id="deck-save-keywords"></div>
                 </div>
               </div>
-              <label class="deck-save-field">
+              <label class="deck-save-field deck-save-intro-field">
                 <span>소개글</span>
                 <textarea id="deck-save-intro" rows="2" maxlength="180" placeholder="저장 목록에서 덱을 구분할 짧은 설명을 적습니다."></textarea>
               </label>
-              <label class="deck-save-field">
+              <label class="deck-save-field deck-save-notes-field">
                 <span>설명 / 사용 방식</span>
                 <textarea id="deck-save-notes" rows="7" placeholder="아래 카드 삽입 기능으로 설명에 카드를 직접 첨부할 수 있습니다."></textarea>
               </label>
-              <button class="deck-action-button" type="button" data-action="open-card-search">카드 삽입</button>
+              <button class="deck-action-button deck-save-insert-button" type="button" data-action="open-card-search">카드 삽입</button>
               <div class="deck-note-preview" id="deck-note-preview" aria-label="설명 미리보기"></div>
-              <output class="deck-save-status" id="deck-save-status"></output>
-              <button class="deck-action-button primary mobile-deck-save-button" type="button" data-action="save-deck-local">저장하기</button>
+              <div class="deck-save-footer">
+                <output class="deck-save-status" id="deck-save-status"></output>
+                <div class="mobile-deck-save-actions">
+                  <button class="deck-action-button" type="button" data-action="view-current-deck">보기</button>
+                  <button class="deck-action-button primary" type="button" data-action="save-deck-local">저장하기</button>
+                </div>
+              </div>
             </section>
           </section>
         </section>
@@ -580,8 +585,8 @@
       </section>
     </main>
 
-    <script src="./version-history.js?v=2.1.6.0-mobile-saves-final"></script>
+    <script src="./version-history.js?v=2.1.7.0-mobile-deck-save"></script>
     <script src="./data/limbus-browser-data.js?v=2.1.0.0-workspace"></script>
-    <script src="./script.js?v=2.1.6.0-preview-click"></script>
+    <script src="./script.js?v=2.1.7.0-mobile-deck-save"></script>
   </body>
 </html>

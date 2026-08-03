@@ -1,6 +1,6 @@
 const LIMBUS_DATA = window.LIMBUS_DATA;
 const DECK_LIMIT = 20;
-const APP_VERSION = "2.1.6.0 beta";
+const APP_VERSION = "2.1.7.0 beta";
 const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
@@ -665,8 +665,10 @@ document.querySelector("[data-action='open-saves-from-deck']").addEventListener(
   openSavesFromDeckReview();
 });
 
-document.querySelector("[data-action='view-current-deck']").addEventListener("click", () => {
-  openCurrentDeckView();
+document.querySelectorAll("[data-action='view-current-deck']").forEach((button) => {
+  button.addEventListener("click", () => {
+    openCurrentDeckView();
+  });
 });
 
 document.querySelector("[data-action='reset-save-import']").addEventListener("click", () => {

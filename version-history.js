@@ -1,5 +1,12 @@
 window.VERSION_HISTORY = [
   {
+    version: "2.1.7.0",
+    label: "2.1.7.0 beta",
+    state: "beta",
+    summary: "모바일 덱 저장 화면 정리",
+    copy: "덱 정보 작성 화면 분리. 보기와 저장 조작을 하단에 고정."
+  },
+  {
     version: "2.1.6.0",
     label: "2.1.6.0 beta",
     state: "beta",
