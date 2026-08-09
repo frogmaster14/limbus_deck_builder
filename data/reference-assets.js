@@ -19,13 +19,6 @@ export const REFERENCE_ASSETS = [
     image: "assets/sinners/faust/base/unique/지식.png"
   },
   {
-    id: "faust_gripper_nail_stack",
-    label: "못",
-    category: "specialStack",
-    owner: { sinnerId: "faust", identityKey: "gripper" },
-    image: "assets/sinners/faust/gripper/unique/못 ( 스택 ).png"
-  },
-  {
     id: "ryoshu_chef_cooking",
     label: "조리 중",
     category: "specialStack",
@@ -45,34 +38,6 @@ export const REFERENCE_ASSETS = [
     category: "stack",
     owner: { sinnerId: "ishmael", identityKey: "office" },
     image: "assets/sinners/ishmael/office/unique/짝패.png"
-  },
-  {
-    id: "ryoshu_edgar_butler_tusik_stack",
-    label: "투.식.",
-    category: "specialStack",
-    owner: { sinnerId: "ryoshu", identityKey: "edgar_butler" },
-    image: "assets/sinners/ryoshu/edgar_butler/unique/투.식. ( 스택 ).png"
-  },
-  {
-    id: "ryoshu_edgar_butler_tusik_card",
-    label: "투.식.",
-    category: "referenceCard",
-    owner: { sinnerId: "ryoshu", identityKey: "edgar_butler" },
-    image: "assets/sinners/ryoshu/edgar_butler/unique/투.식..png"
-  },
-  {
-    id: "ishmael_edgar_butler_tusik_stack",
-    label: "투.식.",
-    category: "specialStack",
-    owner: { sinnerId: "ishmael", identityKey: "edgar_butler" },
-    image: "assets/sinners/ishmael/edgar_butler/unique/투.식. ( 스택 ).png"
-  },
-  {
-    id: "ishmael_edgar_butler_tusik_card",
-    label: "투.식.",
-    category: "referenceCard",
-    owner: { sinnerId: "ishmael", identityKey: "edgar_butler" },
-    image: "assets/sinners/ishmael/edgar_butler/unique/투.식..png"
   },
   {
     id: "faust_index_directives",

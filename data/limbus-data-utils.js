@@ -34,6 +34,11 @@ export const CARD_TYPES = {
   egoUnique: "egoUnique"
 };
 
+const BASE_UNIQUE_IMAGE_NAMES = {
+  faust_base_unique_1: "지식",
+  outis_base_unique_1: "흑심"
+};
+
 export function getIdentityId(sinnerId, identityKey) {
   return `${sinnerId}_${identityKey}`;
 }
@@ -86,7 +91,9 @@ export function getCardImagePath({ type, sinnerId, identityKey = null, number })
   }
 
   if (type === CARD_TYPES.baseUnique) {
-    return `assets/sinners/${sinnerId}/base/unique/${imageNumber}.png`;
+    const cardId = getBaseUniqueCardId(sinnerId, number);
+    const imageName = BASE_UNIQUE_IMAGE_NAMES[cardId] || imageNumber;
+    return `assets/sinners/${sinnerId}/base/unique/${imageName}.png`;
   }
 
   if (type === CARD_TYPES.identity) {
@@ -119,6 +126,9 @@ export function getTagAssetId(tag, kind = "icon") {
 }
 
 export function getKeywordCardImagePath(tag) {
+  const assetId = TAG_ASSET_IDS[tag];
+  if (assetId && typeof assetId === "object" && assetId.card === null) return null;
+
   return `assets/keywords/cards/${getTagAssetId(tag, "card")}.png`;
 }
 

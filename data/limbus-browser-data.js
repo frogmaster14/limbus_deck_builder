@@ -8,9 +8,9 @@
       heishou_wu: [3, 2]
     }],
 
-    faust: [9, 0, {
+    faust: [9, 1, {
       lcb: [3, 1],
-      gripper: [3, 0],
+      gripper: [3, 1],
       seven_south: [3, 0],
       index: [3, 2],
       lobotomy_remnant: [3, 0]
@@ -27,7 +27,7 @@
     ryoshu: [9, 0, {
       lcb: [3, 1],
       wcorp: [3, 0],
-      edgar_butler: [3, 0],
+      edgar_butler: [3, 2],
       chef: [3, 1],
       red_eyes_penance: [3, 4]
     }],
@@ -52,21 +52,24 @@
       lcb: [3, 0],
       fox_rain: [3, 2],
       kurokumo: [3, 1],
-      shi_south: [3, 0]
+      shi_south: [3, 0],
+      full_stop_office: [3, 2]
     }],
 
     ishmael: [8, 0, {
       lcb: [3, 0],
       kurokumo: [3, 1],
       edgar_butler: [3, 0],
-      office: [4, 1]
+      office: [4, 1],
+      zwei_west: [3, 1]
     }],
 
     rodion: [8, 0, {
       lcb: [3, 0],
       lamancha: [3, 2],
       lobotomy: [6, 2],
-      liu: [3, 0]
+      liu: [3, 0],
+      devyat_north: [3, 3]
     }],
 
     sinclair: [8, 0, {
@@ -77,7 +80,7 @@
       southern_shank: [3, 1]
     }],
 
-    outis: [8, 0, {
+    outis: [8, 1, {
       lcb: [3, 0],
       wuthering_butler: [3, 1],
       blade: [3, 0],
@@ -100,14 +103,8 @@
     화상: ["gregor_survivor", "rodion_liu"],
     파열: ["faust_seven_south", "meursault_dead_rabbits"],
     충전: ["don_quixote_wcorp", "ryoshu_wcorp", "yi_sang_ring"],
-    못: ["faust_gripper", "sinclair_grip"],
     마비: ["gregor_tides"],
-    "투.식.": ["ishmael_edgar_butler", "ryoshu_edgar_butler"],
-    "조리 중": ["gregor_tides", "ryoshu_chef"],
-    진동폭발: ["meursault_thumb_east", "outis_molars"],
-    "축제의 열기": ["rodion_lamancha"],
-    "산나비+죽은나비": ["yi_sang_mourning"],
-    "찢어진 추억": ["yi_sang_bullet"]
+    진동폭발: ["meursault_thumb_east", "outis_molars"]
   };
 
   const EXTRA_EGO_CARD_SETS = {
@@ -155,7 +152,9 @@
       "hong_lu_base_6",
       "hong_lu_full_stop_office_cards_1",
       "hong_lu_full_stop_office_cards_2",
-      "hong_lu_full_stop_office_cards_4"
+      "hong_lu_full_stop_office_cards_4",
+      "heathcliff_full_stop_office_cards_1",
+      "heathcliff_full_stop_office_cards_3"
     ],
     화상: [
       "faust_ardor_blossom_ego",
@@ -178,7 +177,11 @@
       "meursault_base_5",
       "meursault_dead_rabbits_cards_1",
       "meursault_dead_rabbits_cards_2",
-      "meursault_dead_rabbits_cards_3"
+      "meursault_dead_rabbits_cards_3",
+      "rodion_devyat_north_cards_1",
+      "rodion_devyat_north_cards_2",
+      "rodion_devyat_north_cards_3",
+      "rodion_devyat_north_unique_1"
     ],
     충전: [
       "yi_sang_ring_cards_1",
@@ -191,26 +194,8 @@
       "ryoshu_wcorp_cards_1",
       "ryoshu_wcorp_cards_2"
     ],
-    못: [
-      "faust_gripper_cards_2",
-      "sinclair_grip_unique_1",
-      "sinclair_grip_cards_1",
-      "sinclair_grip_cards_2",
-      "sinclair_grip_cards_3"
-    ],
     마비: [
       "hong_lu_snare_ego_unique_1",
-      "gregor_tides_cards_2",
-      "gregor_tides_cards_3"
-    ],
-    "투.식.": [
-      "ryoshu_edgar_butler_cards_1",
-      "ryoshu_edgar_butler_cards_2",
-      "ishmael_edgar_butler_cards_1"
-    ],
-    "조리 중": [
-      "ryoshu_chef_cards_2",
-      "gregor_tides_cards_1",
       "gregor_tides_cards_2",
       "gregor_tides_cards_3"
     ],
@@ -218,23 +203,6 @@
       "meursault_thumb_east_cards_3",
       "meursault_thumb_east_upgrade_1",
       "outis_molars_cards_2"
-    ],
-    "축제의 열기": [
-      "rodion_lamancha_cards_2",
-      "rodion_lamancha_cards_3",
-      "rodion_lamancha_unique_1",
-      "rodion_lamancha_upgrade_1"
-    ],
-    "산나비+죽은나비": [
-      "yi_sang_mourning_cards_1",
-      "yi_sang_mourning_cards_2",
-      "yi_sang_mourning_unique_1",
-      "yi_sang_mourning_unique_2"
-    ],
-    "찢어진 추억": [
-      "yi_sang_bullet_cards_1",
-      "yi_sang_bullet_cards_3",
-      "yi_sang_bullet_unique_1"
     ]
   };
   const CARD_EFFECTS = {
@@ -321,6 +289,10 @@
       "rodion_base_5",
       "rodion_lobotomy_cards_5",
       "rodion_liu_cards_1",
+      "rodion_devyat_north",
+      "rodion_devyat_north_cards_1",
+      "rodion_devyat_north_cards_2",
+      "rodion_devyat_north_cards_3",
       "sinclair_base_1",
       "sinclair_base_8",
       "sinclair_southern_shank_cards_1",
@@ -345,6 +317,7 @@
       "ryoshu_edgar_butler_cards_2",
       "meursault_base_4",
       "heathcliff_base_3",
+      "heathcliff_full_stop_office_cards_2",
       "ishmael_base_1",
       "ishmael_base_6",
       "ishmael_base_7",
@@ -420,13 +393,9 @@
       "meursault_thumb_east_unique_2",
       "meursault_thumb_east_unique_3",
       "hong_lu_rcorp_reindeer_unique_1",
+      "ishmael_zwei_west",
       "ishmael_base_3",
       "outis_base_2"
-    ],
-    "특수 키워드 획득": [
-      "ryoshu_red_eyes_penance",
-      "ryoshu_red_eyes_penance_cards_1",
-      "ryoshu_red_eyes_penance_cards_2"
     ],
     "상대 방해": [
       "ryoshu_red_eyes_ego"
@@ -442,6 +411,12 @@
     ],
     "다른 카드로 취급": [
       "yi_sang_base_2"
+    ],
+    탄환: [
+      "heathcliff_full_stop_office",
+      "heathcliff_full_stop_office_cards_1",
+      "heathcliff_full_stop_office_cards_2",
+      "heathcliff_full_stop_office_cards_3"
     ],
     자해기믹: [
       "yi_sang_fell_bullet_ego",
@@ -488,10 +463,12 @@
       "don_quixote_cinq_east_cards_3",
       "don_quixote_cinq_east_unique_1",
       "heathcliff_base_6",
+      "rodion_devyat_north",
       "gregor_base_6"
     ],
     "최대 합 위력 변경": [
-      "yi_sang_base_ego"
+      "yi_sang_base_ego",
+      "ishmael_zwei_west_unique_1"
     ],
     "전체 데미지 증가": [
       "faust_base_9",
@@ -529,10 +506,14 @@
       "heathcliff_fox_rain_unique_2",
       "heathcliff_lcb_cards_3",
       "heathcliff_shi_south_cards_3",
+      "heathcliff_full_stop_office_cards_1",
+      "heathcliff_full_stop_office_cards_3",
+      "heathcliff_full_stop_office_upgrade_1",
       "ishmael_lcb_cards_3",
       "ishmael_office_unique_1",
       "ishmael_edgar_butler_cards_1",
       "ishmael_office_cards_1",
+      "ishmael_zwei_west_cards_3",
       "rodion_base_3",
       "rodion_lcb_cards_3",
       "rodion_lamancha_upgrade_1",
@@ -563,6 +544,7 @@
       "faust_lcb_cards_2",
       "faust_gripper_cards_3",
       "heathcliff_kurokumo_cards_2",
+      "ishmael_zwei_west_cards_3",
       "ishmael_office_cards_4",
       "rodion_lobotomy_cards_2",
       "rodion_lobotomy_unique_2",
@@ -575,6 +557,7 @@
       "ryoshu_red_eyes_penance_unique_4",
       "heathcliff_kurokumo_cards_1",
       "heathcliff_shi_south_cards_2",
+      "ishmael_zwei_west_cards_1",
       "ishmael_office_cards_4",
       "rodion_liu_cards_3",
       "sinclair_middle_cards_3",
@@ -594,6 +577,7 @@
       "hong_lu_full_stop_office_cards_1",
       "heathcliff_base_2",
       "heathcliff_base_4",
+      "heathcliff_full_stop_office_cards_2",
       "ishmael_lcb_cards_2",
       "ishmael_kurokumo_cards_3",
       "rodion_base_6",
@@ -603,6 +587,7 @@
     ],
     "상대 데미지 감소": [
       "meursault_base_2",
+      "ishmael_zwei_west_cards_2",
       "sinclair_base_2"
     ],
     "받는 데미지 감소": [
@@ -614,6 +599,7 @@
       "heathcliff_base_6",
       "heathcliff_fox_rain_unique_2",
       "heathcliff_kurokumo_unique_1",
+      "ishmael_zwei_west_unique_1",
       "ishmael_base_ego",
       "ishmael_edgar_butler_cards_2",
       "rodion_base_4",
@@ -1247,6 +1233,7 @@
 
   const UPGRADE_CARD_SETS = {
     yi_sang_heishou_wu: 1,
+    heathcliff_full_stop_office: 1,
     ryoshu_red_eyes_penance: 1,
     meursault_thumb_east: 1,
     rodion_lamancha: 1
@@ -1258,6 +1245,8 @@
     yi_sang_mourning_unique_1: "stack",
     yi_sang_mourning_unique_2: "stack",
     yi_sang_bullet_unique_1: "stack",
+    faust_base_unique_1: "status",
+    faust_gripper_unique_1: "stack",
     faust_lcb_unique_1: "status",
     faust_index_unique_1: "stack",
     faust_index_unique_2: "stack",
@@ -1269,6 +1258,8 @@
     don_quixote_cinq_east_unique_1: "status",
     don_quixote_wcorp_unique_1: "status",
     ryoshu_lcb_unique_1: "status",
+    ryoshu_edgar_butler_unique_1: "stack",
+    ryoshu_edgar_butler_unique_2: "card",
     ryoshu_chef_unique_1: "stack",
     ryoshu_red_eyes_penance_unique_1: "status",
     ryoshu_red_eyes_penance_unique_2: "status",
@@ -1290,17 +1281,24 @@
     heathcliff_fox_rain_unique_1: "stack",
     heathcliff_fox_rain_unique_2: "status",
     heathcliff_kurokumo_unique_1: "status",
+    heathcliff_full_stop_office_unique_1: "stack",
+    heathcliff_full_stop_office_unique_2: "stack",
     ishmael_kurokumo_unique_1: "status",
     ishmael_office_unique_1: "stack",
+    ishmael_zwei_west_unique_1: "stack",
     rodion_lamancha_unique_1: "stack",
     rodion_lamancha_unique_2: "stack",
     rodion_lobotomy_unique_1: "status",
     rodion_lobotomy_unique_2: "status",
+    rodion_devyat_north_unique_1: "stack",
+    rodion_devyat_north_unique_2: "stack",
+    rodion_devyat_north_unique_3: "stack",
     sinclair_grip_unique_1: "status",
     sinclair_mariachi_unique_1: "stack",
     sinclair_middle_unique_1: "stack",
     sinclair_middle_unique_2: "status",
     sinclair_southern_shank_unique_1: "status",
+    outis_base_unique_1: "status",
     outis_wuthering_butler_unique_1: "status",
     gregor_zwei_south_unique_1: "stack",
     gregor_zwei_south_unique_2: "status",
@@ -1309,42 +1307,6 @@
   };
 
   const SHARED_SPECIAL_CARDS = [
-    {
-      id: "shared_nail_stack",
-      title: "못",
-      category: "stack",
-      sinnerId: "sinclair",
-      identityId: "sinclair_grip",
-      image: "assets/keywords/keyword_+/못.png",
-      tags: ["못"]
-    },
-    {
-      id: "shared_tusik_stack",
-      title: "투.식. (스택)",
-      category: "stack",
-      sinnerId: "ryoshu",
-      identityId: "ryoshu_edgar_butler",
-      image: "assets/keywords/keyword_+/투.식. ( 스택 ).png",
-      tags: ["투.식."]
-    },
-    {
-      id: "shared_tusik_card",
-      title: "투.식.",
-      category: "card",
-      sinnerId: "ryoshu",
-      identityId: "ryoshu_edgar_butler",
-      image: "assets/keywords/keyword_+/투.식..png",
-      tags: ["투.식."]
-    },
-    {
-      id: "shared_cooking_stack",
-      title: "조리 중",
-      category: "stack",
-      sinnerId: "ryoshu",
-      identityId: "ryoshu_chef",
-      image: "assets/keywords/keyword_+/조리 중.png",
-      tags: ["조리 중"]
-    },
     {
       id: "shared_tremor_keyword_card",
       title: "진동",
@@ -1382,37 +1344,13 @@
     화상: "burn",
     파열: "rupture",
     충전: "charge",
-    못: {
-      icon: "못",
-      card: "../keyword_+/못"
-    },
     마비: {
       icon: "마비",
       card: "마비"
     },
-    "투.식.": {
-      icon: "투.식.",
-      card: "../keyword_+/투.식."
-    },
-    "조리 중": {
-      icon: "조리 중",
-      card: "../keyword_+/조리 중"
-    },
-    "산나비+죽은나비": {
-      icon: "산나비+죽은나비",
-      card: "../../sinners/yi_sang/mourning/unique/01"
-    },
-    "찢어진 추억": {
-      icon: "찢어진 추억",
-      card: "../../sinners/yi_sang/bullet/unique/01"
-    },
     진동폭발: {
       icon: "진동폭발",
       card: "tremor"
-    },
-    "축제의 열기": {
-      icon: "축제의 열기",
-      card: "../../sinners/rodion/lamancha/unique/01"
     }
   };
 
@@ -1446,10 +1384,10 @@
     "죄악 변경": "sin_change",
     "상태 변경": "status_change",
     "효과 변경": "status_change",
-    "특수 키워드 획득": "unique_stack",
     "상대 방해": "opponent_power_down",
     "수감자 교체": "sinner_switch",
     "다른 카드로 취급": "treated_as_other_card",
+    탄환: "../../keywords/icons/탄환",
     자해기믹: "self_damage",
     "체인 관련": "chain_related"
   };

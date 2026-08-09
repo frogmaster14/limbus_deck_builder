@@ -113,6 +113,7 @@ const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
 const codexEffectFilters = document.querySelector("#codex-effect-filters");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
+const codexReferencePanel = document.querySelector("#codex-reference-panel");
 const mobileCodexNav = document.querySelector(".mobile-codex-nav");
 const mobileCodexCardCount = document.querySelector("#mobile-codex-card-count");
 const mobileCodexFilterCount = document.querySelector("#mobile-codex-filter-count");
@@ -180,10 +181,10 @@ const effectFilterGroups = [
       { label: "필중", image: "assets/effects/icons/sure_hit.png" },
       { label: "코인토스", image: "assets/effects/icons/chain_continue.png" },
       { label: "재사용", image: "assets/effects/icons/reuse.png" },
+      { label: "탄환", image: "assets/keywords/icons/탄환.png" },
       { label: "죄악 변경", image: "assets/effects/icons/sin_change.png" },
       { label: "상태 변경", image: "assets/effects/icons/status_change.png" },
       { label: "효과 변경", image: "assets/effects/icons/status_change.png" },
-      { label: "특수 키워드 획득", image: "assets/effects/icons/unique_stack.png" },
       { label: "상대 방해", image: "assets/effects/icons/opponent_power_down.png" },
       { label: "수감자 교체", image: "assets/effects/icons/sinner_switch.png" },
       { label: "다른 카드로 취급", image: "assets/effects/icons/treated_as_other_card.png" },
@@ -213,23 +214,11 @@ const attackTypeFilters = [
   { label: "스킬", image: "assets/attack-types/icons/skill.png" }
 ];
 const specialKeywordTags = new Set([
-  "못",
   "마비",
-  "투.식.",
-  "조리 중",
-  "산나비+죽은나비",
-  "찢어진 추억",
-  "진동폭발",
-  "축제의 열기"
+  "진동폭발"
 ]);
-const derivedDeckKeywordCards = [
-  {
-    triggerTag: "침잠",
-    label: "패닉",
-    image: "assets/keywords/icons/패닉.png",
-    previewImage: "assets/keywords/cards/패닉.png"
-  }
-];
+const keywordCardHiddenTags = new Set();
+const derivedDeckKeywordCards = [];
 const faustIndexDirectiveFolder = {
   id: "faust_index_directives",
   title: "지령",
@@ -262,6 +251,31 @@ const faustIndexDirectiveFolder = {
       image: "assets/sinners/faust/index/꽃잎 지령/꽃잎 지령 뒷면.png",
       cards: Array.from({ length: 5 }, (_, index) => `assets/sinners/faust/index/꽃잎 지령/${index + 1}.png`)
     }
+  ]
+};
+const codexReferenceIds = {
+  faust_base_6: ["faust_base_unique_1"],
+  faust_gripper: ["faust_gripper_unique_1"],
+  faust_gripper_cards_1: ["faust_gripper_unique_1"],
+  faust_gripper_cards_2: ["faust_gripper_unique_1"],
+  faust_gripper_cards_3: ["faust_gripper_unique_1"],
+  ishmael_zwei_west: ["ishmael_zwei_west_unique_1"],
+  ishmael_zwei_west_cards_1: ["gregor_zwei_south_unique_1"],
+  ishmael_zwei_west_cards_2: ["gregor_zwei_south_unique_1"],
+  ishmael_zwei_west_cards_3: ["gregor_zwei_south_unique_1"],
+  ishmael_zwei_west_unique_1: ["gregor_zwei_south_unique_1"],
+  outis_base_2: ["outis_base_unique_1"],
+  ryoshu_edgar_butler: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
+  ryoshu_edgar_butler_cards_1: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
+  ryoshu_edgar_butler_cards_2: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
+  ryoshu_edgar_butler_cards_3: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
+  "keyword_침잠": ["shared_panic_card"],
+  yi_sang_ring_cards_3: [
+    "keyword_진동",
+    "keyword_출혈",
+    "keyword_침잠",
+    "keyword_호흡",
+    "keyword_충전"
   ]
 };
 const codexTabsData = [
@@ -769,10 +783,6 @@ identitySlots.forEach((slot) => {
     renderPreview(identity.id);
   };
 
-  slot.addEventListener("mouseenter", showSlotPreview);
-  slot.addEventListener("mouseover", showSlotPreview);
-  slot.addEventListener("pointerenter", showSlotPreview);
-  slot.addEventListener("focus", showSlotPreview);
 });
 
 function showView(viewName) {
@@ -999,7 +1009,7 @@ function renderCodex() {
   renderCodexFilters();
   renderCodexTabs();
   renderCodexGrid();
-  renderCodexPreview(null);
+  renderCodexPreviewLegacy(null);
   syncMobileCodexPane();
 }
 
@@ -1007,17 +1017,16 @@ function renderCodexFilters() {
   codexEffectFilters.classList.add("effect-filter-groups");
 
   codexSinnerFilters.innerHTML = renderSinnerFilterButtons(codexState.activeSinners, "data-codex-sinner", {
-    buttonClass: "deck-filter-token codex-preview-source",
-    preview: true,
+    buttonClass: "deck-filter-token",
     title: true
   });
   renderKeywordFilterSections({
     normalContainer: codexKeywordFilters,
     specialContainer: codexSpecialKeywordFilters,
     activeTags: codexState.activeTags,
-    buttonClass: "deck-filter-token codex-preview-source",
+    buttonClass: "deck-filter-token",
     dataAttribute: "data-codex-tag",
-    preview: true
+    preview: false
   });
 
   codexSinFilters.innerHTML = renderIconFilterButtons(sinFilters, codexState.activeSins, "data-codex-sin", {
@@ -1037,9 +1046,6 @@ function renderCodexFilters() {
   bindFilterButtons(codexAttackTypeFilters, "data-codex-attack-type", (value) => toggleCodexFilter("activeAttackTypes", value));
   bindFilterButtons(codexEffectFilters, "data-codex-effect", (value) => toggleCodexFilter("activeEffects", value));
 
-  attachCodexPreviewListeners(codexSinnerFilters);
-  attachCodexPreviewListeners(codexKeywordFilters);
-  attachCodexPreviewListeners(codexSpecialKeywordFilters);
 }
 
 function toggleCodexFilter(key, value) {
@@ -1071,6 +1077,7 @@ function renderCodexTabs() {
 
 function renderCodexGrid() {
   const items = getFilteredCodexItems();
+  const itemNumberMap = getCodexItemNumberMap();
   const activeTab = codexTabsData.find(([tabId]) => tabId === codexState.activeTab);
   codexHeading.textContent = activeTab?.[1] || "전체";
   codexCount.textContent = String(items.length);
@@ -1081,20 +1088,25 @@ function renderCodexGrid() {
     return;
   }
 
-  codexGrid.innerHTML = items.map((item) => `
-    <button
-      class="codex-item codex-preview-source ${item.id === codexState.previewItemId ? "is-selected" : ""} ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCodexFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""}"
-      type="button"
-      title="${item.title}"
-      data-codex-item-id="${item.id}"
-      ${item.shape === "folder" ? `data-codex-folder-id="${item.id}"` : ""}
-      data-preview-image="${item.previewImage || item.image}"
-      data-preview-alt="${item.title}"
-    >
-      <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
-      ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
-    </button>
-  `).join("");
+  codexGrid.innerHTML = items.map((item) => {
+    const itemNumber = itemNumberMap.get(item.id);
+
+    return `
+      <button
+        class="codex-item codex-preview-source ${item.id === codexState.previewItemId ? "is-selected" : ""} ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCodexFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""}"
+        type="button"
+        title="${item.title}"
+        data-codex-item-id="${item.id}"
+        ${item.shape === "folder" ? `data-codex-folder-id="${item.id}"` : ""}
+        data-preview-image="${item.previewImage || item.image}"
+        data-preview-alt="${item.title}"
+      >
+        <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
+        ${itemNumber ? `<span class="codex-item-number">${itemNumber}</span>` : ""}
+        ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
+      </button>
+    `;
+  }).join("");
 
   attachCodexPreviewListeners(codexGrid);
   codexGrid.querySelectorAll("[data-codex-folder-id]").forEach((button) => {
@@ -1105,6 +1117,14 @@ function renderCodexGrid() {
 
 function getFilteredCodexItems() {
   return getCodexItems().filter((item) => itemMatchesCodexFilterState(item, codexState));
+}
+
+function getCodexItemNumberMap() {
+  return new Map(
+    getCodexItems(() => true)
+      .filter((item) => item.shape === "card")
+      .map((item, index) => [item.id, index + 1])
+  );
 }
 
 function itemMatchesCodexFilterState(item, state) {
@@ -1157,7 +1177,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         id,
         category: getUniqueCardCategory(id),
         sinnerId: sinner.id,
-        image: `assets/sinners/${sinner.id}/base/unique/${padNumber(index)}.png`
+        image: getBaseUniqueImagePath(sinner.id, index)
       }));
     }
 
@@ -1251,6 +1271,8 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
 
   const keywordFilters = LIMBUS_DATA.cardTagFilters || LIMBUS_DATA.identityTagFilters;
   keywordFilters.forEach((filter) => {
+    if (keywordCardHiddenTags.has(filter.tag)) return;
+
     items.push({
       id: `keyword_${filter.tag}`,
       title: filter.tag,
@@ -1545,7 +1567,7 @@ function isCodexFolderExpanded(folderId) {
 
 function attachCodexPreviewListeners(root) {
   root.querySelectorAll(".codex-preview-source").forEach((button) => {
-    const showPreview = (event) => {
+    const previewOnly = () => {
       const isMobileFolder = button.dataset.codexFolderId
         && window.matchMedia("(max-width: 640px)").matches;
       if (isMobileFolder) return;
@@ -1554,17 +1576,34 @@ function attachCodexPreviewListeners(root) {
         ? getCodexItems().find((item) => item.id === button.dataset.codexItemId)
         : null;
 
-      if (codexItem) {
-        codexState.previewItemId = codexItem.id;
-        codexGrid.querySelectorAll("[data-codex-item-id]").forEach((itemButton) => {
-          itemButton.classList.toggle("is-selected", itemButton.dataset.codexItemId === codexItem.id);
-        });
-      }
-
-      renderCodexPreview({
+      renderCodexPreviewLegacy({
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
-        filters: codexItem ? getCodexPreviewFilters(codexItem) : []
+        filters: codexItem ? getCodexPreviewFilters(codexItem) : [],
+        references: []
+      });
+    };
+
+    const selectPreview = (event) => {
+      const codexItem = button.dataset.codexItemId
+        ? getCodexItems().find((item) => item.id === button.dataset.codexItemId)
+        : null;
+
+      if (!codexItem) {
+        previewOnly();
+        return;
+      }
+
+      codexState.previewItemId = codexItem.id;
+      codexGrid.querySelectorAll("[data-codex-item-id]").forEach((itemButton) => {
+        itemButton.classList.toggle("is-selected", itemButton.dataset.codexItemId === codexItem.id);
+      });
+
+      renderCodexPreviewLegacy({
+        image: codexItem.previewImage || codexItem.image,
+        alt: codexItem.title,
+        filters: getCodexPreviewFilters(codexItem),
+        references: getCodexReferenceItems(codexItem.id)
       });
 
       if (codexItem && event.type === "click" && window.matchMedia("(max-width: 640px)").matches) {
@@ -1574,11 +1613,7 @@ function attachCodexPreviewListeners(root) {
       }
     };
 
-    button.addEventListener("mouseenter", showPreview);
-    button.addEventListener("mouseover", showPreview);
-    button.addEventListener("pointerenter", showPreview);
-    button.addEventListener("focus", showPreview);
-    button.addEventListener("click", showPreview);
+    button.addEventListener("click", selectPreview);
   });
 }
 
@@ -1595,6 +1630,109 @@ function renderCodexPreview(item) {
 
 function renderCodexPreviewFilters(filters = []) {
   renderPreviewFilters(codexPreviewFilters, filters);
+}
+
+function renderCodexPreviewLegacy(item) {
+  if (!item) {
+    codexPreview.innerHTML = "<span>카드를 클릭하면 상세 정보가 표시됩니다.</span>";
+    renderCodexPreviewFilters([]);
+    renderCodexReferencePanel([]);
+    return;
+  }
+
+  codexPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
+  renderCodexPreviewFilters(item.filters);
+  renderCodexReferencePanel(item.references || []);
+}
+
+function renderCodexReferencePanel(references = []) {
+  if (!codexReferencePanel) return;
+
+  if (!references.length) {
+    codexReferencePanel.innerHTML = `
+      <h3>인용 카드</h3>
+      <p class="codex-reference-empty">인용 없음</p>
+    `;
+    return;
+  }
+
+  codexReferencePanel.innerHTML = `
+    <h3>인용 카드</h3>
+    <div class="codex-reference-grid">
+      ${references.map((item) => `
+        <button
+          class="codex-reference-card"
+          type="button"
+          data-reference-id="${escapeHtml(item.id)}"
+          aria-label="${escapeHtml(item.title)}"
+        >
+          <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  codexReferencePanel.querySelectorAll(".codex-reference-card").forEach((button) => {
+    const showReferencePreview = () => {
+      const item = findCodexItem(button.dataset.referenceId);
+      if (!item) return;
+      codexPreview.innerHTML = `<img src="${item.previewImage || item.image}" alt="${escapeHtml(item.title)}" />`;
+      renderCodexPreviewFilters(getCodexPreviewFilters(item));
+    };
+    const restoreSelectedPreview = () => {
+      const selectedItem = findCodexItem(codexState.previewItemId);
+      if (!selectedItem) return;
+      codexPreview.innerHTML = `<img src="${selectedItem.previewImage || selectedItem.image}" alt="${escapeHtml(selectedItem.title)}" />`;
+      renderCodexPreviewFilters(getCodexPreviewFilters(selectedItem));
+    };
+
+    button.addEventListener("mouseenter", showReferencePreview);
+    button.addEventListener("mouseover", showReferencePreview);
+    button.addEventListener("pointerenter", showReferencePreview);
+    button.addEventListener("focus", showReferencePreview);
+    button.addEventListener("mouseleave", restoreSelectedPreview);
+    button.addEventListener("blur", restoreSelectedPreview);
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const item = findCodexItem(button.dataset.referenceId);
+      if (!item) return;
+      codexState.previewItemId = item.id;
+      renderCodexPreviewLegacy({
+        image: item.previewImage || item.image,
+        alt: item.title,
+        filters: getCodexPreviewFilters(item),
+        references: getCodexReferenceItems(item.id)
+      });
+    });
+  });
+}
+
+function getCodexReferenceItems(itemId) {
+  const item = findCodexItem(itemId);
+  const referenceIds = [
+    ...(codexReferenceIds[itemId] || []),
+    ...getNormalKeywordReferenceIds(item)
+  ];
+  const uniqueReferenceIds = [...new Set(referenceIds)];
+
+  return uniqueReferenceIds
+    .map((referenceId) => findCodexItem(referenceId))
+    .filter(Boolean);
+}
+
+function getNormalKeywordReferenceIds(item) {
+  if (!item || item.category === "identity" || item.category === "keyword") return [];
+
+  return (item.tags || [])
+    .filter((tag) => !specialKeywordTags.has(tag))
+    .filter((tag) => !keywordCardHiddenTags.has(tag))
+    .map((tag) => `keyword_${tag}`);
+}
+
+function findCodexItem(itemId) {
+  if (!itemId) return null;
+  return getCodexItems().find((item) => item.id === itemId || item.title === itemId) || null;
 }
 
 function versionDirectiveImage(image) {
@@ -1983,10 +2121,6 @@ function attachSlotExtraPreviewListeners() {
       renderPreview(builderState.hovered);
     };
 
-    button.addEventListener("mouseenter", showPreview);
-    button.addEventListener("mouseover", showPreview);
-    button.addEventListener("pointerenter", showPreview);
-    button.addEventListener("focus", showPreview);
     button.addEventListener("click", showPreview);
   });
 }
@@ -2014,14 +2148,6 @@ function renderIdentities() {
 
   identityGrid.querySelectorAll(".identity-card").forEach((card) => {
     card.addEventListener("click", () => chooseIdentity(card.dataset.identityId));
-    card.addEventListener("mouseenter", () => {
-      builderState.hovered = card.dataset.identityId;
-      renderPreview(builderState.hovered);
-    });
-    card.addEventListener("focus", () => {
-      builderState.hovered = card.dataset.identityId;
-      renderPreview(builderState.hovered);
-    });
   });
 }
 
@@ -3615,10 +3741,9 @@ function compactFeaturedFilters(featuredFilters, filterIndexes) {
 }
 
 function compactFilterValues(values, source) {
-  return values.map((value) => {
-    const index = source.indexOf(value);
-    return index >= 0 ? index : value;
-  });
+  return values
+    .map((value) => source.indexOf(value))
+    .filter((index) => index >= 0);
 }
 
 function expandCompactFeaturedFilters(compactFilters, filterIndexes) {
@@ -3636,7 +3761,7 @@ function expandCompactFilterValues(values, source) {
   if (!Array.isArray(values)) return [];
 
   return values
-    .map((value) => (Number.isInteger(value) ? source[value] : value))
+    .map((value) => (Number.isInteger(value) ? source[value] : null))
     .filter((value) => typeof value === "string" && value);
 }
 
@@ -4582,14 +4707,19 @@ function renderDeckReviewExtraCard(card) {
 
 function renderDeckExtraKeywordToken(item) {
   if (!item) return "";
+  const previewClass = item.isPreviewable ? "deck-preview-source" : "";
+  const previewAttributes = item.isPreviewable
+    ? `
+      data-preview-image="${item.previewImage}"
+      data-preview-alt="${item.label}"`
+    : "";
 
   return `
     <button
-      class="deck-token deck-extra-keyword-token ${item.isCard ? "is-card-token" : ""} deck-preview-source"
+      class="deck-token deck-extra-keyword-token ${item.isCard ? "is-card-token" : ""} ${previewClass}"
       type="button"
       aria-label="${item.label}"
-      data-preview-image="${item.previewImage}"
-      data-preview-alt="${item.label}"
+      ${previewAttributes}
     >
       <img src="${item.image}" alt="" />
     </button>
@@ -4611,6 +4741,7 @@ function getKeywordItemsFromTags(tags = []) {
         label: tag,
         image: keywordFilter.image,
         previewImage: keywordFilter.cardImage,
+        isPreviewable: !keywordCardHiddenTags.has(tag),
         isCard: false
       };
     })
@@ -4624,6 +4755,7 @@ function getKeywordItemsFromTags(tags = []) {
       label: card.label,
       image: card.image,
       previewImage: card.previewImage,
+      isPreviewable: true,
       isCard: false
     });
   });
@@ -4888,10 +5020,6 @@ function attachCardPreviewListeners(root, renderPreviewItem, { onClick } = {}) {
     button.addEventListener("mousedown", (event) => {
       event.preventDefault();
     });
-    button.addEventListener("mouseenter", showPreview);
-    button.addEventListener("mouseover", showPreview);
-    button.addEventListener("pointerenter", showPreview);
-    button.addEventListener("focus", showPreview);
     button.addEventListener("click", () => {
       showPreview();
       onClick?.();
@@ -4935,6 +5063,16 @@ function renderSavedViewPreview(item) {
 
 function padNumber(value) {
   return String(value).padStart(2, "0");
+}
+
+function getBaseUniqueImagePath(sinnerId, index) {
+  const imageNames = {
+    faust_base_unique_1: "지식",
+    outis_base_unique_1: "흑심"
+  };
+  const id = `${sinnerId}_base_unique_${index}`;
+  const imageName = imageNames[id] || padNumber(index);
+  return `assets/sinners/${sinnerId}/base/unique/${imageName}.png`;
 }
 
 function renderPreview(identityId) {
