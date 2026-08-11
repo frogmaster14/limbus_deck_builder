@@ -39,6 +39,74 @@ export function getIdentityId(sinnerId, identityKey) {
   return `${sinnerId}_${identityKey}`;
 }
 
+export const SINNER_NUMBERS = Object.fromEntries(
+  Object.keys(CARD_SETS).map((sinnerId, index) => [sinnerId, index + 1])
+);
+
+export const NORMAL_KEYWORD_CODES = {
+  화상: "K-1",
+  출혈: "K-2",
+  진동: "K-3",
+  파열: "K-4",
+  침잠: "K-5",
+  호흡: "K-6",
+  충전: "K-7",
+  패닉: "K-8"
+};
+
+export function getIdentityNumber(sinnerId, identityKey) {
+  const identityKeys = Object.keys(CARD_SETS[sinnerId]?.[2] || {});
+  const index = identityKeys.indexOf(identityKey);
+  return index >= 0 ? index + 1 : null;
+}
+
+export function getIdentityCode(sinnerId, identityKey) {
+  return `${SINNER_NUMBERS[sinnerId]}-I-${getIdentityNumber(sinnerId, identityKey)}`;
+}
+
+export function getBaseCardCode(sinnerId, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-B-${number}`;
+}
+
+export function getBaseUniqueCardCode(sinnerId, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-BX-${number}`;
+}
+
+export function getIdentityCardCode(sinnerId, identityKey, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-C-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+}
+
+export function getIdentityUniqueCardCode(sinnerId, identityKey, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-X-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+}
+
+export function getIdentityUpgradeCardCode(sinnerId, identityKey, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-U-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+}
+
+export function getEgoNumber(sinnerId, egoKey = "base") {
+  if (egoKey === "base") return 1;
+  const extraEgoKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+  const index = extraEgoKeys.indexOf(egoKey);
+  return index >= 0 ? index + 2 : null;
+}
+
+export function getEgoCardCode(sinnerId, egoKey = "base") {
+  return `${SINNER_NUMBERS[sinnerId]}-E-${getEgoNumber(sinnerId, egoKey)}`;
+}
+
+export function getEgoUniqueCardCode(sinnerId, egoKey, number) {
+  return `${SINNER_NUMBERS[sinnerId]}-EX-${getEgoNumber(sinnerId, egoKey)}-${number}`;
+}
+
+export function getKeywordCode(tag) {
+  return NORMAL_KEYWORD_CODES[tag] || null;
+}
+
+export function getDirectiveCardCode(folderNumber, number) {
+  return `D-${folderNumber}-${number}`;
+}
+
 export function getBaseCardId(sinnerId, number) {
   return `${sinnerId}_base_${number}`;
 }
@@ -69,6 +137,13 @@ export function getEgoUniqueCardId(sinnerId, egoKey, number) {
 
 export function formatImageNumber(number) {
   return String(number).padStart(2, "0");
+}
+
+export function getEgoImageNumber(sinnerId, egoKey = "base") {
+  if (egoKey === "base") return "00";
+  const extraEgoKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+  const egoIndex = extraEgoKeys.indexOf(egoKey);
+  return formatImageNumber(egoIndex + 1);
 }
 
 export function getSinnerIconPath(sinnerId) {
@@ -105,7 +180,7 @@ export function getCardImagePath({ type, sinnerId, identityKey = null, number })
   }
 
   if (type === CARD_TYPES.ego) {
-    return `assets/sinners/${sinnerId}/ego/${identityKey || "base"}.png`;
+    return `assets/sinners/${sinnerId}/ego/${getEgoImageNumber(sinnerId, identityKey || "base")}.png`;
   }
 
   if (type === CARD_TYPES.egoUnique) {
@@ -139,6 +214,7 @@ function addToMapArray(map, key, value) {
 
 function makeCard({
   id,
+  code,
   type,
   sinnerId,
   identityId = null,
@@ -152,6 +228,7 @@ function makeCard({
 }) {
   return {
     id,
+    code,
     type,
     sinnerId,
     identityId,
@@ -190,6 +267,9 @@ export function buildLimbusData() {
   const egoBySinnerId = {};
   const egosBySinnerId = {};
   const egoUniqueCardsByEgoId = {};
+  const stableCodeById = {};
+  const idByStableCode = {};
+  const stableCodeDuplicates = [];
 
   const identitiesBySinnerId = {};
   const baseCardsBySinnerId = {};
@@ -210,6 +290,16 @@ export function buildLimbusData() {
     });
   });
 
+  function registerStableCode(id, code) {
+    if (!id || !code) return;
+    if (idByStableCode[code] && idByStableCode[code] !== id) {
+      stableCodeDuplicates.push({ code, ids: [idByStableCode[code], id] });
+      return;
+    }
+    stableCodeById[id] = code;
+    idByStableCode[code] = id;
+  }
+
   function addCard(card) {
     const withTags = {
       ...card,
@@ -220,6 +310,7 @@ export function buildLimbusData() {
 
     cards.push(withTags);
     cardById[withTags.id] = withTags;
+    registerStableCode(withTags.id, withTags.code);
     return withTags;
   }
 
@@ -238,6 +329,7 @@ export function buildLimbusData() {
     for (let number = 1; number <= baseCount; number += 1) {
       const card = addCard(makeCard({
         id: getBaseCardId(sinnerId, number),
+        code: getBaseCardCode(sinnerId, number),
         type: CARD_TYPES.base,
         sinnerId,
         number,
@@ -250,6 +342,7 @@ export function buildLimbusData() {
     for (let number = 1; number <= baseUniqueCount; number += 1) {
       const card = addCard(makeCard({
         id: getBaseUniqueCardId(sinnerId, number),
+        code: getBaseUniqueCardCode(sinnerId, number),
         type: CARD_TYPES.baseUnique,
         sinnerId,
         number,
@@ -264,6 +357,7 @@ export function buildLimbusData() {
     const sinnerEgos = egoKeys.map((egoKey) => {
       const ego = addCard(makeCard({
         id: getEgoCardId(sinnerId, egoKey),
+        code: getEgoCardCode(sinnerId, egoKey),
         type: CARD_TYPES.ego,
         sinnerId,
         identityKey: egoKey,
@@ -282,6 +376,7 @@ export function buildLimbusData() {
       for (let number = 1; number <= egoUniqueCount; number += 1) {
         const uniqueCard = addCard(makeCard({
           id: getEgoUniqueCardId(sinnerId, egoKey, number),
+          code: getEgoUniqueCardCode(sinnerId, egoKey, number),
           type: CARD_TYPES.egoUnique,
           sinnerId,
           identityId: ego.id,
@@ -303,6 +398,7 @@ export function buildLimbusData() {
       const identityId = getIdentityId(sinnerId, identityKey);
       const identity = {
         id: identityId,
+        code: getIdentityCode(sinnerId, identityKey),
         sinnerId,
         identityKey,
         image: getIdentityImagePath(sinnerId, identityKey),
@@ -311,6 +407,7 @@ export function buildLimbusData() {
 
       identities.push(identity);
       identityById[identityId] = identity;
+      registerStableCode(identityId, identity.code);
       identitiesBySinnerId[sinnerId].push(identity);
       cardsByIdentityId[identityId] = [];
       uniqueCardsByIdentityId[identityId] = [];
@@ -320,6 +417,7 @@ export function buildLimbusData() {
       for (let number = 1; number <= cardCount; number += 1) {
         const card = addCard(makeCard({
           id: getIdentityCardId(sinnerId, identityKey, number),
+          code: getIdentityCardCode(sinnerId, identityKey, number),
           type: CARD_TYPES.identity,
           sinnerId,
           identityId,
@@ -335,6 +433,7 @@ export function buildLimbusData() {
       for (let number = 1; number <= uniqueCount; number += 1) {
         const card = addCard(makeCard({
           id: getIdentityUniqueCardId(sinnerId, identityKey, number),
+          code: getIdentityUniqueCardCode(sinnerId, identityKey, number),
           type: CARD_TYPES.identityUnique,
           sinnerId,
           identityId,
@@ -351,6 +450,7 @@ export function buildLimbusData() {
       for (let number = 1; number <= upgradeCount; number += 1) {
         const card = addCard(makeCard({
           id: getIdentityUpgradeCardId(sinnerId, identityKey, number),
+          code: getIdentityUpgradeCardCode(sinnerId, identityKey, number),
           type: CARD_TYPES.identityUpgrade,
           sinnerId,
           identityId,
@@ -404,6 +504,7 @@ export function buildLimbusData() {
 
   const keywordAssets = Object.entries(TAG_ASSET_IDS).map(([tag]) => ({
     tag,
+    code: getKeywordCode(tag),
     assetId: getTagAssetId(tag, "card"),
     cardImage: getKeywordCardImagePath(tag),
     icon: getKeywordIconPath(tag)
@@ -442,6 +543,9 @@ export function buildLimbusData() {
     baseCardsBySinnerId,
     baseUniqueCardsBySinnerId,
     cardsByIdentityId,
+    stableCodeById,
+    idByStableCode,
+    stableCodeDuplicates,
     uniqueCardsByIdentityId,
     upgradeCardsByIdentityId,
     deckableCardsByIdentityId,
@@ -457,6 +561,8 @@ export function buildLimbusData() {
     identityTagFilters: keywordAssets,
     cardTagFilters: keywordAssets,
     keywordAssets,
+    keywordStableCodes: NORMAL_KEYWORD_CODES,
+    sinnerNumbers: SINNER_NUMBERS,
     tagAssetIds: TAG_ASSET_IDS,
     tagsByIdentityId,
     tagsByCardId,

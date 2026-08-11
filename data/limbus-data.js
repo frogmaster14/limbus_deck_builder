@@ -19,7 +19,8 @@
 // - 인격 카드: `assets/sinners/${sinnerId}/${identityKey}/${nn}.png`
 // - 인격 고유 추가 카드: `assets/sinners/${sinnerId}/${identityKey}/unique/${nn}.png`
 // - 인격 강화 카드: `assets/sinners/${sinnerId}/${identityKey}/unique/upgrade/${nn}.png`
-// - EGO 카드: `assets/sinners/${sinnerId}/ego/${egoKey}.png`
+// - EGO 카드: `assets/sinners/${sinnerId}/ego/${nn}.png`
+//   기본 EGO는 00, 추가 EGO는 EXTRA_EGO_CARD_SETS 순서대로 01, 02, 03...을 쓴다.
 // - 키워드 카드: `assets/keywords/cards/${tagAssetId}.png`
 // - 키워드 아이콘: `assets/keywords/icons/${tagAssetId}.png`
 // 여기서 `${nn}`은 01, 02, 03처럼 2자리 숫자다.
@@ -120,7 +121,7 @@ export const CARD_SETS = {
     lcb: [3, 0],
     zwei_south: [3, 2],
     survivor: [3, 2],
-    tides: [3, 0]
+    tides: [3, 1]
   }]
 };
 
@@ -213,7 +214,8 @@ export const UNIQUE_CARD_TYPES = {
   gregor_zwei_south_unique_1: "stack",
   gregor_zwei_south_unique_2: "status",
   gregor_survivor_unique_1: "stack",
-  gregor_survivor_unique_2: "stack"
+  gregor_survivor_unique_2: "stack",
+  gregor_tides_unique_1: "stack"
 };
 
 // 인격 필터용 태그.
@@ -255,17 +257,17 @@ export const CARD_SINS = {
 // 필터 UI에서 태그를 묶어 보여주고 싶을 때 쓴다.
 // 여기에 없는 태그도 CARD_TAGS/IDENTITY_TAGS에 있으면 데이터로는 유효하다.
 export const TAG_GROUPS = {
-  상태이상: ["출혈", "화상", "진동", "파열", "침잠"],
-  자원: ["충전", "호흡"],
+  상태이상: ["화상", "출혈", "진동", "파열", "침잠"],
+  자원: ["호흡", "충전"],
   역할: []
 };
 
 export const TAG_ASSET_IDS = {
-  진동: "tremor",
-  출혈: "bleed",
-  침잠: "sinking",
-  호흡: "poise",
-  화상: "burn",
-  파열: "rupture",
-  충전: "charge"
+  화상: "01",
+  출혈: "02",
+  진동: "03",
+  파열: "04",
+  침잠: "05",
+  호흡: "06",
+  충전: "07"
 };

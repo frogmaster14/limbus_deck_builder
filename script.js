@@ -166,24 +166,28 @@ const faustIndexDirectiveFolder = {
   folders: [
     {
       id: "faust_index_directive_note_1",
+      directiveNumber: 1,
       title: "쪽지 1",
       image: "assets/sinners/faust/index/쪽지 1/쪽지 1 뒷면.png",
       cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 1/${index + 1}.png`)
     },
     {
       id: "faust_index_directive_note_2",
+      directiveNumber: 2,
       title: "쪽지 2",
       image: "assets/sinners/faust/index/쪽지 2/쪽지 2 뒷면.png",
       cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 2/${index + 1}.png`)
     },
     {
       id: "faust_index_directive_note_3",
+      directiveNumber: 3,
       title: "쪽지 3",
       image: "assets/sinners/faust/index/쪾자 3/쪽지 3 뒷면.png",
       cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪾자 3/${index + 1}.png`)
     },
     {
       id: "faust_index_directive_petal",
+      directiveNumber: 4,
       title: "꽃잎 지령",
       image: "assets/sinners/faust/index/꽃잎 지령/꽃잎 지령 뒷면.png",
       cards: Array.from({ length: 5 }, (_, index) => `assets/sinners/faust/index/꽃잎 지령/${index + 1}.png`)
@@ -973,7 +977,6 @@ function renderCodexTabs() {
 
 function renderCodexGrid() {
   const items = getFilteredCodexItems();
-  const itemNumberMap = getCodexItemNumberMap();
   const activeTab = codexTabsData.find(([tabId]) => tabId === codexState.activeTab);
   codexHeading.textContent = activeTab?.[1] || "전체";
   codexCount.textContent = String(items.length);
@@ -985,7 +988,7 @@ function renderCodexGrid() {
   }
 
   codexGrid.innerHTML = items.map((item) => {
-    const itemNumber = itemNumberMap.get(item.id);
+    const itemCode = item.code || getStableCode(item.id);
 
     return `
       <button
@@ -996,9 +999,10 @@ function renderCodexGrid() {
         ${item.shape === "folder" ? `data-codex-folder-id="${item.id}"` : ""}
         data-preview-image="${item.previewImage || item.image}"
         data-preview-alt="${item.title}"
+        data-preview-code="${itemCode || ""}"
       >
         <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
-        ${itemNumber ? `<span class="codex-item-number">${itemNumber}</span>` : ""}
+        ${itemCode ? `<span class="codex-item-number">${itemCode}</span>` : ""}
         ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
       </button>
     `;
@@ -1078,7 +1082,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         id: `${sinner.id}_${egoKey}_ego`,
         category: "ego",
         sinnerId: sinner.id,
-        image: `assets/sinners/${sinner.id}/ego/${egoKey}.png`
+        image: `assets/sinners/${sinner.id}/ego/${getEgoImageNumberForSinner(sinner.id, egoKey)}.png`
       }));
 
       const uniqueCount = LIMBUS_DATA.raw.egoUniqueCardSets?.[sinner.id]?.[egoKey] || 0;
@@ -1100,6 +1104,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
 
       items.push({
         id: identity.id,
+        code: identity.code || getStableCode(identity.id),
         title: identity.id,
         category: "identity",
         sinnerId: identity.sinnerId,
@@ -1148,6 +1153,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
   keywordFilters.forEach((filter) => {
     items.push({
       id: `keyword_${filter.tag}`,
+      code: filter.code || LIMBUS_DATA.keywordStableCodes?.[filter.tag] || null,
       title: filter.tag,
       category: "keyword",
       image: filter.cardImage,
@@ -1189,6 +1195,7 @@ function addFaustIndexDirectiveItems(items, isFolderExpanded = isCodexFolderExpa
       const versionedImage = versionDirectiveImage(image);
       items.push({
         id: `${folder.id}_${index + 1}`,
+        code: `D-${folder.directiveNumber}-${index + 1}`,
         title: `${folder.title}_${index + 1}`,
         category: group.category,
         sinnerId: group.sinnerId,
@@ -1204,9 +1211,10 @@ function addFaustIndexDirectiveItems(items, isFolderExpanded = isCodexFolderExpa
   });
 }
 
-function makeCodexFolderItem({ id, title, image, folderDepth }) {
+function makeCodexFolderItem({ id, title, image, folderDepth, code = null }) {
   return {
     id,
+    code,
     title,
     category: faustIndexDirectiveFolder.category,
     sinnerId: faustIndexDirectiveFolder.sinnerId,
@@ -1337,6 +1345,7 @@ function renderKeywordFilterButtons(filters, activeTags, {
 function makeCodexItem({ id, category, sinnerId, image }) {
   return {
     id,
+    code: getStableCode(id),
     title: id,
     category,
     sinnerId,
@@ -1393,6 +1402,7 @@ function attachCodexPreviewListeners(root) {
       renderCodexPreviewLegacy({
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
+        code: button.dataset.previewCode || getStableCode(button.dataset.codexItemId),
         filters: codexItem ? getCodexPreviewFilters(codexItem) : []
       });
     };
@@ -1415,6 +1425,7 @@ function attachCodexPreviewListeners(root) {
       renderCodexPreviewLegacy({
         image: codexItem.previewImage || codexItem.image,
         alt: codexItem.title,
+        code: codexItem.code || getStableCode(codexItem.id),
         filters: getCodexPreviewFilters(codexItem)
       });
 
@@ -1436,7 +1447,7 @@ function renderCodexPreview(item) {
     return;
   }
 
-  codexPreview.innerHTML = `<img src="${item.image}" alt="${item.alt}" />`;
+  codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
 }
 
@@ -1451,7 +1462,7 @@ function renderCodexPreviewLegacy(item) {
     return;
   }
 
-  codexPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
+  codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
 }
 
@@ -1641,6 +1652,12 @@ function chooseIdentity(identityId) {
 
 function getEgoKeysForSinner(sinnerId) {
   return ["base", ...(LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [])];
+}
+
+function getEgoImageNumberForSinner(sinnerId, egoKey = "base") {
+  if (egoKey === "base") return "00";
+  const extraEgoKeys = LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [];
+  return padNumber(extraEgoKeys.indexOf(egoKey) + 1);
 }
 
 function renderBuilder() {
@@ -2204,6 +2221,7 @@ function getDeckCardsForIdentityIds(identityIds = []) {
       const id = `${identity.sinnerId}_base_${index}`;
       cards.push({
         id,
+        code: getStableCode(id),
         category: "sinner",
         image: `assets/sinners/${identity.sinnerId}/base/${padNumber(index)}.png`,
         selectable: true,
@@ -2218,6 +2236,7 @@ function getDeckCardsForIdentityIds(identityIds = []) {
       const id = `${identity.id}_cards_${index}`;
       cards.push({
         id,
+        code: getStableCode(id),
         category: "identity",
         image: `assets/sinners/${identity.sinnerId}/${identity.identityKey}/${padNumber(index)}.png`,
         selectable: true,
@@ -2231,6 +2250,7 @@ function getDeckCardsForIdentityIds(identityIds = []) {
     identity.upgradeCards.forEach((card) => {
       cards.push({
         id: card.id,
+        code: card.code || getStableCode(card.id),
         category: "upgrade",
         image: card.image,
         selectable: true,
@@ -2248,8 +2268,9 @@ function getDeckCardsForIdentityIds(identityIds = []) {
 
       cards.push({
         id: egoId,
+        code: getStableCode(egoId),
         category: "ego",
-        image: `assets/sinners/${identity.sinnerId}/ego/${egoKey}.png`,
+        image: `assets/sinners/${identity.sinnerId}/ego/${getEgoImageNumberForSinner(identity.sinnerId, egoKey)}.png`,
         selectable: true,
         countsTowardDeck: false,
         sin: getCardSin(egoId),
@@ -2585,6 +2606,7 @@ function selectCardInsertItem(itemId) {
   renderCardSearchPreview({
     image: item.previewImage || item.image,
     alt: item.title,
+    code: item.code || getStableCode(item.id),
     filters: getCodexPreviewFilters(item)
   });
   renderCardSearchResults();
@@ -2594,6 +2616,7 @@ function selectCardInsertItem(itemId) {
 function makeCardInsertDeckItem(card) {
   return {
     id: card.id,
+    code: card.code || getStableCode(card.id),
     title: card.id,
     category: card.category === "sinner" ? "card" : card.category,
     sinnerId: card.sinnerId || null,
@@ -2604,6 +2627,10 @@ function makeCardInsertDeckItem(card) {
     attackType: card.attackType || null,
     shape: "card"
   };
+}
+
+function getStableCode(id) {
+  return LIMBUS_DATA.stableCodeById?.[id] || null;
 }
 
 function getCardInsertItemById(itemId) {
@@ -2621,7 +2648,7 @@ function renderCardSearchPreview(item) {
     return;
   }
 
-  cardSearchPreview.innerHTML = `<img src="${item.image}" alt="${item.alt}" />`;
+  cardSearchPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code || getStableCode(item.alt));
   renderPreviewFilters(cardSearchPreviewFilters, item.filters || getPreviewFiltersForId(item.alt));
 }
 
@@ -4645,6 +4672,7 @@ function attachCardPreviewListeners(root, renderPreviewItem, { onClick } = {}) {
       renderPreviewItem({
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
+        code: getStableCode(previewId),
         filters: getPreviewFiltersForId(previewId)
       });
     };
@@ -4678,7 +4706,7 @@ function renderDeckPreview(item) {
     return;
   }
 
-  deckPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
+  deckPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code || getStableCode(item.alt));
   renderDeckPreviewFilters(item.filters || getPreviewFiltersForId(item.alt));
 }
 
@@ -4691,7 +4719,7 @@ function renderSavedViewPreview(item) {
     return;
   }
 
-  savedViewPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
+  savedViewPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code || getStableCode(item.alt));
   renderPreviewFilters(savedViewPreviewFilters, item.filters || getPreviewFiltersForId(item.alt));
 }
 
@@ -4708,6 +4736,18 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
+function renderPreviewImageWithCode(image, alt, code = null) {
+  const codeBadge = code
+    ? `<span class="preview-code-badge">${escapeHtml(code)}</span>`
+    : "";
+  return `
+    <div class="preview-image-wrap">
+      <img src="${image}" alt="${escapeHtml(alt)}" />
+      ${codeBadge}
+    </div>
+  `;
+}
+
 function getBaseUniqueImagePath(sinnerId, index) {
   const imageNames = {
     faust_base_unique_1: "지식",
@@ -4720,7 +4760,11 @@ function getBaseUniqueImagePath(sinnerId, index) {
 
 function renderPreview(identityId) {
   if (identityId && typeof identityId === "object") {
-    identityPreview.innerHTML = `<img src="${identityId.image}" alt="${identityId.alt}" />`;
+    identityPreview.innerHTML = renderPreviewImageWithCode(
+      identityId.image,
+      identityId.alt,
+      identityId.code || getStableCode(identityId.alt)
+    );
     renderIdentityPreviewFilters(identityId.filters || getPreviewFiltersForId(identityId.alt));
     return;
   }
@@ -4733,7 +4777,7 @@ function renderPreview(identityId) {
     return;
   }
 
-  identityPreview.innerHTML = `<img src="${identity.image}" alt="${identity.id}" />`;
+  identityPreview.innerHTML = renderPreviewImageWithCode(identity.image, identity.id, identity.code || getStableCode(identity.id));
   renderIdentityPreviewFilters(getPreviewFiltersForId(identity.id));
 }
 

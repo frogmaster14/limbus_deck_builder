@@ -91,7 +91,7 @@
       lcb: [3, 0],
       zwei_south: [3, 2],
       survivor: [3, 2],
-      tides: [3, 0]
+      tides: [3, 1]
     }]
   };
 
@@ -203,18 +203,19 @@
     gregor_zwei_south_unique_1: "stack",
     gregor_zwei_south_unique_2: "status",
     gregor_survivor_unique_1: "stack",
-    gregor_survivor_unique_2: "stack"
+    gregor_survivor_unique_2: "stack",
+    gregor_tides_unique_1: "stack"
   };
 
 
   const TAG_ASSET_IDS = {
-  진동: "tremor",
-  출혈: "bleed",
-  침잠: "sinking",
-  호흡: "poise",
-  화상: "burn",
-  파열: "rupture",
-  충전: "charge"
+  화상: "01",
+  출혈: "02",
+  진동: "03",
+  파열: "04",
+  침잠: "05",
+  호흡: "06",
+  충전: "07"
 };
 
   const getTagAssetId = (tag, kind) => {
@@ -244,6 +245,54 @@
   const attackTypeByCardId = {};
   const sinByCardId = {};
   const padNumber = (value) => String(value).padStart(2, "0");
+  const SINNER_NUMBERS = Object.fromEntries(
+    Object.keys(CARD_SETS).map((sinnerId, index) => [sinnerId, index + 1])
+  );
+  const NORMAL_KEYWORD_CODES = {
+    화상: "K-1",
+    출혈: "K-2",
+    진동: "K-3",
+    파열: "K-4",
+    침잠: "K-5",
+    호흡: "K-6",
+    충전: "K-7",
+    패닉: "K-8"
+  };
+  const stableCodeById = {};
+  const idByStableCode = {};
+  const stableCodeDuplicates = [];
+
+  const getIdentityNumber = (sinnerId, identityKey) => {
+    const identityKeys = Object.keys(CARD_SETS[sinnerId]?.[2] || {});
+    const index = identityKeys.indexOf(identityKey);
+    return index >= 0 ? index + 1 : null;
+  };
+
+  const getEgoNumber = (sinnerId, egoKey = "base") => {
+    if (egoKey === "base") return 1;
+    const index = (EXTRA_EGO_CARD_SETS[sinnerId] || []).indexOf(egoKey);
+    return index >= 0 ? index + 2 : null;
+  };
+
+  const registerStableCode = (id, code) => {
+    if (!id || !code) return code;
+    if (idByStableCode[code] && idByStableCode[code] !== id) {
+      stableCodeDuplicates.push({ code, ids: [idByStableCode[code], id] });
+      return code;
+    }
+    stableCodeById[id] = code;
+    idByStableCode[code] = id;
+    return code;
+  };
+
+  const getIdentityCode = (sinnerId, identityKey) => `${SINNER_NUMBERS[sinnerId]}-I-${getIdentityNumber(sinnerId, identityKey)}`;
+  const getBaseCardCode = (sinnerId, number) => `${SINNER_NUMBERS[sinnerId]}-B-${number}`;
+  const getBaseUniqueCardCode = (sinnerId, number) => `${SINNER_NUMBERS[sinnerId]}-BX-${number}`;
+  const getIdentityCardCode = (sinnerId, identityKey, number) => `${SINNER_NUMBERS[sinnerId]}-C-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+  const getIdentityUniqueCardCode = (sinnerId, identityKey, number) => `${SINNER_NUMBERS[sinnerId]}-X-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+  const getIdentityUpgradeCardCode = (sinnerId, identityKey, number) => `${SINNER_NUMBERS[sinnerId]}-U-${getIdentityNumber(sinnerId, identityKey)}-${number}`;
+  const getEgoCardCode = (sinnerId, egoKey = "base") => `${SINNER_NUMBERS[sinnerId]}-E-${getEgoNumber(sinnerId, egoKey)}`;
+  const getEgoUniqueCardCode = (sinnerId, egoKey, number) => `${SINNER_NUMBERS[sinnerId]}-EX-${getEgoNumber(sinnerId, egoKey)}-${number}`;
 
   Object.entries(IDENTITY_TAGS).forEach(([tag, identityIds]) => {
     identityIds.forEach((identityId) => {
@@ -271,7 +320,7 @@
     });
   });
 
-  Object.entries(CARD_SETS).forEach(([sinnerId, [, , identitySet]]) => {
+  Object.entries(CARD_SETS).forEach(([sinnerId, [baseCount, baseUniqueCount, identitySet]]) => {
     const sinner = {
       id: sinnerId,
       icon: `assets/sinners/${sinnerId}/icon.png`
@@ -281,11 +330,30 @@
     sinnerById[sinnerId] = sinner;
     identitiesBySinnerId[sinnerId] = [];
 
+    for (let number = 1; number <= baseCount; number += 1) {
+      registerStableCode(`${sinnerId}_base_${number}`, getBaseCardCode(sinnerId, number));
+    }
+
+    for (let number = 1; number <= baseUniqueCount; number += 1) {
+      registerStableCode(`${sinnerId}_base_unique_${number}`, getBaseUniqueCardCode(sinnerId, number));
+    }
+
+    ["base", ...(EXTRA_EGO_CARD_SETS[sinnerId] || [])].forEach((egoKey) => {
+      const egoId = `${sinnerId}_${egoKey}_ego`;
+      registerStableCode(egoId, getEgoCardCode(sinnerId, egoKey));
+
+      const uniqueCount = EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0;
+      for (let number = 1; number <= uniqueCount; number += 1) {
+        registerStableCode(`${egoId}_unique_${number}`, getEgoUniqueCardCode(sinnerId, egoKey, number));
+      }
+    });
+
     Object.entries(identitySet).forEach(([identityKey, [cardCount, uniqueCount]]) => {
       const identityId = `${sinnerId}_${identityKey}`;
       const tags = tagsByIdentityId[identityId] || [];
       const identity = {
         id: identityId,
+        code: registerStableCode(identityId, getIdentityCode(sinnerId, identityKey)),
         sinnerId,
         identityKey,
         cardCount,
@@ -301,6 +369,7 @@
           const number = index + 1;
           return {
             id: `${identityId}_unique_${number}`,
+            code: registerStableCode(`${identityId}_unique_${number}`, getIdentityUniqueCardCode(sinnerId, identityKey, number)),
             image: `assets/sinners/${sinnerId}/${identityKey}/unique/${padNumber(number)}.png`
           };
         }),
@@ -308,10 +377,15 @@
           const number = index + 1;
           return {
             id: `${identityId}_upgrade_${number}`,
+            code: registerStableCode(`${identityId}_upgrade_${number}`, getIdentityUpgradeCardCode(sinnerId, identityKey, number)),
             image: `assets/sinners/${sinnerId}/${identityKey}/unique/upgrade/${padNumber(number)}.png`
           };
         })
       };
+
+      for (let number = 1; number <= cardCount; number += 1) {
+        registerStableCode(`${identityId}_cards_${number}`, getIdentityCardCode(sinnerId, identityKey, number));
+      }
 
       identities.push(identity);
       identityById[identity.id] = identity;
@@ -338,11 +412,13 @@
     identitiesBySinnerId,
     identityTagFilters: Object.keys(TAG_ASSET_IDS).map((tag) => ({
       tag,
+      code: NORMAL_KEYWORD_CODES[tag] || null,
       image: getKeywordIconPath(tag),
       cardImage: getKeywordCardImagePath(tag)
     })),
     cardTagFilters: Object.keys(TAG_ASSET_IDS).map((tag) => ({
       tag,
+      code: NORMAL_KEYWORD_CODES[tag] || null,
       image: getKeywordIconPath(tag),
       cardImage: getKeywordCardImagePath(tag)
     })),
@@ -355,6 +431,11 @@
     cardIdsByAttackType: CARD_ATTACK_TYPES,
     cardIdsBySin: CARD_SINS,
     uniqueCardTypes: UNIQUE_CARD_TYPES,
+    stableCodeById,
+    idByStableCode,
+    stableCodeDuplicates,
+    keywordStableCodes: NORMAL_KEYWORD_CODES,
+    sinnerNumbers: SINNER_NUMBERS,
     egoUniqueCardSets: EGO_UNIQUE_CARD_SETS,
     tagsByIdentityId,
     tagsByCardId,
