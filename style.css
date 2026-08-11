@@ -610,69 +610,9 @@ h2 {
   display: none;
 }
 
-.codex-reference-panel {
-  display: grid;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-  min-height: 176px;
-  max-height: none;
-  padding: 12px;
-  border: 1px solid rgba(243, 170, 22, 0.18);
-  background: rgba(35, 18, 13, 0.58);
-  overflow-y: auto;
-}
-
-.codex-reference-panel h3 {
-  margin: 0;
-  color: #ffe4ad;
-  font-size: 14px;
-}
-
-.codex-reference-empty {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.codex-reference-grid {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  align-items: flex-start;
-  gap: 8px;
-  min-height: 0;
-}
-
-.codex-reference-card {
-  position: relative;
-  flex: 0 0 92px;
-  width: 92px;
-  aspect-ratio: var(--card-aspect);
-  padding: 0;
-  border: 1px solid rgba(243, 170, 22, 0.22);
-  background: rgba(20, 9, 6, 0.72);
-  cursor: default;
-  overflow: hidden;
-}
-
-.codex-reference-card:hover,
-.codex-reference-card:focus-visible {
-  border-color: rgba(243, 170, 22, 0.82);
-  outline: none;
-}
-
-.codex-reference-card img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
 .codex-shell .deck-preview-panel {
   align-content: start;
-  grid-template-rows: auto 62px minmax(176px, 1fr);
+  grid-template-rows: auto 62px;
   justify-items: stretch;
   padding: 20px;
 }
@@ -690,10 +630,6 @@ h2 {
   min-height: 62px;
   max-height: 62px;
   pointer-events: none;
-}
-
-.codex-shell .codex-reference-panel {
-  grid-row: 3;
 }
 
 @media (min-width: 641px) {
@@ -935,36 +871,6 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-.special-keyword-panel {
-  display: grid;
-  gap: 8px;
-  margin-top: 2px;
-}
-
-.special-keyword-panel[hidden] {
-  display: none;
-}
-
-.special-keyword-panel summary {
-  width: max-content;
-  color: #d8aa69;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 900;
-  list-style-position: inside;
-}
-
-.special-keyword-panel summary:hover,
-.special-keyword-panel summary:focus-visible {
-  color: #ffe4ad;
-  outline: none;
-}
-
-.special-keyword-panel .filter-buttons,
-.special-keyword-panel .deck-filter-buttons {
-  padding-top: 2px;
 }
 
 .sinner-filter-buttons {
@@ -1625,23 +1531,6 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-.effect-filter-groups {
-  display: grid;
-  gap: 10px;
-}
-
-.filter-subgroup {
-  display: grid;
-  gap: 6px;
-}
-
-.filter-subgroup-title {
-  margin: 0;
-  color: #ffe4ad;
-  font-size: 12px;
-  font-weight: 900;
 }
 
 .deck-filter-token {

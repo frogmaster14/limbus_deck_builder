@@ -1,16 +1,12 @@
 import {
-  CARD_ATTACK_TYPES,
-  CARD_EFFECTS,
-  CARD_SETS,
+  CARD_ATTACK_TYPES,  CARD_SETS,
   CARD_SINS,
   CARD_TAGS,
   EGO_UNIQUE_CARD_SETS,
   EXTRA_EGO_CARD_SETS,
   IDENTITY_TAGS,
   TAG_ASSET_IDS,
-  TAG_GROUPS,
-  SHARED_SPECIAL_CARDS,
-  UNIQUE_CARD_TYPES,
+  TAG_GROUPS,  UNIQUE_CARD_TYPES,
   UPGRADE_CARD_SETS
 } from "./limbus-data.js";
 
@@ -205,7 +201,6 @@ export function buildLimbusData() {
 
   const tagsByIdentityId = invertTagMap(IDENTITY_TAGS);
   const tagsByCardId = invertTagMap(CARD_TAGS);
-  const effectsByCardId = invertTagMap(CARD_EFFECTS);
   const attackTypesByCardId = invertTagMap(CARD_ATTACK_TYPES);
   const sinByCardId = {};
 
@@ -219,7 +214,6 @@ export function buildLimbusData() {
     const withTags = {
       ...card,
       tags: tagsByCardId[card.id] || [],
-      effects: effectsByCardId[card.id] || [],
       attackType: attackTypesByCardId[card.id]?.[0] || null,
       sin: sinByCardId[card.id] || null
     };
@@ -394,13 +388,6 @@ export function buildLimbusData() {
     ])
   );
 
-  const cardsByEffect = Object.fromEntries(
-    Object.entries(CARD_EFFECTS).map(([effect, cardIds]) => [
-      effect,
-      cardIds.map((cardId) => cardById[cardId]).filter(Boolean)
-    ])
-  );
-
   const cardsByAttackType = Object.fromEntries(
     Object.entries(CARD_ATTACK_TYPES).map(([attackType, cardIds]) => [
       attackType,
@@ -430,13 +417,11 @@ export function buildLimbusData() {
       egoUniqueCardSets: EGO_UNIQUE_CARD_SETS,
       identityTags: IDENTITY_TAGS,
       cardTags: CARD_TAGS,
-      cardEffects: CARD_EFFECTS,
       cardAttackTypes: CARD_ATTACK_TYPES,
       cardSins: CARD_SINS,
       tagAssetIds: TAG_ASSET_IDS,
       tagGroups: TAG_GROUPS,
       uniqueCardTypes: UNIQUE_CARD_TYPES,
-      sharedSpecialCards: SHARED_SPECIAL_CARDS,
       upgradeCardSets: UPGRADE_CARD_SETS
     },
     sinners,
@@ -463,20 +448,18 @@ export function buildLimbusData() {
     identitiesByTag,
     cardsByTag,
     cardsBySin,
-    cardsByEffect,
     cardsByAttackType,
     identityIdsByTag: IDENTITY_TAGS,
     cardIdsByTag: CARD_TAGS,
-    cardIdsByEffect: CARD_EFFECTS,
     cardIdsByAttackType: CARD_ATTACK_TYPES,
     cardIdsBySin: CARD_SINS,
     uniqueCardTypes: UNIQUE_CARD_TYPES,
-    sharedSpecialCards: SHARED_SPECIAL_CARDS,
+    identityTagFilters: keywordAssets,
+    cardTagFilters: keywordAssets,
     keywordAssets,
     tagAssetIds: TAG_ASSET_IDS,
     tagsByIdentityId,
     tagsByCardId,
-    effectsByCardId,
     attackTypeByCardId: Object.fromEntries(
       Object.entries(attackTypesByCardId).map(([cardId, attackTypes]) => [cardId, attackTypes[0]])
     ),

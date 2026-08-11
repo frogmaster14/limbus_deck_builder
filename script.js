@@ -46,7 +46,6 @@ const identityGrid = document.querySelector("#identity-grid");
 const identityCount = document.querySelector("#identity-count");
 const sinnerFilterButtons = document.querySelector("#sinner-filter-buttons");
 const keywordFilterButtons = document.querySelector("#keyword-filter-buttons");
-const keywordSpecialFilterButtons = document.querySelector("#keyword-special-filter-buttons");
 const identitySlots = document.querySelectorAll(".identity-slot");
 const slotExtras = document.querySelectorAll(".slot-extra");
 const identityPreview = document.querySelector("#identity-preview");
@@ -89,17 +88,13 @@ const cardSearchPreviewFilters = document.querySelector("#card-search-preview-fi
 const cardSearchInsertButton = document.querySelector("#card-search-insert-button");
 const cardInsertSinnerFilters = document.querySelector("#card-insert-sinner-filters");
 const cardInsertKeywordFilters = document.querySelector("#card-insert-keyword-filters");
-const cardInsertSpecialKeywordFilters = document.querySelector("#card-insert-special-keyword-filters");
 const cardInsertSinFilters = document.querySelector("#card-insert-sin-filters");
 const cardInsertAttackTypeFilters = document.querySelector("#card-insert-attack-type-filters");
-const cardInsertEffectFilters = document.querySelector("#card-insert-effect-filters");
 const deckCount = document.querySelector("#deck-view .deck-count");
 const deckPreview = document.querySelector("#deck-preview");
 const deckKeywordFilters = document.querySelector("#deck-keyword-filters");
-const deckSpecialKeywordFilters = document.querySelector("#deck-special-keyword-filters");
 const deckSinFilters = document.querySelector("#deck-sin-filters");
 const deckAttackTypeFilters = document.querySelector("#deck-attack-type-filters");
-const deckEffectFilters = document.querySelector("#deck-effect-filters");
 const deckNextButton = document.querySelector("[data-action='next-deck-step']");
 const codexTabs = document.querySelector("#codex-tabs");
 const codexGrid = document.querySelector("#codex-grid");
@@ -108,12 +103,9 @@ const codexHeading = document.querySelector("#codex-heading");
 const codexPreview = document.querySelector("#codex-preview");
 const codexSinnerFilters = document.querySelector("#codex-sinner-filters");
 const codexKeywordFilters = document.querySelector("#codex-keyword-filters");
-const codexSpecialKeywordFilters = document.querySelector("#codex-special-keyword-filters");
 const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
-const codexEffectFilters = document.querySelector("#codex-effect-filters");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
-const codexReferencePanel = document.querySelector("#codex-reference-panel");
 const mobileCodexNav = document.querySelector(".mobile-codex-nav");
 const mobileCodexCardCount = document.querySelector("#mobile-codex-card-count");
 const mobileCodexFilterCount = document.querySelector("#mobile-codex-filter-count");
@@ -158,67 +150,12 @@ const sinFilters = [
   { label: "오만", image: "assets/sins/icons/pride.png" },
   { label: "질투", image: "assets/sins/icons/envy.png" }
 ];
-const effectFilterGroups = [
-  {
-    title: "회복",
-    filters: [
-      { label: "가드회복", image: "assets/effects/icons/guard_restore.png" },
-      { label: "체력회복", image: "assets/effects/icons/hp_restore.png" }
-    ]
-  },
-  {
-    title: "카드 이동",
-    filters: [
-      { label: "드로우", image: "assets/effects/icons/draw.png" },
-      { label: "버리기", image: "assets/effects/icons/discard.png" },
-      { label: "덱 이동", image: "assets/effects/icons/deck_shuffle.png" },
-      { label: "체인 관련", image: "assets/effects/icons/chain_related.png" }
-    ]
-  },
-  {
-    title: "특수",
-    filters: [
-      { label: "필중", image: "assets/effects/icons/sure_hit.png" },
-      { label: "코인토스", image: "assets/effects/icons/chain_continue.png" },
-      { label: "재사용", image: "assets/effects/icons/reuse.png" },
-      { label: "탄환", image: "assets/keywords/icons/탄환.png" },
-      { label: "죄악 변경", image: "assets/effects/icons/sin_change.png" },
-      { label: "상태 변경", image: "assets/effects/icons/status_change.png" },
-      { label: "효과 변경", image: "assets/effects/icons/status_change.png" },
-      { label: "상대 방해", image: "assets/effects/icons/opponent_power_down.png" },
-      { label: "수감자 교체", image: "assets/effects/icons/sinner_switch.png" },
-      { label: "다른 카드로 취급", image: "assets/effects/icons/treated_as_other_card.png" },
-      { label: "자해기믹", image: "assets/effects/icons/self_damage.png" }
-    ]
-  },
-  {
-    title: "데미지 & 위력",
-    filters: [
-      { label: "위력증가", image: "assets/effects/icons/power_up.png" },
-      { label: "위력감소", image: "assets/effects/icons/opponent_power_down.png" },
-      { label: "최대 합 위력 변경", image: "assets/effects/icons/max_clash_power_change.png" },
-      { label: "전체 데미지 증가", image: "assets/effects/icons/hp_damage_up.png" },
-      { label: "가드뎀 증가", image: "assets/effects/icons/guard_damage_up.png" },
-      { label: "체력뎀 증가", image: "assets/effects/icons/damage_up.png" },
-      { label: "효과 데미지", image: "assets/effects/icons/effect_damage.png" },
-      { label: "상대 데미지 감소", image: "assets/effects/icons/opponent_damage_down.png" },
-      { label: "받는 데미지 감소", image: "assets/effects/icons/damage_reduce.png" }
-    ]
-  }
-];
-const effectFilters = effectFilterGroups.flatMap((group) => group.filters);
 const attackTypeFilters = [
   { label: "참격", image: "assets/attack-types/icons/slash.png" },
   { label: "관통", image: "assets/attack-types/icons/pierce.png" },
   { label: "타격", image: "assets/attack-types/icons/blunt.png" },
   { label: "스킬", image: "assets/attack-types/icons/skill.png" }
 ];
-const specialKeywordTags = new Set([
-  "마비",
-  "진동폭발"
-]);
-const keywordCardHiddenTags = new Set();
-const derivedDeckKeywordCards = [];
 const faustIndexDirectiveFolder = {
   id: "faust_index_directives",
   title: "지령",
@@ -251,31 +188,6 @@ const faustIndexDirectiveFolder = {
       image: "assets/sinners/faust/index/꽃잎 지령/꽃잎 지령 뒷면.png",
       cards: Array.from({ length: 5 }, (_, index) => `assets/sinners/faust/index/꽃잎 지령/${index + 1}.png`)
     }
-  ]
-};
-const codexReferenceIds = {
-  faust_base_6: ["faust_base_unique_1"],
-  faust_gripper: ["faust_gripper_unique_1"],
-  faust_gripper_cards_1: ["faust_gripper_unique_1"],
-  faust_gripper_cards_2: ["faust_gripper_unique_1"],
-  faust_gripper_cards_3: ["faust_gripper_unique_1"],
-  ishmael_zwei_west: ["ishmael_zwei_west_unique_1"],
-  ishmael_zwei_west_cards_1: ["gregor_zwei_south_unique_1"],
-  ishmael_zwei_west_cards_2: ["gregor_zwei_south_unique_1"],
-  ishmael_zwei_west_cards_3: ["gregor_zwei_south_unique_1"],
-  ishmael_zwei_west_unique_1: ["gregor_zwei_south_unique_1"],
-  outis_base_2: ["outis_base_unique_1"],
-  ryoshu_edgar_butler: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
-  ryoshu_edgar_butler_cards_1: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
-  ryoshu_edgar_butler_cards_2: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
-  ryoshu_edgar_butler_cards_3: ["ryoshu_edgar_butler_unique_1", "ryoshu_edgar_butler_unique_2"],
-  "keyword_침잠": ["shared_panic_card"],
-  yi_sang_ring_cards_3: [
-    "keyword_진동",
-    "keyword_출혈",
-    "keyword_침잠",
-    "keyword_호흡",
-    "keyword_충전"
   ]
 };
 const codexTabsData = [
@@ -313,7 +225,6 @@ const builderState = {
   activeDeckTags: [],
   activeDeckSins: [],
   activeDeckAttackTypes: [],
-  activeDeckEffects: [],
   deckCards: [],
   selectedEgo: null,
   upgradeCards: [],
@@ -324,8 +235,7 @@ const builderState = {
     featuredFilters: {
       sins: [],
       attackTypes: [],
-      tags: [],
-      effects: []
+      tags: []
     },
     editingId: null
   }
@@ -336,7 +246,6 @@ const codexState = {
   activeTags: [],
   activeSins: [],
   activeAttackTypes: [],
-  activeEffects: [],
   expandedFolders: [],
   previewItemId: "",
   mobilePane: "cards"
@@ -347,7 +256,6 @@ const cardInsertState = {
   activeTags: [],
   activeSins: [],
   activeAttackTypes: [],
-  activeEffects: [],
   expandedFolders: [],
   selectedItemId: ""
 };
@@ -789,7 +697,7 @@ function showView(viewName) {
   const isHome = viewName === "home";
   const isBuilder = viewName === "builder";
   const isDeckPicker = isBuilder && builderState.identityPickerReturnView === "deck";
-  const isDeck = viewName === "deck" || isDeckPicker;
+  const isDeck = viewName === "deck";
   const isCodex = viewName === "codex";
   const isSaves = viewName === "saves";
   const isSavedDeck = viewName === "savedDeck";
@@ -865,9 +773,7 @@ function getActiveCodexFilterSummary() {
     ["수감자", codexState.activeSinners],
     ["키워드", codexState.activeTags],
     ["죄악", codexState.activeSins],
-    ["유형", codexState.activeAttackTypes],
-    ["기타", codexState.activeEffects]
-  ];
+    ["유형", codexState.activeAttackTypes],  ];
 
   const activeSections = sections
     .filter(([, values]) => values.length)
@@ -999,8 +905,7 @@ function syncMobileCodexPane() {
   const activeFilterCount = codexState.activeSinners.length
     + codexState.activeTags.length
     + codexState.activeSins.length
-    + codexState.activeAttackTypes.length
-    + codexState.activeEffects.length;
+    + codexState.activeAttackTypes.length;
   if (mobileCodexCardCount) mobileCodexCardCount.textContent = codexCount.textContent || "0";
   if (mobileCodexFilterCount) mobileCodexFilterCount.textContent = String(activeFilterCount);
 }
@@ -1014,15 +919,12 @@ function renderCodex() {
 }
 
 function renderCodexFilters() {
-  codexEffectFilters.classList.add("effect-filter-groups");
-
   codexSinnerFilters.innerHTML = renderSinnerFilterButtons(codexState.activeSinners, "data-codex-sinner", {
     buttonClass: "deck-filter-token",
     title: true
   });
   renderKeywordFilterSections({
     normalContainer: codexKeywordFilters,
-    specialContainer: codexSpecialKeywordFilters,
     activeTags: codexState.activeTags,
     buttonClass: "deck-filter-token",
     dataAttribute: "data-codex-tag",
@@ -1036,16 +938,10 @@ function renderCodexFilters() {
   codexAttackTypeFilters.innerHTML = renderIconFilterButtons(attackTypeFilters, codexState.activeAttackTypes, "data-codex-attack-type", {
     title: true
   });
-
-  codexEffectFilters.innerHTML = renderEffectFilterGroups(codexState.activeEffects, "codex");
-
   bindFilterButtons(codexSinnerFilters, "data-codex-sinner", (value) => toggleCodexFilter("activeSinners", value));
   bindFilterButtons(codexKeywordFilters, "data-codex-tag", (value) => toggleCodexFilter("activeTags", value));
-  bindFilterButtons(codexSpecialKeywordFilters, "data-codex-tag", (value) => toggleCodexFilter("activeTags", value));
   bindFilterButtons(codexSinFilters, "data-codex-sin", (value) => toggleCodexFilter("activeSins", value));
   bindFilterButtons(codexAttackTypeFilters, "data-codex-attack-type", (value) => toggleCodexFilter("activeAttackTypes", value));
-  bindFilterButtons(codexEffectFilters, "data-codex-effect", (value) => toggleCodexFilter("activeEffects", value));
-
 }
 
 function toggleCodexFilter(key, value) {
@@ -1134,21 +1030,17 @@ function itemMatchesCodexFilterState(item, state) {
   const hasCoreFilters = state.activeSinners.length
     || state.activeSins.length
     || state.activeAttackTypes.length;
-  const hasOptionalFilters = state.activeTags.length
-    || state.activeEffects.length;
+  const hasOptionalFilters = state.activeTags.length;
   const tagMatched = state.activeTags.length
     && item.tags.some((tag) => state.activeTags.includes(tag));
   const sinMatched = state.activeSins.length
     && state.activeSins.includes(item.sin);
   const attackTypeMatched = state.activeAttackTypes.length
     && state.activeAttackTypes.includes(item.attackType);
-  const effectMatched = state.activeEffects.length
-    && item.effects.some((effect) => state.activeEffects.includes(effect));
-
   const coreMatched = sinnerMatched
     && (!state.activeSins.length || sinMatched)
     && (!state.activeAttackTypes.length || attackTypeMatched);
-  const optionalMatched = !hasOptionalFilters || tagMatched || effectMatched;
+  const optionalMatched = !hasOptionalFilters || tagMatched;
   const hasAnyFilter = hasCoreFilters || hasOptionalFilters;
   const showItem = !hasAnyFilter || (item.category !== "keyword" && coreMatched && optionalMatched);
 
@@ -1213,7 +1105,6 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         sinnerId: identity.sinnerId,
         image: identity.image,
         tags: identity.tags,
-        effects: getCardEffects(identity.id),
         sin: null,
         attackType: null,
         shape: "card"
@@ -1253,26 +1144,8 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
     });
   });
 
-  (LIMBUS_DATA.sharedSpecialCards || LIMBUS_DATA.raw?.sharedSpecialCards || []).forEach((card) => {
-    items.push({
-      id: card.id,
-      title: card.title,
-      category: card.category,
-      sinnerId: card.sinnerId,
-      image: card.image,
-      previewImage: card.previewImage || card.image,
-      tags: card.tags || [],
-      effects: card.effects || [],
-      sin: null,
-      attackType: null,
-      shape: "card"
-    });
-  });
-
   const keywordFilters = LIMBUS_DATA.cardTagFilters || LIMBUS_DATA.identityTagFilters;
   keywordFilters.forEach((filter) => {
-    if (keywordCardHiddenTags.has(filter.tag)) return;
-
     items.push({
       id: `keyword_${filter.tag}`,
       title: filter.tag,
@@ -1281,7 +1154,6 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
       previewImage: filter.cardImage,
       sinnerId: null,
       tags: [filter.tag],
-      effects: [],
       sin: null,
       attackType: null,
       shape: "card"
@@ -1323,7 +1195,6 @@ function addFaustIndexDirectiveItems(items, isFolderExpanded = isCodexFolderExpa
         image: versionedImage,
         previewImage: versionedImage,
         tags: [],
-        effects: [],
         sin: null,
         attackType: null,
         shape: "card",
@@ -1342,7 +1213,6 @@ function makeCodexFolderItem({ id, title, image, folderDepth }) {
     image: versionDirectiveImage(image),
     previewImage: versionDirectiveImage(image),
     tags: [],
-    effects: [],
     sin: null,
     attackType: null,
     shape: "folder",
@@ -1351,40 +1221,9 @@ function makeCodexFolderItem({ id, title, image, folderDepth }) {
   };
 }
 
-function renderEffectFilterGroups(activeEffects, target) {
-  const dataAttribute = {
-    codex: "data-codex-effect",
-    deck: "data-deck-effect",
-    "card-insert": "data-card-insert-effect"
-  }[target] || "data-deck-effect";
 
-  return effectFilterGroups.map((group) => `
-    <div class="filter-subgroup">
-      <p class="filter-subgroup-title">${group.title}</p>
-      <div class="deck-filter-buttons">
-        ${group.filters.map((filter) => renderEffectFilterButton(filter, activeEffects, dataAttribute)).join("")}
-      </div>
-    </div>
-  `).join("");
-}
 
-function renderEffectFilterButton(filter, activeEffects, dataAttribute) {
-  const content = filter.image
-    ? `<img src="${filter.image}" alt="" onerror="this.hidden=true;" />`
-    : `<span class="filter-token-empty" aria-hidden="true"></span>`;
 
-  return `
-    <button
-      class="deck-filter-token ${activeEffects.includes(filter.label) ? "is-active" : ""}"
-      type="button"
-      title="${filter.label}"
-      aria-label="${filter.label}"
-      ${dataAttribute}="${filter.label}"
-    >
-      ${content}
-    </button>
-  `;
-}
 
 function renderSinnerFilterButtons(activeSinners, dataAttribute, {
   buttonClass = "deck-filter-token",
@@ -1437,7 +1276,6 @@ function renderIconFilterButtons(filters, activeValues, dataAttribute, {
 
 function renderKeywordFilterSections({
   normalContainer,
-  specialContainer,
   activeTags,
   buttonClass,
   dataAttribute,
@@ -1449,12 +1287,6 @@ function renderKeywordFilterSections({
     dataAttribute,
     preview
   });
-  specialContainer.innerHTML = renderKeywordFilterButtons(keywordFilters.special, activeTags, {
-    buttonClass,
-    dataAttribute,
-    preview
-  });
-  syncSpecialKeywordPanel(specialContainer, keywordFilters.special, activeTags);
 }
 
 function bindFilterButtons(container, dataAttribute, onClick) {
@@ -1473,10 +1305,7 @@ function toggleArrayValue(values, value) {
 }
 
 function getKeywordFilterSets(keywordFilters) {
-  return {
-    normal: keywordFilters.filter((filter) => !specialKeywordTags.has(filter.tag)),
-    special: keywordFilters.filter((filter) => specialKeywordTags.has(filter.tag))
-  };
+  return { normal: keywordFilters };
 }
 
 function renderKeywordFilterButtons(filters, activeTags, {
@@ -1503,20 +1332,7 @@ function renderKeywordFilterButtons(filters, activeTags, {
   }).join("");
 }
 
-function syncSpecialKeywordPanel(container, filters, activeTags) {
-  const panel = container?.closest(".special-keyword-panel");
-  if (!panel) return;
 
-  panel.hidden = !filters.length;
-  if (!filters.length) {
-    panel.open = false;
-    return;
-  }
-
-  if (activeTags.some((tag) => specialKeywordTags.has(tag))) {
-    panel.open = true;
-  }
-}
 
 function makeCodexItem({ id, category, sinnerId, image }) {
   return {
@@ -1526,7 +1342,6 @@ function makeCodexItem({ id, category, sinnerId, image }) {
     sinnerId,
     image,
     tags: getCardTags(id),
-    effects: getCardEffects(id),
     sin: getCardSin(id),
     attackType: getCardAttackType(id),
     shape: "card"
@@ -1545,7 +1360,6 @@ function resetCodexState() {
   codexState.activeTags = [];
   codexState.activeSins = [];
   codexState.activeAttackTypes = [];
-  codexState.activeEffects = [];
   codexState.expandedFolders = [];
   codexState.previewItemId = "";
   codexState.mobilePane = "cards";
@@ -1579,8 +1393,7 @@ function attachCodexPreviewListeners(root) {
       renderCodexPreviewLegacy({
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
-        filters: codexItem ? getCodexPreviewFilters(codexItem) : [],
-        references: []
+        filters: codexItem ? getCodexPreviewFilters(codexItem) : []
       });
     };
 
@@ -1602,8 +1415,7 @@ function attachCodexPreviewListeners(root) {
       renderCodexPreviewLegacy({
         image: codexItem.previewImage || codexItem.image,
         alt: codexItem.title,
-        filters: getCodexPreviewFilters(codexItem),
-        references: getCodexReferenceItems(codexItem.id)
+        filters: getCodexPreviewFilters(codexItem)
       });
 
       if (codexItem && event.type === "click" && window.matchMedia("(max-width: 640px)").matches) {
@@ -1636,99 +1448,18 @@ function renderCodexPreviewLegacy(item) {
   if (!item) {
     codexPreview.innerHTML = "<span>카드를 클릭하면 상세 정보가 표시됩니다.</span>";
     renderCodexPreviewFilters([]);
-    renderCodexReferencePanel([]);
     return;
   }
 
   codexPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
   renderCodexPreviewFilters(item.filters);
-  renderCodexReferencePanel(item.references || []);
 }
 
-function renderCodexReferencePanel(references = []) {
-  if (!codexReferencePanel) return;
 
-  if (!references.length) {
-    codexReferencePanel.innerHTML = `
-      <h3>인용 카드</h3>
-      <p class="codex-reference-empty">인용 없음</p>
-    `;
-    return;
-  }
 
-  codexReferencePanel.innerHTML = `
-    <h3>인용 카드</h3>
-    <div class="codex-reference-grid">
-      ${references.map((item) => `
-        <button
-          class="codex-reference-card"
-          type="button"
-          data-reference-id="${escapeHtml(item.id)}"
-          aria-label="${escapeHtml(item.title)}"
-        >
-          <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
-        </button>
-      `).join("")}
-    </div>
-  `;
 
-  codexReferencePanel.querySelectorAll(".codex-reference-card").forEach((button) => {
-    const showReferencePreview = () => {
-      const item = findCodexItem(button.dataset.referenceId);
-      if (!item) return;
-      codexPreview.innerHTML = `<img src="${item.previewImage || item.image}" alt="${escapeHtml(item.title)}" />`;
-      renderCodexPreviewFilters(getCodexPreviewFilters(item));
-    };
-    const restoreSelectedPreview = () => {
-      const selectedItem = findCodexItem(codexState.previewItemId);
-      if (!selectedItem) return;
-      codexPreview.innerHTML = `<img src="${selectedItem.previewImage || selectedItem.image}" alt="${escapeHtml(selectedItem.title)}" />`;
-      renderCodexPreviewFilters(getCodexPreviewFilters(selectedItem));
-    };
 
-    button.addEventListener("mouseenter", showReferencePreview);
-    button.addEventListener("mouseover", showReferencePreview);
-    button.addEventListener("pointerenter", showReferencePreview);
-    button.addEventListener("focus", showReferencePreview);
-    button.addEventListener("mouseleave", restoreSelectedPreview);
-    button.addEventListener("blur", restoreSelectedPreview);
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const item = findCodexItem(button.dataset.referenceId);
-      if (!item) return;
-      codexState.previewItemId = item.id;
-      renderCodexPreviewLegacy({
-        image: item.previewImage || item.image,
-        alt: item.title,
-        filters: getCodexPreviewFilters(item),
-        references: getCodexReferenceItems(item.id)
-      });
-    });
-  });
-}
 
-function getCodexReferenceItems(itemId) {
-  const item = findCodexItem(itemId);
-  const referenceIds = [
-    ...(codexReferenceIds[itemId] || []),
-    ...getNormalKeywordReferenceIds(item)
-  ];
-  const uniqueReferenceIds = [...new Set(referenceIds)];
-
-  return uniqueReferenceIds
-    .map((referenceId) => findCodexItem(referenceId))
-    .filter(Boolean);
-}
-
-function getNormalKeywordReferenceIds(item) {
-  if (!item || item.category === "identity" || item.category === "keyword") return [];
-
-  return (item.tags || [])
-    .filter((tag) => !specialKeywordTags.has(tag))
-    .filter((tag) => !keywordCardHiddenTags.has(tag))
-    .map((tag) => `keyword_${tag}`);
-}
 
 function findCodexItem(itemId) {
   if (!itemId) return null;
@@ -1825,17 +1556,6 @@ function getCodexPreviewFilters(item) {
     });
   });
 
-  (item.effects || []).forEach((effect) => {
-    const effectFilter = effectFilters.find((filter) => filter.label === effect);
-    if (!effectFilter?.image) return;
-
-    filters.push({
-      type: "effect",
-      label: effect,
-      image: effectFilter.image
-    });
-  });
-
   return filters;
 }
 
@@ -1850,7 +1570,6 @@ function getPreviewFiltersForId(itemId) {
       category: "identity",
       sinnerId: identity.sinnerId,
       tags: identity.tags || [],
-      effects: getCardEffects(identity.id),
       sin: null,
       attackType: null
     });
@@ -1867,7 +1586,6 @@ function getPreviewFiltersForId(itemId) {
       category: "keyword",
       sinnerId: null,
       tags: [itemId],
-      effects: [],
       sin: null,
       attackType: null
     });
@@ -1995,12 +1713,6 @@ function renderFilters() {
     buttonClass: "filter-button",
     dataAttribute: "data-filter-tag"
   });
-  keywordSpecialFilterButtons.innerHTML = renderKeywordFilterButtons(keywordFilters.special, builderState.activeTags, {
-    buttonClass: "filter-button",
-    dataAttribute: "data-filter-tag"
-  });
-  syncSpecialKeywordPanel(keywordSpecialFilterButtons, keywordFilters.special, builderState.activeTags);
-
   sinnerFilterButtons.querySelectorAll(".filter-button").forEach((button) => {
     button.addEventListener("click", () => {
       toggleSinnerFilter(button.dataset.filterSinner);
@@ -2008,12 +1720,6 @@ function renderFilters() {
   });
 
   keywordFilterButtons.querySelectorAll(".filter-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      toggleTagFilter(button.dataset.filterTag);
-    });
-  });
-
-  keywordSpecialFilterButtons.querySelectorAll(".filter-button").forEach((button) => {
     button.addEventListener("click", () => {
       toggleTagFilter(button.dataset.filterTag);
     });
@@ -2218,8 +1924,7 @@ function syncMobileDeckPane() {
 
   const activeFilterCount = builderState.activeDeckTags.length
     + builderState.activeDeckSins.length
-    + builderState.activeDeckAttackTypes.length
-    + builderState.activeDeckEffects.length;
+    + builderState.activeDeckAttackTypes.length;
   if (mobileActiveFilterCount) mobileActiveFilterCount.textContent = String(activeFilterCount);
   if (mobileDeckNavCount) mobileDeckNavCount.textContent = `${builderState.deckCards.length}/${DECK_LIMIT}`;
 }
@@ -2354,11 +2059,8 @@ function renderDeckAssetRow(items) {
 }
 
 function renderDeckFilters() {
-  deckEffectFilters.classList.add("effect-filter-groups");
-
   renderKeywordFilterSections({
     normalContainer: deckKeywordFilters,
-    specialContainer: deckSpecialKeywordFilters,
     activeTags: builderState.activeDeckTags,
     buttonClass: "deck-filter-token deck-preview-source",
     dataAttribute: "data-deck-keyword",
@@ -2373,17 +2075,10 @@ function renderDeckFilters() {
   deckAttackTypeFilters.innerHTML = renderIconFilterButtons(attackTypeFilters, builderState.activeDeckAttackTypes, "data-deck-attack-type", {
     title: true
   });
-
-  deckEffectFilters.innerHTML = renderEffectFilterGroups(builderState.activeDeckEffects, "deck");
-
   bindFilterButtons(deckKeywordFilters, "data-deck-keyword", toggleDeckKeywordFilter);
-  bindFilterButtons(deckSpecialKeywordFilters, "data-deck-keyword", toggleDeckKeywordFilter);
   bindFilterButtons(deckSinFilters, "data-deck-sin", toggleDeckSinFilter);
   bindFilterButtons(deckAttackTypeFilters, "data-deck-attack-type", toggleDeckAttackTypeFilter);
-  bindFilterButtons(deckEffectFilters, "data-deck-effect", toggleDeckEffectFilter);
-
   attachDeckPreviewListeners(deckKeywordFilters);
-  attachDeckPreviewListeners(deckSpecialKeywordFilters);
   syncMobileDeckPane();
 }
 
@@ -2401,12 +2096,7 @@ function toggleDeckAttackTypeFilter(attackType) {
   renderDeckCardPool();
 }
 
-function toggleDeckEffectFilter(effect) {
-  builderState.activeDeckEffects = toggleArrayValue(builderState.activeDeckEffects, effect);
 
-  renderDeckFilters();
-  renderDeckCardPool();
-}
 
 function toggleDeckSinFilter(sin) {
   builderState.activeDeckSins = toggleArrayValue(builderState.activeDeckSins, sin);
@@ -2520,7 +2210,6 @@ function getDeckCardsForIdentityIds(identityIds = []) {
         countsTowardDeck: true,
         sin: getCardSin(id),
         attackType: getCardAttackType(id),
-        effects: getCardEffects(id),
         tags: getCardTags(id)
       });
     }
@@ -2535,7 +2224,6 @@ function getDeckCardsForIdentityIds(identityIds = []) {
         countsTowardDeck: true,
         sin: getCardSin(id),
         attackType: getCardAttackType(id),
-        effects: getCardEffects(id),
         tags: getCardTags(id)
       });
     }
@@ -2549,7 +2237,6 @@ function getDeckCardsForIdentityIds(identityIds = []) {
         countsTowardDeck: false,
         sin: getCardSin(card.id),
         attackType: getCardAttackType(card.id),
-        effects: getCardEffects(card.id),
         tags: getCardTags(card.id)
       });
     });
@@ -2567,7 +2254,6 @@ function getDeckCardsForIdentityIds(identityIds = []) {
         countsTowardDeck: false,
         sin: getCardSin(egoId),
         attackType: getCardAttackType(egoId),
-        effects: getCardEffects(egoId),
         tags: getCardTags(egoId)
       });
     });
@@ -2709,52 +2395,6 @@ function renderDeckSaveFilters() {
   attachDeckPreviewListeners(deckSaveKeywords);
 }
 
-function getDeckSaveFilterGroups() {
-  const keywordFilters = [
-    ...(LIMBUS_DATA.cardTagFilters || []),
-    ...(LIMBUS_DATA.identityTagFilters || [])
-  ];
-  const uniqueKeywordFilters = keywordFilters.filter((filter, index, filters) => {
-    return filters.findIndex((candidate) => candidate.tag === filter.tag) === index;
-  });
-
-  return [
-    {
-      key: "sins",
-      title: "죄악",
-      filters: sinFilters.map((filter) => ({
-        value: filter.label,
-        image: filter.image
-      }))
-    },
-    {
-      key: "attackTypes",
-      title: "유형",
-      filters: attackTypeFilters.map((filter) => ({
-        value: filter.label,
-        image: filter.image
-      }))
-    },
-    {
-      key: "tags",
-      title: "키워드",
-      filters: uniqueKeywordFilters.map((filter) => ({
-        value: filter.tag,
-        image: filter.image,
-        previewImage: filter.cardImage
-      }))
-    },
-    {
-      key: "effects",
-      title: "기타",
-      filters: effectFilters.map((filter) => ({
-        value: filter.label,
-        image: filter.image
-      }))
-    }
-  ];
-}
-
 function renderDeckSaveFilterButton(key, filter) {
   const activeValues = builderState.deckSave.featuredFilters[key] || [];
   const hasCardPreview = Boolean(filter.previewImage);
@@ -2810,33 +2450,25 @@ function renderCardInsert() {
 function renderCardInsertFilters() {
   if (!cardInsertSinnerFilters) return;
 
-  cardInsertEffectFilters.classList.add("effect-filter-groups");
-
   cardInsertSinnerFilters.innerHTML = renderSinnerFilterButtons(cardInsertState.activeSinners, "data-card-insert-sinner");
   renderKeywordFilterSections({
     normalContainer: cardInsertKeywordFilters,
-    specialContainer: cardInsertSpecialKeywordFilters,
     activeTags: cardInsertState.activeTags,
     buttonClass: "deck-filter-token",
     dataAttribute: "data-card-insert-tag"
   });
 
   cardInsertSinFilters.innerHTML = renderIconFilterButtons(sinFilters, cardInsertState.activeSins, "data-card-insert-sin");
-
   cardInsertAttackTypeFilters.innerHTML = renderIconFilterButtons(
     attackTypeFilters,
     cardInsertState.activeAttackTypes,
     "data-card-insert-attack-type"
   );
 
-  cardInsertEffectFilters.innerHTML = renderEffectFilterGroups(cardInsertState.activeEffects, "card-insert");
-
   bindFilterButtons(cardInsertSinnerFilters, "data-card-insert-sinner", (value) => toggleCardInsertFilter("activeSinners", value));
   bindFilterButtons(cardInsertKeywordFilters, "data-card-insert-tag", (value) => toggleCardInsertFilter("activeTags", value));
-  bindFilterButtons(cardInsertSpecialKeywordFilters, "data-card-insert-tag", (value) => toggleCardInsertFilter("activeTags", value));
   bindFilterButtons(cardInsertSinFilters, "data-card-insert-sin", (value) => toggleCardInsertFilter("activeSins", value));
   bindFilterButtons(cardInsertAttackTypeFilters, "data-card-insert-attack-type", (value) => toggleCardInsertFilter("activeAttackTypes", value));
-  bindFilterButtons(cardInsertEffectFilters, "data-card-insert-effect", (value) => toggleCardInsertFilter("activeEffects", value));
 }
 
 function renderCardInsertTabs() {
@@ -2889,19 +2521,19 @@ function renderCardSearchResults() {
   }
 
   cardSearchGrid.innerHTML = items.map((item) => `
-      <button
-        class="card-search-result ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCardInsertFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""} ${cardInsertState.selectedItemId === item.id ? "is-selected" : ""}"
-        type="button"
-        aria-label="${item.title}"
-        data-card-insert-item-id="${item.id}"
-        ${item.shape === "folder" ? `data-card-insert-folder-id="${item.id}"` : ""}
-        data-preview-image="${item.previewImage || item.image}"
-        data-preview-alt="${item.title}"
-      >
-        <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
-        ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
-      </button>
-    `).join("");
+    <button
+      class="card-search-result ${item.shape === "icon" ? "is-icon" : ""} ${item.shape === "folder" ? "is-folder" : ""} ${item.shape === "folder" && isCardInsertFolderExpanded(item.id) ? "is-open" : ""} ${item.folderDepth ? `folder-depth-${item.folderDepth}` : ""} ${cardInsertState.selectedItemId === item.id ? "is-selected" : ""}"
+      type="button"
+      aria-label="${item.title}"
+      data-card-insert-item-id="${item.id}"
+      ${item.shape === "folder" ? `data-card-insert-folder-id="${item.id}"` : ""}
+      data-preview-image="${item.previewImage || item.image}"
+      data-preview-alt="${item.title}"
+    >
+      <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
+      ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
+    </button>
+  `).join("");
 
   cardSearchGrid.querySelectorAll("[data-card-insert-folder-id]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -2968,7 +2600,6 @@ function makeCardInsertDeckItem(card) {
     image: card.image,
     previewImage: card.previewImage || card.image,
     tags: card.tags || [],
-    effects: card.effects || [],
     sin: card.sin || null,
     attackType: card.attackType || null,
     shape: "card"
@@ -2979,12 +2610,6 @@ function getCardInsertItemById(itemId) {
   return getFilteredCardInsertItems().find((item) => item.id === itemId)
     || getCodexItems(() => true).find((item) => item.id === itemId || item.title === itemId)
     || null;
-}
-
-function clearCardInsertSelection() {
-  cardInsertState.selectedItemId = "";
-  renderCardSearchPreview(null);
-  renderCardSearchInsertButton();
 }
 
 function renderCardSearchPreview(item) {
@@ -3000,26 +2625,12 @@ function renderCardSearchPreview(item) {
   renderPreviewFilters(cardSearchPreviewFilters, item.filters || getPreviewFiltersForId(item.alt));
 }
 
-function renderCardSearchInsertButton() {
-  if (!cardSearchInsertButton) return;
-
-  cardSearchInsertButton.disabled = !cardInsertState.selectedItemId;
-}
-
-function insertSelectedCardSearchItem() {
-  if (!cardInsertState.selectedItemId) return;
-
-  insertDeckCardToken(cardInsertState.selectedItemId);
-  closeCardSearch();
-}
-
 function resetCardInsertState() {
   cardInsertState.activeTab = "all";
   cardInsertState.activeSinners = [];
   cardInsertState.activeTags = [];
   cardInsertState.activeSins = [];
   cardInsertState.activeAttackTypes = [];
-  cardInsertState.activeEffects = [];
   cardInsertState.expandedFolders = [];
   clearCardInsertSelection();
 }
@@ -3058,6 +2669,88 @@ function getDeckReferenceCards() {
     seen.add(card.id);
     return true;
   });
+}
+
+function getDeckSaveFilterGroups() {
+  const keywordFilters = [
+    ...(LIMBUS_DATA.cardTagFilters || []),
+    ...(LIMBUS_DATA.identityTagFilters || [])
+  ];
+  const uniqueKeywordFilters = keywordFilters.filter((filter, index, filters) => {
+    return filters.findIndex((candidate) => candidate.tag === filter.tag) === index;
+  });
+
+  return [
+    {
+      key: "sins",
+      title: "죄악",
+      filters: sinFilters.map((filter) => ({
+        value: filter.label,
+        image: filter.image
+      }))
+    },
+    {
+      key: "attackTypes",
+      title: "유형",
+      filters: attackTypeFilters.map((filter) => ({
+        value: filter.label,
+        image: filter.image
+      }))
+    },
+    {
+      key: "tags",
+      title: "키워드",
+      filters: uniqueKeywordFilters.map((filter) => ({
+        value: filter.tag,
+        image: filter.image,
+        previewImage: filter.cardImage
+      }))
+    }
+  ];
+}
+
+function buildCurrentDeckPayload({ includeNotes = true } = {}) {
+  const snapshot = getDeckSelectionSnapshot();
+  const payload = {
+    version: APP_VERSION,
+    savedAt: new Date().toISOString(),
+    name: deckSaveName?.value.trim() || "이름 없는 덱",
+    intro: deckSaveIntro?.value || "",
+    identities: {
+      front: snapshot.front?.id || null,
+      back: snapshot.back?.id || null
+    },
+    cards: snapshot.mainCards.map((card) => card.id),
+    ego: snapshot.selectedEgo?.id || null,
+    upgrades: snapshot.selectedUpgrades.map((card) => card.id),
+    featuredFilters: {
+      sins: [...builderState.deckSave.featuredFilters.sins],
+      attackTypes: [...builderState.deckSave.featuredFilters.attackTypes],
+      tags: [...builderState.deckSave.featuredFilters.tags]
+    }
+  };
+
+  if (includeNotes) payload.notes = deckSaveNotes?.value || "";
+  return payload;
+}
+
+function clearCardInsertSelection() {
+  cardInsertState.selectedItemId = "";
+  renderCardSearchPreview(null);
+  renderCardSearchInsertButton();
+}
+
+function renderCardSearchInsertButton() {
+  if (!cardSearchInsertButton) return;
+
+  cardSearchInsertButton.disabled = !cardInsertState.selectedItemId;
+}
+
+function insertSelectedCardSearchItem() {
+  if (!cardInsertState.selectedItemId) return;
+
+  insertDeckCardToken(cardInsertState.selectedItemId);
+  closeCardSearch();
 }
 
 function insertDeckCardToken(cardId) {
@@ -3165,42 +2858,6 @@ function getSearchableCardMap() {
     if (!map.has(card.id)) map.set(card.id, card);
   });
   return map;
-}
-
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (character) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "\"": "&quot;",
-    "'": "&#39;"
-  }[character]));
-}
-
-function buildCurrentDeckPayload({ includeNotes = true } = {}) {
-  const snapshot = getDeckSelectionSnapshot();
-  const payload = {
-    version: APP_VERSION,
-    savedAt: new Date().toISOString(),
-    name: deckSaveName?.value.trim() || "이름 없는 덱",
-    intro: deckSaveIntro?.value.trim() || "",
-    identities: {
-      front: snapshot.front?.id || null,
-      back: snapshot.back?.id || null
-    },
-    cards: snapshot.mainCards.map((card) => card.id),
-    ego: snapshot.selectedEgo?.id || null,
-    upgrades: snapshot.selectedUpgrades.map((card) => card.id),
-    featuredFilters: {
-      sins: [...builderState.deckSave.featuredFilters.sins],
-      attackTypes: [...builderState.deckSave.featuredFilters.attackTypes],
-      tags: [...builderState.deckSave.featuredFilters.tags],
-      effects: [...builderState.deckSave.featuredFilters.effects]
-    }
-  };
-
-  if (includeNotes) payload.notes = deckSaveNotes?.value || "";
-  return payload;
 }
 
 function getSavedDecks() {
@@ -3640,8 +3297,7 @@ function getDeckShareIndexes() {
     featuredFilters: {
       sins: sinFilters.map((filter) => filter.label),
       attackTypes: attackTypeFilters.map((filter) => filter.label),
-      tags: keywordFilters.map((filter) => filter.value),
-      effects: effectFilters.map((filter) => filter.label)
+      tags: keywordFilters.map((filter) => filter.value)
     }
   };
 }
@@ -3735,8 +3391,7 @@ function compactFeaturedFilters(featuredFilters, filterIndexes) {
   return [
     compactFilterValues(normalizedFilters.sins, filterIndexes.sins),
     compactFilterValues(normalizedFilters.attackTypes, filterIndexes.attackTypes),
-    compactFilterValues(normalizedFilters.tags, filterIndexes.tags),
-    compactFilterValues(normalizedFilters.effects, filterIndexes.effects)
+    compactFilterValues(normalizedFilters.tags, filterIndexes.tags)
   ];
 }
 
@@ -3752,8 +3407,7 @@ function expandCompactFeaturedFilters(compactFilters, filterIndexes) {
   return normalizeFeaturedFilters({
     sins: expandCompactFilterValues(compactFilters[0], filterIndexes.sins),
     attackTypes: expandCompactFilterValues(compactFilters[1], filterIndexes.attackTypes),
-    tags: expandCompactFilterValues(compactFilters[2], filterIndexes.tags),
-    effects: expandCompactFilterValues(compactFilters[3], filterIndexes.effects)
+    tags: expandCompactFilterValues(compactFilters[2], filterIndexes.tags)
   });
 }
 
@@ -3813,8 +3467,7 @@ function normalizeFeaturedFilters(featuredFilters = {}) {
   return {
     sins: uniqueStrings(source.sins),
     attackTypes: uniqueStrings(source.attackTypes),
-    tags: uniqueStrings(source.tags),
-    effects: uniqueStrings(source.effects)
+    tags: uniqueStrings(source.tags)
   };
 }
 
@@ -4081,7 +3734,6 @@ function loadPayloadIntoBuilder(payload, editingId = null) {
   builderState.activeDeckTags = [];
   builderState.activeDeckSins = [];
   builderState.activeDeckAttackTypes = [];
-  builderState.activeDeckEffects = [];
   builderState.deckCards = [...normalizedPayload.cards];
   builderState.selectedEgo = normalizedPayload.ego;
   builderState.upgradeCards = [...normalizedPayload.upgrades];
@@ -4741,24 +4393,11 @@ function getKeywordItemsFromTags(tags = []) {
         label: tag,
         image: keywordFilter.image,
         previewImage: keywordFilter.cardImage,
-        isPreviewable: !keywordCardHiddenTags.has(tag),
+        isPreviewable: Boolean(keywordFilter.cardImage),
         isCard: false
       };
     })
     .filter(Boolean);
-
-  derivedDeckKeywordCards.forEach((card) => {
-    if (!tags.includes(card.triggerTag)) return;
-    if (items.some((item) => item.label === card.label)) return;
-
-    items.push({
-      label: card.label,
-      image: card.image,
-      previewImage: card.previewImage,
-      isPreviewable: true,
-      isCard: false
-    });
-  });
 
   return items;
 }
@@ -4868,20 +4507,16 @@ function getFilteredDeckCards() {
   return getDeckCards().filter((card) => {
     const tabMatched = builderState.activeDeckTab === "all"
       || card.category === builderState.activeDeckTab;
-    const hasOptionalFilters = builderState.activeDeckTags.length
-      || builderState.activeDeckEffects.length;
+    const hasOptionalFilters = builderState.activeDeckTags.length;
     const tagMatched = builderState.activeDeckTags.length
       && card.tags.some((tag) => builderState.activeDeckTags.includes(tag));
     const sinMatched = builderState.activeDeckSins.length
       && builderState.activeDeckSins.includes(card.sin);
     const attackTypeMatched = builderState.activeDeckAttackTypes.length
       && builderState.activeDeckAttackTypes.includes(card.attackType);
-    const effectMatched = builderState.activeDeckEffects.length
-      && card.effects.some((effect) => builderState.activeDeckEffects.includes(effect));
-
     const coreMatched = (!builderState.activeDeckSins.length || sinMatched)
       && (!builderState.activeDeckAttackTypes.length || attackTypeMatched);
-    const optionalMatched = !hasOptionalFilters || tagMatched || effectMatched;
+    const optionalMatched = !hasOptionalFilters || tagMatched;
 
     return tabMatched && coreMatched && optionalMatched;
   });
@@ -4903,9 +4538,7 @@ function getCardAttackType(cardId) {
   return LIMBUS_DATA.attackTypeByCardId?.[cardId] || null;
 }
 
-function getCardEffects(cardId) {
-  return LIMBUS_DATA.effectsByCardId?.[cardId] || [];
-}
+
 
 function toggleDeckCard(cardId) {
   const card = getDeckCardMap().get(cardId);
@@ -4989,7 +4622,6 @@ function resetDeckState({ clearSaveDraft = false } = {}) {
   builderState.activeDeckTags = [];
   builderState.activeDeckSins = [];
   builderState.activeDeckAttackTypes = [];
-  builderState.activeDeckEffects = [];
   builderState.deckCards = [];
   builderState.selectedEgo = null;
   builderState.upgradeCards = [];
@@ -5017,6 +4649,8 @@ function attachCardPreviewListeners(root, renderPreviewItem, { onClick } = {}) {
       });
     };
 
+    button.addEventListener("pointerenter", showPreview);
+    button.addEventListener("focus", showPreview);
     button.addEventListener("mousedown", (event) => {
       event.preventDefault();
     });
@@ -5044,7 +4678,7 @@ function renderDeckPreview(item) {
     return;
   }
 
-  deckPreview.innerHTML = `<img src="${item.image}" alt="${item.alt}" />`;
+  deckPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
   renderDeckPreviewFilters(item.filters || getPreviewFiltersForId(item.alt));
 }
 
@@ -5057,12 +4691,21 @@ function renderSavedViewPreview(item) {
     return;
   }
 
-  savedViewPreview.innerHTML = `<img src="${item.image}" alt="${item.alt}" />`;
+  savedViewPreview.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.alt)}" />`;
   renderPreviewFilters(savedViewPreviewFilters, item.filters || getPreviewFiltersForId(item.alt));
 }
 
 function padNumber(value) {
   return String(value).padStart(2, "0");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function getBaseUniqueImagePath(sinnerId, index) {
