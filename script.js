@@ -169,28 +169,28 @@ const faustIndexDirectiveFolder = {
       directiveNumber: 1,
       title: "쪽지 1",
       image: "assets/sinners/faust/index/쪽지 1/쪽지 1 뒷면.png",
-      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 1/${index + 1}.png`)
+      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 1/${padNumber(index + 1)}.png`)
     },
     {
       id: "faust_index_directive_note_2",
       directiveNumber: 2,
       title: "쪽지 2",
       image: "assets/sinners/faust/index/쪽지 2/쪽지 2 뒷면.png",
-      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 2/${index + 1}.png`)
+      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪽지 2/${padNumber(index + 1)}.png`)
     },
     {
       id: "faust_index_directive_note_3",
       directiveNumber: 3,
       title: "쪽지 3",
       image: "assets/sinners/faust/index/쪾자 3/쪽지 3 뒷면.png",
-      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪾자 3/${index + 1}.png`)
+      cards: Array.from({ length: 4 }, (_, index) => `assets/sinners/faust/index/쪾자 3/${padNumber(index + 1)}.png`)
     },
     {
       id: "faust_index_directive_petal",
       directiveNumber: 4,
       title: "꽃잎 지령",
       image: "assets/sinners/faust/index/꽃잎 지령/꽃잎 지령 뒷면.png",
-      cards: Array.from({ length: 5 }, (_, index) => `assets/sinners/faust/index/꽃잎 지령/${index + 1}.png`)
+      cards: Array.from({ length: 5 }, (_, index) => `assets/sinners/faust/index/꽃잎 지령/${padNumber(index + 1)}.png`)
     }
   ]
 };
