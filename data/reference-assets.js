@@ -23,7 +23,7 @@ export const REFERENCE_ASSETS = [
     label: "조리 중",
     category: "specialStack",
     owner: { sinnerId: "ryoshu", identityKey: "chef" },
-    image: "assets/sinners/ryoshu/chef/unique/조리 중.png"
+    image: "assets/sinners/ryoshu/chef/unique/02.png"
   },
   {
     id: "hong_lu_rcorp_reindeer_friendly_fire",

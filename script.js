@@ -5,6 +5,13 @@ const DIRECTIVE_IMAGE_VERSION = "directive-fit-2";
 const ENABLED_BETA_VIEWS = new Set(["deck", "codex", "saves"]);
 const FEEDBACK_DRAFT_KEY = "limttak_feedback_draft";
 const SAVED_DECKS_KEY = "limttak_saved_decks";
+const BLINDED_STABLE_CODES = new Set([
+  "6-I-3",
+  "6-C-3-1",
+  "6-C-3-2",
+  "6-C-3-3",
+  "6-X-3-1"
+]);
 
 const menuCopy = {
   deck: {
@@ -106,6 +113,7 @@ const codexKeywordFilters = document.querySelector("#codex-keyword-filters");
 const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
+const codexPreviewReferences = document.querySelector("#codex-preview-references");
 const mobileCodexNav = document.querySelector(".mobile-codex-nav");
 const mobileCodexCardCount = document.querySelector("#mobile-codex-card-count");
 const mobileCodexFilterCount = document.querySelector("#mobile-codex-filter-count");
@@ -199,8 +207,7 @@ const codexTabsData = [
   ["identity", "인격"],
   ["card", "카드"],
   ["ego", "EGO"],
-  ["stack", "스택", "assets/card-types/icons/stack.png"],
-  ["status", "상태", "assets/card-types/icons/status.png"],
+  ["stackStatus", "스택/상태"],
   ["upgrade", "강화"],
   ["keyword", "키워드"]
 ];
@@ -209,10 +216,7 @@ const cardInsertTabsData = [
   ["deck", "덱"],
   ...codexTabsData.slice(1)
 ];
-const cardCategoryFilters = {
-  stack: { label: "스택", image: "assets/card-types/icons/stack.png" },
-  status: { label: "상태", image: "assets/card-types/icons/status.png" }
-};
+const cardCategoryFilters = {};
 
 const versionHistory = window.VERSION_HISTORY || [];
 const builderState = {
@@ -1019,6 +1023,18 @@ function getFilteredCodexItems() {
   return getCodexItems().filter((item) => itemMatchesCodexFilterState(item, codexState));
 }
 
+function isBlindedStableCode(code) {
+  return Boolean(code && BLINDED_STABLE_CODES.has(code));
+}
+
+function isBlindedItemId(id) {
+  return isBlindedStableCode(getStableCode(id));
+}
+
+function isVisibleDataItem(item) {
+  return !isBlindedStableCode(item?.code || getStableCode(item?.id));
+}
+
 function getCodexItemNumberMap() {
   return new Map(
     getCodexItems(() => true)
@@ -1028,7 +1044,7 @@ function getCodexItemNumberMap() {
 }
 
 function itemMatchesCodexFilterState(item, state) {
-  const tabMatched = state.activeTab === "all" || item.category === state.activeTab;
+  const tabMatched = itemMatchesCodexTab(item, state.activeTab);
   const sinnerMatched = !state.activeSinners.length
     || (item.sinnerId && state.activeSinners.includes(item.sinnerId));
   const hasCoreFilters = state.activeSinners.length
@@ -1049,6 +1065,13 @@ function itemMatchesCodexFilterState(item, state) {
   const showItem = !hasAnyFilter || (item.category !== "keyword" && coreMatched && optionalMatched);
 
   return tabMatched && showItem;
+}
+
+function itemMatchesCodexTab(item, activeTab) {
+  if (activeTab === "all") return true;
+  if (activeTab === "stackStatus") return item.category === "stack" || item.category === "status";
+
+  return item.category === activeTab;
 }
 
 function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
@@ -1400,6 +1423,7 @@ function attachCodexPreviewListeners(root) {
         : null;
 
       renderCodexPreviewLegacy({
+        id: codexItem?.id || button.dataset.codexItemId,
         image: button.dataset.previewImage,
         alt: button.dataset.previewAlt,
         code: button.dataset.previewCode || getStableCode(button.dataset.codexItemId),
@@ -1417,17 +1441,7 @@ function attachCodexPreviewListeners(root) {
         return;
       }
 
-      codexState.previewItemId = codexItem.id;
-      codexGrid.querySelectorAll("[data-codex-item-id]").forEach((itemButton) => {
-        itemButton.classList.toggle("is-selected", itemButton.dataset.codexItemId === codexItem.id);
-      });
-
-      renderCodexPreviewLegacy({
-        image: codexItem.previewImage || codexItem.image,
-        alt: codexItem.title,
-        code: codexItem.code || getStableCode(codexItem.id),
-        filters: getCodexPreviewFilters(codexItem)
-      });
+      selectCodexItem(codexItem);
 
       if (codexItem && event.type === "click" && window.matchMedia("(max-width: 640px)").matches) {
         setMobileCodexPane("preview");
@@ -1444,11 +1458,13 @@ function renderCodexPreview(item) {
   if (!item) {
     codexPreview.innerHTML = "<span>항목 위에 마우스를 올리면 크게 표시.</span>";
     renderCodexPreviewFilters([]);
+    renderCodexPreviewReferences(null);
     return;
   }
 
   codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
+  renderCodexPreviewReferences(item.id || item.alt);
 }
 
 function renderCodexPreviewFilters(filters = []) {
@@ -1459,11 +1475,96 @@ function renderCodexPreviewLegacy(item) {
   if (!item) {
     codexPreview.innerHTML = "<span>카드를 클릭하면 상세 정보가 표시됩니다.</span>";
     renderCodexPreviewFilters([]);
+    renderCodexPreviewReferences(null);
     return;
   }
 
   codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
+  renderCodexPreviewReferences(item.id || item.alt);
+}
+
+function renderCodexPreviewSurface(item) {
+  if (!item) return;
+
+  codexPreview.innerHTML = renderPreviewImageWithCode(
+    item.previewImage || item.image,
+    item.title || item.alt || item.id,
+    item.code || getStableCode(item.id || item.alt)
+  );
+  renderCodexPreviewFilters(item.filters || getCodexPreviewFilters(item));
+}
+
+function renderCodexPreviewReferences(itemId) {
+  if (!codexPreviewReferences) return;
+
+  const references = getCodexReferenceItems(itemId);
+  const body = references.length
+    ? references.map((item) => `
+      <button
+        class="codex-reference-card"
+        type="button"
+        title="${escapeHtml(item.title)}"
+        data-codex-reference-id="${escapeHtml(item.id)}"
+      >
+        <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
+        ${item.code ? `<span>${escapeHtml(item.code)}</span>` : ""}
+      </button>
+    `).join("")
+    : `<p class="codex-reference-empty">인용 없음</p>`;
+
+  codexPreviewReferences.innerHTML = `
+    <h3>인용 카드</h3>
+    <div class="codex-reference-list">${body}</div>
+  `;
+
+  codexPreviewReferences.querySelectorAll("[data-codex-reference-id]").forEach((button) => {
+    const item = findAnyCodexItem(button.dataset.codexReferenceId);
+    if (!item) return;
+
+    button.addEventListener("mouseenter", () => renderCodexPreviewSurface(item));
+    button.addEventListener("focus", () => renderCodexPreviewSurface(item));
+    button.addEventListener("mouseleave", restoreSelectedCodexPreview);
+    button.addEventListener("blur", restoreSelectedCodexPreview);
+    button.addEventListener("click", () => selectCodexItem(item));
+  });
+}
+
+function getCodexReferenceItems(itemId) {
+  const referenceIds = LIMBUS_DATA.cardReferenceIdsById?.[itemId]
+    || LIMBUS_DATA.raw?.cardReferences?.[itemId]
+    || [];
+
+  return referenceIds.map((referenceId) => findAnyCodexItem(referenceId)).filter(Boolean);
+}
+
+function findAnyCodexItem(itemId) {
+  if (!itemId) return null;
+  return getCodexItems(() => true).find((item) => item.id === itemId || item.title === itemId) || null;
+}
+
+function selectCodexItem(item) {
+  if (!item) return;
+
+  codexState.previewItemId = item.id;
+  codexGrid?.querySelectorAll("[data-codex-item-id]").forEach((itemButton) => {
+    itemButton.classList.toggle("is-selected", itemButton.dataset.codexItemId === item.id);
+  });
+
+  renderCodexPreviewLegacy({
+    id: item.id,
+    image: item.previewImage || item.image,
+    alt: item.title,
+    code: item.code || getStableCode(item.id),
+    filters: getCodexPreviewFilters(item)
+  });
+}
+
+function restoreSelectedCodexPreview() {
+  const selectedItem = findAnyCodexItem(codexState.previewItemId);
+  if (selectedItem) {
+    selectCodexItem(selectedItem);
+  }
 }
 
 
@@ -1878,10 +1979,11 @@ function getVisibleIdentities() {
   const sinnerFiltered = builderState.activeSinners.length
     ? LIMBUS_DATA.identities.filter((identity) => builderState.activeSinners.includes(identity.sinnerId))
     : LIMBUS_DATA.identities;
+  const visibleIdentities = sinnerFiltered.filter(isVisibleDataItem);
 
-  if (!builderState.activeTags.length) return sinnerFiltered;
+  if (!builderState.activeTags.length) return visibleIdentities;
 
-  return sinnerFiltered.filter((identity) => {
+  return visibleIdentities.filter((identity) => {
     return builderState.activeTags.some((tag) => identity.tags.includes(tag));
   });
 }
@@ -2210,7 +2312,8 @@ function getDeckCards() {
 function getDeckCardsForIdentityIds(identityIds = []) {
   const selectedIdentities = identityIds
     .map((identityId) => getIdentity(identityId))
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter(isVisibleDataItem);
   const cards = [];
   const addedEgoIds = new Set();
 
@@ -2280,7 +2383,7 @@ function getDeckCardsForIdentityIds(identityIds = []) {
     });
   });
 
-  return cards;
+  return cards.filter(isVisibleDataItem);
 }
 
 function renderDeckIncludedGrid() {
@@ -4426,7 +4529,7 @@ function getKeywordItemsFromTags(tags = []) {
     })
     .filter(Boolean);
 
-  return items;
+  return items.filter(isVisibleDataItem);
 }
 
 function getSelectedDeckKeywordTags(availableCards = getDeckCardMap()) {

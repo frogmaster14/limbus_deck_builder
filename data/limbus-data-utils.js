@@ -1,5 +1,6 @@
 import {
   CARD_ATTACK_TYPES,  CARD_SETS,
+  CARD_REFERENCES,
   CARD_SINS,
   CARD_TAGS,
   EGO_UNIQUE_CARD_SETS,
@@ -518,6 +519,7 @@ export function buildLimbusData() {
       egoUniqueCardSets: EGO_UNIQUE_CARD_SETS,
       identityTags: IDENTITY_TAGS,
       cardTags: CARD_TAGS,
+      cardReferences: CARD_REFERENCES,
       cardAttackTypes: CARD_ATTACK_TYPES,
       cardSins: CARD_SINS,
       tagAssetIds: TAG_ASSET_IDS,
@@ -555,6 +557,7 @@ export function buildLimbusData() {
     cardsByAttackType,
     identityIdsByTag: IDENTITY_TAGS,
     cardIdsByTag: CARD_TAGS,
+    cardReferenceIdsById: CARD_REFERENCES,
     cardIdsByAttackType: CARD_ATTACK_TYPES,
     cardIdsBySin: CARD_SINS,
     uniqueCardTypes: UNIQUE_CARD_TYPES,
