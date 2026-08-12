@@ -49,11 +49,13 @@ export function collectExpectedImages(data = LIMBUS_DATA) {
         id: item.tag,
         image: item.cardImage
       })),
-    ...data.keywordAssets.map((item) => ({
-      kind: "keyword-icon",
-      id: item.tag,
-      image: item.icon
-    }))
+    ...data.keywordAssets
+      .filter((item) => item.icon)
+      .map((item) => ({
+        kind: "keyword-icon",
+        id: item.tag,
+        image: item.icon
+      }))
   ];
 }
 

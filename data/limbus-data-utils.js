@@ -200,11 +200,14 @@ export function getTagAssetId(tag, kind = "icon") {
 export function getKeywordCardImagePath(tag) {
   const assetId = TAG_ASSET_IDS[tag];
   if (assetId && typeof assetId === "object" && assetId.card === null) return null;
+  if (!assetId) return null;
 
   return `assets/keywords/cards/${getTagAssetId(tag, "card")}.png`;
 }
 
 export function getKeywordIconPath(tag) {
+  if (!TAG_ASSET_IDS[tag]) return null;
+
   return `assets/keywords/icons/${getTagAssetId(tag, "icon")}.png`;
 }
 
@@ -503,7 +506,12 @@ export function buildLimbusData() {
     ])
   );
 
-  const keywordAssets = Object.entries(TAG_ASSET_IDS).map(([tag]) => ({
+  const allTags = [...new Set([
+    ...Object.keys(TAG_ASSET_IDS),
+    ...Object.keys(CARD_TAGS),
+    ...Object.keys(IDENTITY_TAGS)
+  ])];
+  const keywordAssets = allTags.map((tag) => ({
     tag,
     code: getKeywordCode(tag),
     assetId: getTagAssetId(tag, "card"),

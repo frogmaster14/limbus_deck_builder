@@ -95,11 +95,13 @@ const cardSearchPreviewFilters = document.querySelector("#card-search-preview-fi
 const cardSearchInsertButton = document.querySelector("#card-search-insert-button");
 const cardInsertSinnerFilters = document.querySelector("#card-insert-sinner-filters");
 const cardInsertKeywordFilters = document.querySelector("#card-insert-keyword-filters");
+const cardInsertClashPowerFilters = document.querySelector("#card-insert-clash-power-filters");
 const cardInsertSinFilters = document.querySelector("#card-insert-sin-filters");
 const cardInsertAttackTypeFilters = document.querySelector("#card-insert-attack-type-filters");
 const deckCount = document.querySelector("#deck-view .deck-count");
 const deckPreview = document.querySelector("#deck-preview");
 const deckKeywordFilters = document.querySelector("#deck-keyword-filters");
+const deckClashPowerFilters = document.querySelector("#deck-clash-power-filters");
 const deckSinFilters = document.querySelector("#deck-sin-filters");
 const deckAttackTypeFilters = document.querySelector("#deck-attack-type-filters");
 const deckNextButton = document.querySelector("[data-action='next-deck-step']");
@@ -110,6 +112,7 @@ const codexHeading = document.querySelector("#codex-heading");
 const codexPreview = document.querySelector("#codex-preview");
 const codexSinnerFilters = document.querySelector("#codex-sinner-filters");
 const codexKeywordFilters = document.querySelector("#codex-keyword-filters");
+const codexClashPowerFilters = document.querySelector("#codex-clash-power-filters");
 const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
@@ -933,6 +936,7 @@ function renderCodexFilters() {
   });
   renderKeywordFilterSections({
     normalContainer: codexKeywordFilters,
+    clashPowerContainer: codexClashPowerFilters,
     activeTags: codexState.activeTags,
     buttonClass: "deck-filter-token",
     dataAttribute: "data-codex-tag",
@@ -947,7 +951,7 @@ function renderCodexFilters() {
     title: true
   });
   bindFilterButtons(codexSinnerFilters, "data-codex-sinner", (value) => toggleCodexFilter("activeSinners", value));
-  bindFilterButtons(codexKeywordFilters, "data-codex-tag", (value) => toggleCodexFilter("activeTags", value));
+  bindTagFilterContainers([codexKeywordFilters, codexClashPowerFilters], "data-codex-tag", (value) => toggleCodexFilter("activeTags", value));
   bindFilterButtons(codexSinFilters, "data-codex-sin", (value) => toggleCodexFilter("activeSins", value));
   bindFilterButtons(codexAttackTypeFilters, "data-codex-attack-type", (value) => toggleCodexFilter("activeAttackTypes", value));
 }
@@ -1307,17 +1311,27 @@ function renderIconFilterButtons(filters, activeValues, dataAttribute, {
 
 function renderKeywordFilterSections({
   normalContainer,
+  clashPowerContainer = null,
   activeTags,
   buttonClass,
   dataAttribute,
   preview = false
 }) {
   const keywordFilters = getKeywordFilterSets(LIMBUS_DATA.cardTagFilters || LIMBUS_DATA.identityTagFilters);
-  normalContainer.innerHTML = renderKeywordFilterButtons(keywordFilters.normal, activeTags, {
-    buttonClass,
-    dataAttribute,
-    preview
-  });
+  if (normalContainer) {
+    normalContainer.innerHTML = renderKeywordFilterButtons(keywordFilters.normal, activeTags, {
+      buttonClass,
+      dataAttribute,
+      preview
+    });
+  }
+  if (clashPowerContainer) {
+    clashPowerContainer.innerHTML = renderKeywordFilterButtons(keywordFilters.clashPower, activeTags, {
+      buttonClass,
+      dataAttribute,
+      preview
+    });
+  }
 }
 
 function bindFilterButtons(container, dataAttribute, onClick) {
@@ -1329,6 +1343,10 @@ function bindFilterButtons(container, dataAttribute, onClick) {
   });
 }
 
+function bindTagFilterContainers(containers, dataAttribute, onClick) {
+  containers.forEach((container) => bindFilterButtons(container, dataAttribute, onClick));
+}
+
 function toggleArrayValue(values, value) {
   return values.includes(value)
     ? values.filter((item) => item !== value)
@@ -1336,7 +1354,14 @@ function toggleArrayValue(values, value) {
 }
 
 function getKeywordFilterSets(keywordFilters) {
-  return { normal: keywordFilters };
+  return {
+    normal: keywordFilters.filter((filter) => !isClashPowerTag(filter.tag)),
+    clashPower: keywordFilters.filter((filter) => isClashPowerTag(filter.tag))
+  };
+}
+
+function isClashPowerTag(tag) {
+  return tag.startsWith("합위력 ");
 }
 
 function renderKeywordFilterButtons(filters, activeTags, {
@@ -1346,8 +1371,9 @@ function renderKeywordFilterButtons(filters, activeTags, {
 }) {
   return filters.map((filter) => {
     const previewAttributes = preview
-      ? `data-preview-image="${filter.cardImage}" data-preview-alt="${filter.tag}"`
+      ? makePreviewAttributes(filter.cardImage, filter.tag)
       : "";
+    const displayText = getFilterDisplayText(filter.tag);
 
     return `
       <button
@@ -1357,10 +1383,22 @@ function renderKeywordFilterButtons(filters, activeTags, {
         ${dataAttribute}="${filter.tag}"
         ${previewAttributes}
       >
-        <img src="${filter.image}" alt="${filter.tag}" />
+        ${filter.image ? `<img src="${filter.image}" alt="${filter.tag}" />` : `<span>${displayText}</span>`}
       </button>
     `;
   }).join("");
+}
+
+function makePreviewAttributes(image, alt) {
+  if (!image) return "";
+
+  return `data-preview-image="${image}" data-preview-alt="${alt}"`;
+}
+
+function getFilterDisplayText(tag) {
+  if (tag.startsWith("합위력 ")) return tag.replace("합위력 ", "");
+
+  return tag.slice(0, 1);
 }
 
 
@@ -2180,6 +2218,7 @@ function renderDeckAssetRow(items) {
 function renderDeckFilters() {
   renderKeywordFilterSections({
     normalContainer: deckKeywordFilters,
+    clashPowerContainer: deckClashPowerFilters,
     activeTags: builderState.activeDeckTags,
     buttonClass: "deck-filter-token deck-preview-source",
     dataAttribute: "data-deck-keyword",
@@ -2194,10 +2233,11 @@ function renderDeckFilters() {
   deckAttackTypeFilters.innerHTML = renderIconFilterButtons(attackTypeFilters, builderState.activeDeckAttackTypes, "data-deck-attack-type", {
     title: true
   });
-  bindFilterButtons(deckKeywordFilters, "data-deck-keyword", toggleDeckKeywordFilter);
+  bindTagFilterContainers([deckKeywordFilters, deckClashPowerFilters], "data-deck-keyword", toggleDeckKeywordFilter);
   bindFilterButtons(deckSinFilters, "data-deck-sin", toggleDeckSinFilter);
   bindFilterButtons(deckAttackTypeFilters, "data-deck-attack-type", toggleDeckAttackTypeFilter);
   attachDeckPreviewListeners(deckKeywordFilters);
+  attachDeckPreviewListeners(deckClashPowerFilters);
   syncMobileDeckPane();
 }
 
@@ -2577,6 +2617,7 @@ function renderCardInsertFilters() {
   cardInsertSinnerFilters.innerHTML = renderSinnerFilterButtons(cardInsertState.activeSinners, "data-card-insert-sinner");
   renderKeywordFilterSections({
     normalContainer: cardInsertKeywordFilters,
+    clashPowerContainer: cardInsertClashPowerFilters,
     activeTags: cardInsertState.activeTags,
     buttonClass: "deck-filter-token",
     dataAttribute: "data-card-insert-tag"
@@ -2590,7 +2631,7 @@ function renderCardInsertFilters() {
   );
 
   bindFilterButtons(cardInsertSinnerFilters, "data-card-insert-sinner", (value) => toggleCardInsertFilter("activeSinners", value));
-  bindFilterButtons(cardInsertKeywordFilters, "data-card-insert-tag", (value) => toggleCardInsertFilter("activeTags", value));
+  bindTagFilterContainers([cardInsertKeywordFilters, cardInsertClashPowerFilters], "data-card-insert-tag", (value) => toggleCardInsertFilter("activeTags", value));
   bindFilterButtons(cardInsertSinFilters, "data-card-insert-sin", (value) => toggleCardInsertFilter("activeSins", value));
   bindFilterButtons(cardInsertAttackTypeFilters, "data-card-insert-attack-type", (value) => toggleCardInsertFilter("activeAttackTypes", value));
 }
@@ -2809,6 +2850,12 @@ function getDeckSaveFilterGroups() {
   const uniqueKeywordFilters = keywordFilters.filter((filter, index, filters) => {
     return filters.findIndex((candidate) => candidate.tag === filter.tag) === index;
   });
+  const tagFilterSets = getKeywordFilterSets(uniqueKeywordFilters);
+  const toDeckSaveTagFilter = (filter) => ({
+    value: filter.tag,
+    image: filter.image,
+    previewImage: filter.cardImage
+  });
 
   return [
     {
@@ -2830,11 +2877,12 @@ function getDeckSaveFilterGroups() {
     {
       key: "tags",
       title: "키워드",
-      filters: uniqueKeywordFilters.map((filter) => ({
-        value: filter.tag,
-        image: filter.image,
-        previewImage: filter.cardImage
-      }))
+      filters: tagFilterSets.normal.map(toDeckSaveTagFilter)
+    },
+    {
+      key: "tags",
+      title: "합위력",
+      filters: tagFilterSets.clashPower.map(toDeckSaveTagFilter)
     }
   ];
 }
@@ -3329,7 +3377,9 @@ function expandCompactDeckPayload(compactPayload) {
 }
 
 function getDeckShareIndexes() {
-  const keywordFilters = getDeckSaveFilterGroups().find((group) => group.key === "tags")?.filters || [];
+  const keywordFilters = getDeckSaveFilterGroups()
+    .filter((group) => group.key === "tags")
+    .flatMap((group) => group.filters);
   const newIdentityIds = [
     "yi_sang_heishou_wu",
     "faust_lobotomy_remnant",
