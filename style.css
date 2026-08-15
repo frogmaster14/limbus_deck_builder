@@ -1553,6 +1553,28 @@ h2 {
   gap: 8px;
 }
 
+.codex-code-search {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid rgba(243, 170, 22, 0.22);
+  background: rgba(24, 11, 8, 0.72);
+  color: #ffe4ad;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  outline: none;
+}
+
+.codex-code-search::placeholder {
+  color: rgba(255, 228, 173, 0.42);
+}
+
+.codex-code-search:focus {
+  border-color: rgba(245, 185, 57, 0.82);
+  box-shadow: 0 0 0 2px rgba(245, 185, 57, 0.12);
+}
+
 .deck-filter-buttons {
   display: flex;
   flex-wrap: wrap;

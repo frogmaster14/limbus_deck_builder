@@ -115,6 +115,7 @@ const codexKeywordFilters = document.querySelector("#codex-keyword-filters");
 const codexClashPowerFilters = document.querySelector("#codex-clash-power-filters");
 const codexSinFilters = document.querySelector("#codex-sin-filters");
 const codexAttackTypeFilters = document.querySelector("#codex-attack-type-filters");
+const codexCodeSearch = document.querySelector("#codex-code-search");
 const codexPreviewFilters = document.querySelector("#codex-preview-filters");
 const codexPreviewReferences = document.querySelector("#codex-preview-references");
 const mobileCodexNav = document.querySelector(".mobile-codex-nav");
@@ -257,6 +258,7 @@ const codexState = {
   activeTags: [],
   activeSins: [],
   activeAttackTypes: [],
+  codeQuery: "",
   expandedFolders: [],
   previewItemId: "",
   mobilePane: "cards"
@@ -502,6 +504,11 @@ document.querySelector("[data-action='back-home-feedback']").addEventListener("c
 document.querySelector("[data-action='reset-codex']").addEventListener("click", () => {
   resetCodexState();
   renderCodex();
+});
+
+codexCodeSearch?.addEventListener("input", () => {
+  codexState.codeQuery = codexCodeSearch.value;
+  renderCodexGrid();
 });
 
 document.querySelector("[data-action='reset-feedback']").addEventListener("click", () => {
@@ -781,6 +788,7 @@ function openFeedback() {
 
 function getActiveCodexFilterSummary() {
   const sections = [
+    ["코드", codexState.codeQuery ? [codexState.codeQuery] : []],
     ["수감자", codexState.activeSinners],
     ["키워드", codexState.activeTags],
     ["죄악", codexState.activeSins],
@@ -916,7 +924,8 @@ function syncMobileCodexPane() {
   const activeFilterCount = codexState.activeSinners.length
     + codexState.activeTags.length
     + codexState.activeSins.length
-    + codexState.activeAttackTypes.length;
+    + codexState.activeAttackTypes.length
+    + (getCodeSearchParts(codexState.codeQuery).length ? 1 : 0);
   if (mobileCodexCardCount) mobileCodexCardCount.textContent = codexCount.textContent || "0";
   if (mobileCodexFilterCount) mobileCodexFilterCount.textContent = String(activeFilterCount);
 }
@@ -930,6 +939,10 @@ function renderCodex() {
 }
 
 function renderCodexFilters() {
+  if (codexCodeSearch && codexCodeSearch.value !== codexState.codeQuery) {
+    codexCodeSearch.value = codexState.codeQuery;
+  }
+
   codexSinnerFilters.innerHTML = renderSinnerFilterButtons(codexState.activeSinners, "data-codex-sinner", {
     buttonClass: "deck-filter-token",
     title: true
@@ -1049,6 +1062,7 @@ function getCodexItemNumberMap() {
 
 function itemMatchesCodexFilterState(item, state) {
   const tabMatched = itemMatchesCodexTab(item, state.activeTab);
+  const codeMatched = itemMatchesCodeQuery(item, state.codeQuery);
   const sinnerMatched = !state.activeSinners.length
     || (item.sinnerId && state.activeSinners.includes(item.sinnerId));
   const hasCoreFilters = state.activeSinners.length
@@ -1068,7 +1082,7 @@ function itemMatchesCodexFilterState(item, state) {
   const hasAnyFilter = hasCoreFilters || hasOptionalFilters;
   const showItem = !hasAnyFilter || (item.category !== "keyword" && coreMatched && optionalMatched);
 
-  return tabMatched && showItem;
+  return tabMatched && codeMatched && showItem;
 }
 
 function itemMatchesCodexTab(item, activeTab) {
@@ -1360,6 +1374,27 @@ function getKeywordFilterSets(keywordFilters) {
   };
 }
 
+function itemMatchesCodeQuery(item, query) {
+  const queryParts = getCodeSearchParts(query);
+  if (!queryParts.length) return true;
+
+  const itemParts = getCodeSearchParts(item.code || getStableCode(item.id));
+  if (queryParts.length > itemParts.length) return false;
+
+  return queryParts.every((part, index) => {
+    if (part === "*") return Boolean(itemParts[index]);
+    return itemParts[index]?.startsWith(part);
+  });
+}
+
+function getCodeSearchParts(value) {
+  return String(value || "")
+    .toUpperCase()
+    .split(/[^A-Z0-9*]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 function isClashPowerTag(tag) {
   return tag.startsWith("합위력 ");
 }
@@ -1430,6 +1465,7 @@ function resetCodexState() {
   codexState.activeTags = [];
   codexState.activeSins = [];
   codexState.activeAttackTypes = [];
+  codexState.codeQuery = "";
   codexState.expandedFolders = [];
   codexState.previewItemId = "";
   codexState.mobilePane = "cards";
