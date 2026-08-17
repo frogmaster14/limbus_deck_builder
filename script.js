@@ -1826,9 +1826,16 @@ function chooseIdentity(identityId) {
 }
 
 function getEgoKeysForSinner(sinnerId) {
+  const dataKeys = LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [];
+  const manifestKeys = (getManifestSinner(sinnerId).extraEgoKeys || [])
+    .filter((key) => {
+      const number = Number(/^e(\d+)$/i.exec(key)?.[1]);
+      return !Number.isInteger(number) || number > dataKeys.length;
+    });
+
   return ["base", ...mergeOrderedValues(
-    LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [],
-    getManifestSinner(sinnerId).extraEgoKeys || []
+    dataKeys,
+    manifestKeys
   )];
 }
 
