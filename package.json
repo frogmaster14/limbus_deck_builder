@@ -2,6 +2,8 @@
   "type": "module",
   "scripts": {
     "assets:init": "node scripts/create-asset-placeholders.mjs",
+    "assets:manifest": "node scripts/generate-limbus-asset-manifest.mjs",
+    "scan:assets": "node scripts/scan-limbus-assets.mjs",
     "validate:data": "node scripts/validate-limbus-data.mjs"
   }
 }

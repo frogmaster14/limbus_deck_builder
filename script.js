@@ -1096,7 +1096,8 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
   const items = [];
 
   LIMBUS_DATA.sinners.forEach((sinner) => {
-    const [baseCount, baseUniqueCount, identitySet] = LIMBUS_DATA.raw.cardSets[sinner.id];
+    const baseCount = getSinnerBaseCount(sinner.id);
+    const baseUniqueCount = getSinnerBaseUniqueCount(sinner.id);
 
     for (let index = 1; index <= baseCount; index += 1) {
       const id = `${sinner.id}_base_${index}`;
@@ -1126,7 +1127,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         image: `assets/sinners/${sinner.id}/ego/${getEgoImageNumberForSinner(sinner.id, egoKey)}.png`
       }));
 
-      const uniqueCount = LIMBUS_DATA.raw.egoUniqueCardSets?.[sinner.id]?.[egoKey] || 0;
+      const uniqueCount = getEgoUniqueCountForSinner(sinner.id, egoKey);
       for (let index = 1; index <= uniqueCount; index += 1) {
         const id = `${sinner.id}_${egoKey}_ego_unique_${index}`;
         items.push(makeCodexItem({
@@ -1138,9 +1139,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
       }
     });
 
-    Object.entries(identitySet).forEach(([identityKey, [cardCount]]) => {
-      const identityId = `${sinner.id}_${identityKey}`;
-      const identity = getIdentity(identityId);
+    getIdentitiesForSinner(sinner.id).forEach((identity) => {
       if (!identity) return;
 
       items.push({
@@ -1156,7 +1155,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         shape: "card"
       });
 
-      for (let index = 1; index <= cardCount; index += 1) {
+      for (let index = 1; index <= identity.cardCount; index += 1) {
         const id = `${identity.id}_cards_${index}`;
         items.push(makeCodexItem({
           id,
@@ -1190,7 +1189,8 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
     });
   });
 
-  const keywordFilters = LIMBUS_DATA.cardTagFilters || LIMBUS_DATA.identityTagFilters;
+  const keywordFilters = (LIMBUS_DATA.cardTagFilters || LIMBUS_DATA.identityTagFilters)
+    .filter((filter) => filter.cardImage && !isClashPowerTag(filter.tag));
   keywordFilters.forEach((filter) => {
     items.push({
       id: `keyword_${filter.tag}`,
@@ -1826,13 +1826,43 @@ function chooseIdentity(identityId) {
 }
 
 function getEgoKeysForSinner(sinnerId) {
-  return ["base", ...(LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [])];
+  return ["base", ...mergeOrderedValues(
+    LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [],
+    getManifestSinner(sinnerId).extraEgoKeys || []
+  )];
 }
 
 function getEgoImageNumberForSinner(sinnerId, egoKey = "base") {
   if (egoKey === "base") return "00";
-  const extraEgoKeys = LIMBUS_DATA.raw?.extraEgoCardSets?.[sinnerId] || [];
+  const extraEgoKeys = getEgoKeysForSinner(sinnerId).filter((key) => key !== "base");
   return padNumber(extraEgoKeys.indexOf(egoKey) + 1);
+}
+
+function getManifestSinner(sinnerId) {
+  return window.LIMBUS_ASSET_MANIFEST?.sinners?.[sinnerId] || {};
+}
+
+function mergeOrderedValues(...values) {
+  return [...new Set(values.flat().filter(Boolean))];
+}
+
+function getSinnerBaseCount(sinnerId) {
+  const dataCount = LIMBUS_DATA.raw?.cardSets?.[sinnerId]?.[0] || 0;
+  return Math.max(dataCount, getManifestSinner(sinnerId).baseCount || 0);
+}
+
+function getSinnerBaseUniqueCount(sinnerId) {
+  const dataCount = LIMBUS_DATA.raw?.cardSets?.[sinnerId]?.[1] || 0;
+  return Math.max(dataCount, getManifestSinner(sinnerId).baseUniqueCount || 0);
+}
+
+function getIdentitiesForSinner(sinnerId) {
+  return LIMBUS_DATA.identitiesBySinnerId?.[sinnerId] || [];
+}
+
+function getEgoUniqueCountForSinner(sinnerId, egoKey) {
+  const dataCount = LIMBUS_DATA.raw?.egoUniqueCardSets?.[sinnerId]?.[egoKey] || 0;
+  return Math.max(dataCount, getManifestSinner(sinnerId).egoUniqueCounts?.[egoKey] || 0);
 }
 
 function renderBuilder() {
@@ -2394,7 +2424,7 @@ function getDeckCardsForIdentityIds(identityIds = []) {
   const addedEgoIds = new Set();
 
   selectedIdentities.forEach((identity) => {
-    const baseCount = LIMBUS_DATA.raw.cardSets[identity.sinnerId]?.[0] || 0;
+    const baseCount = getSinnerBaseCount(identity.sinnerId);
 
     for (let index = 1; index <= baseCount; index += 1) {
       const id = `${identity.sinnerId}_base_${index}`;
@@ -3530,15 +3560,15 @@ function getDeckShareMainCardIds() {
   const cardIds = [];
 
   LIMBUS_DATA.sinners.forEach((sinner) => {
-    const [baseCount,, identitySet] = LIMBUS_DATA.raw.cardSets[sinner.id];
+    const baseCount = getSinnerBaseCount(sinner.id);
 
     for (let index = 1; index <= baseCount; index += 1) {
       cardIds.push(`${sinner.id}_base_${index}`);
     }
 
-    Object.entries(identitySet).forEach(([identityKey, [cardCount]]) => {
-      for (let index = 1; index <= cardCount; index += 1) {
-        cardIds.push(`${sinner.id}_${identityKey}_cards_${index}`);
+    getIdentitiesForSinner(sinner.id).forEach((identity) => {
+      for (let index = 1; index <= identity.cardCount; index += 1) {
+        cardIds.push(`${identity.id}_cards_${index}`);
       }
     });
   });

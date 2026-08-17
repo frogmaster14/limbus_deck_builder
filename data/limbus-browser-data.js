@@ -417,7 +417,8 @@
     파열: "04",
     침잠: "05",
     호흡: "06",
-    충전: "07"
+    충전: "07",
+    패닉: "08"
   };
 
 
@@ -470,16 +471,51 @@
   const stableCodeById = {};
   const idByStableCode = {};
   const stableCodeDuplicates = [];
+  const ASSET_MANIFEST = window.LIMBUS_ASSET_MANIFEST || { sinners: {} };
+
+  const getManifestSinner = (sinnerId) => ASSET_MANIFEST.sinners?.[sinnerId] || {};
+  const mergeOrderedKeys = (...keyLists) => [...new Set(keyLists.flat().filter(Boolean))];
+  const getExtraEgoKeys = (sinnerId) => {
+    const dataKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+    const manifestKeys = (getManifestSinner(sinnerId).extraEgoKeys || [])
+      .filter((key) => {
+        const number = Number(/^e(\d+)$/i.exec(key)?.[1]);
+        return !Number.isInteger(number) || number > dataKeys.length;
+      });
+
+    return mergeOrderedKeys(dataKeys, manifestKeys);
+  };
+  const getIdentityKeys = (sinnerId) => mergeOrderedKeys(
+    Object.keys(CARD_SETS[sinnerId]?.[2] || {}),
+    Object.keys(getManifestSinner(sinnerId).identities || {})
+  );
+  const getIdentityCounts = (sinnerId, identityKey) => {
+    const dataCounts = CARD_SETS[sinnerId]?.[2]?.[identityKey] || [0, 0];
+    const manifestCounts = getManifestSinner(sinnerId).identities?.[identityKey] || {};
+    return [
+      Math.max(dataCounts[0] || 0, manifestCounts.cardCount || 0),
+      Math.max(dataCounts[1] || 0, manifestCounts.uniqueCount || 0)
+    ];
+  };
+  const getUpgradeCount = (sinnerId, identityKey) => {
+    const identityId = `${sinnerId}_${identityKey}`;
+    const manifestCount = getManifestSinner(sinnerId).identities?.[identityKey]?.upgradeCount || 0;
+    return Math.max(UPGRADE_CARD_SETS[identityId] || 0, manifestCount);
+  };
+  const getEgoUniqueCount = (sinnerId, egoKey) => {
+    const manifestCount = getManifestSinner(sinnerId).egoUniqueCounts?.[egoKey] || 0;
+    return Math.max(EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0, manifestCount);
+  };
 
   const getIdentityNumber = (sinnerId, identityKey) => {
-    const identityKeys = Object.keys(CARD_SETS[sinnerId]?.[2] || {});
+    const identityKeys = getIdentityKeys(sinnerId);
     const index = identityKeys.indexOf(identityKey);
     return index >= 0 ? index + 1 : null;
   };
 
   const getEgoNumber = (sinnerId, egoKey = "base") => {
     if (egoKey === "base") return 1;
-    const index = (EXTRA_EGO_CARD_SETS[sinnerId] || []).indexOf(egoKey);
+    const index = getExtraEgoKeys(sinnerId).indexOf(egoKey);
     return index >= 0 ? index + 2 : null;
   };
 
@@ -529,7 +565,10 @@
     });
   });
 
-  Object.entries(CARD_SETS).forEach(([sinnerId, [baseCount, baseUniqueCount, identitySet]]) => {
+  Object.entries(CARD_SETS).forEach(([sinnerId, [dataBaseCount, dataBaseUniqueCount]]) => {
+    const manifestSinner = getManifestSinner(sinnerId);
+    const baseCount = Math.max(dataBaseCount, manifestSinner.baseCount || 0);
+    const baseUniqueCount = Math.max(dataBaseUniqueCount, manifestSinner.baseUniqueCount || 0);
     const sinner = {
       id: sinnerId,
       icon: `assets/sinners/${sinnerId}/icon.png`
@@ -547,17 +586,18 @@
       registerStableCode(`${sinnerId}_base_unique_${number}`, getBaseUniqueCardCode(sinnerId, number));
     }
 
-    ["base", ...(EXTRA_EGO_CARD_SETS[sinnerId] || [])].forEach((egoKey) => {
+    ["base", ...getExtraEgoKeys(sinnerId)].forEach((egoKey) => {
       const egoId = `${sinnerId}_${egoKey}_ego`;
       registerStableCode(egoId, getEgoCardCode(sinnerId, egoKey));
 
-      const uniqueCount = EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0;
+      const uniqueCount = getEgoUniqueCount(sinnerId, egoKey);
       for (let number = 1; number <= uniqueCount; number += 1) {
         registerStableCode(`${egoId}_unique_${number}`, getEgoUniqueCardCode(sinnerId, egoKey, number));
       }
     });
 
-    Object.entries(identitySet).forEach(([identityKey, [cardCount, uniqueCount]]) => {
+    getIdentityKeys(sinnerId).forEach((identityKey) => {
+      const [cardCount, uniqueCount] = getIdentityCounts(sinnerId, identityKey);
       const identityId = `${sinnerId}_${identityKey}`;
       const tags = tagsByIdentityId[identityId] || [];
       const identity = {
@@ -582,7 +622,7 @@
             image: `assets/sinners/${sinnerId}/${identityKey}/unique/${padNumber(number)}.png`
           };
         }),
-        upgradeCards: Array.from({ length: UPGRADE_CARD_SETS[identityId] || 0 }, (_, index) => {
+        upgradeCards: Array.from({ length: getUpgradeCount(sinnerId, identityKey) }, (_, index) => {
           const number = index + 1;
           return {
             id: `${identityId}_upgrade_${number}`,

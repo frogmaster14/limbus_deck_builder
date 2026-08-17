@@ -10,6 +10,7 @@ import {
   TAG_GROUPS,  UNIQUE_CARD_TYPES,
   UPGRADE_CARD_SETS
 } from "./limbus-data.js";
+import { LIMBUS_ASSET_MANIFEST } from "./limbus-asset-manifest.mjs";
 
 export const DECK_RULES = {
   deckSize: 20,
@@ -56,7 +57,7 @@ export const NORMAL_KEYWORD_CODES = {
 };
 
 export function getIdentityNumber(sinnerId, identityKey) {
-  const identityKeys = Object.keys(CARD_SETS[sinnerId]?.[2] || {});
+  const identityKeys = getIdentityKeys(sinnerId);
   const index = identityKeys.indexOf(identityKey);
   return index >= 0 ? index + 1 : null;
 }
@@ -87,7 +88,7 @@ export function getIdentityUpgradeCardCode(sinnerId, identityKey, number) {
 
 export function getEgoNumber(sinnerId, egoKey = "base") {
   if (egoKey === "base") return 1;
-  const extraEgoKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+  const extraEgoKeys = getExtraEgoKeys(sinnerId);
   const index = extraEgoKeys.indexOf(egoKey);
   return index >= 0 ? index + 2 : null;
 }
@@ -142,7 +143,7 @@ export function formatImageNumber(number) {
 
 export function getEgoImageNumber(sinnerId, egoKey = "base") {
   if (egoKey === "base") return "00";
-  const extraEgoKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+  const extraEgoKeys = getExtraEgoKeys(sinnerId);
   const egoIndex = extraEgoKeys.indexOf(egoKey);
   return formatImageNumber(egoIndex + 1);
 }
@@ -259,6 +260,60 @@ function invertTagMap(tagMap) {
   return result;
 }
 
+function getManifestSinner(sinnerId) {
+  return LIMBUS_ASSET_MANIFEST.sinners?.[sinnerId] || {};
+}
+
+function getMaxManifestCount(sinnerId, key, fallback = 0) {
+  const value = getManifestSinner(sinnerId)[key];
+  return Math.max(fallback, Number.isInteger(value) ? value : 0);
+}
+
+function mergeOrderedKeys(...keyLists) {
+  return [...new Set(keyLists.flat().filter(Boolean))];
+}
+
+function getExtraEgoKeys(sinnerId) {
+  const dataKeys = EXTRA_EGO_CARD_SETS[sinnerId] || [];
+  const manifestKeys = (getManifestSinner(sinnerId).extraEgoKeys || [])
+    .filter((key) => {
+      const number = Number(/^e(\d+)$/i.exec(key)?.[1]);
+      return !Number.isInteger(number) || number > dataKeys.length;
+    });
+
+  return mergeOrderedKeys(
+    dataKeys,
+    manifestKeys
+  );
+}
+
+function getIdentityKeys(sinnerId) {
+  return mergeOrderedKeys(
+    Object.keys(CARD_SETS[sinnerId]?.[2] || {}),
+    Object.keys(getManifestSinner(sinnerId).identities || {})
+  );
+}
+
+function getIdentityCounts(sinnerId, identityKey) {
+  const dataCounts = CARD_SETS[sinnerId]?.[2]?.[identityKey] || [0, 0];
+  const manifestCounts = getManifestSinner(sinnerId).identities?.[identityKey] || {};
+  return [
+    Math.max(dataCounts[0] || 0, manifestCounts.cardCount || 0),
+    Math.max(dataCounts[1] || 0, manifestCounts.uniqueCount || 0)
+  ];
+}
+
+function getUpgradeCount(sinnerId, identityKey) {
+  const identityId = getIdentityId(sinnerId, identityKey);
+  const manifestCount = getManifestSinner(sinnerId).identities?.[identityKey]?.upgradeCount || 0;
+  return Math.max(UPGRADE_CARD_SETS[identityId] || 0, manifestCount);
+}
+
+function getEgoUniqueCount(sinnerId, egoKey) {
+  const manifestCount = getManifestSinner(sinnerId).egoUniqueCounts?.[egoKey] || 0;
+  return Math.max(EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0, manifestCount);
+}
+
 export function buildLimbusData() {
   const sinners = [];
   const identities = [];
@@ -318,7 +373,9 @@ export function buildLimbusData() {
     return withTags;
   }
 
-  Object.entries(CARD_SETS).forEach(([sinnerId, [baseCount, baseUniqueCount, identitySet]]) => {
+  Object.entries(CARD_SETS).forEach(([sinnerId, [dataBaseCount, dataBaseUniqueCount]]) => {
+    const baseCount = getMaxManifestCount(sinnerId, "baseCount", dataBaseCount);
+    const baseUniqueCount = getMaxManifestCount(sinnerId, "baseUniqueCount", dataBaseUniqueCount);
     const sinner = {
       id: sinnerId,
       icon: getSinnerIconPath(sinnerId)
@@ -357,7 +414,7 @@ export function buildLimbusData() {
       baseUniqueCardsBySinnerId[sinnerId].push(card);
     }
 
-    const egoKeys = ["base", ...(EXTRA_EGO_CARD_SETS[sinnerId] || [])];
+    const egoKeys = ["base", ...getExtraEgoKeys(sinnerId)];
     const sinnerEgos = egoKeys.map((egoKey) => {
       const ego = addCard(makeCard({
         id: getEgoCardId(sinnerId, egoKey),
@@ -375,7 +432,7 @@ export function buildLimbusData() {
 
       egoById[ego.id] = ego;
 
-      const egoUniqueCount = EGO_UNIQUE_CARD_SETS[sinnerId]?.[egoKey] || 0;
+      const egoUniqueCount = getEgoUniqueCount(sinnerId, egoKey);
       egoUniqueCardsByEgoId[ego.id] = [];
       for (let number = 1; number <= egoUniqueCount; number += 1) {
         const uniqueCard = addCard(makeCard({
@@ -398,7 +455,8 @@ export function buildLimbusData() {
     egosBySinnerId[sinnerId] = sinnerEgos;
     egoBySinnerId[sinnerId] = sinnerEgos[0];
 
-    Object.entries(identitySet).forEach(([identityKey, [cardCount, uniqueCount]]) => {
+    getIdentityKeys(sinnerId).forEach((identityKey) => {
+      const [cardCount, uniqueCount] = getIdentityCounts(sinnerId, identityKey);
       const identityId = getIdentityId(sinnerId, identityKey);
       const identity = {
         id: identityId,
@@ -450,7 +508,7 @@ export function buildLimbusData() {
         uniqueCardsByIdentityId[identityId].push(card);
       }
 
-      const upgradeCount = UPGRADE_CARD_SETS[identityId] || 0;
+      const upgradeCount = getUpgradeCount(sinnerId, identityKey);
       for (let number = 1; number <= upgradeCount; number += 1) {
         const card = addCard(makeCard({
           id: getIdentityUpgradeCardId(sinnerId, identityKey, number),
