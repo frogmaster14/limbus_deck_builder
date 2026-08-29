@@ -78,7 +78,8 @@ function buildManifest() {
           cardCount: getMaxNumber(identityDir),
           uniqueCount: getMaxNumber(path.join(identityDir, "unique")),
           upgradeCount: getMaxNumber(path.join(identityDir, "unique", "upgrade")),
-          hasIdentityImage: exists(path.join(identityDir, "identity.png"))
+          hasIdentityImage: exists(path.join(identityDir, "identity.png")),
+          hasIdentityBackImage: exists(path.join(identityDir, "identity_back.png"))
         };
       });
 

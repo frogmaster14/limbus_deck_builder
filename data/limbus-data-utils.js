@@ -457,6 +457,7 @@ export function buildLimbusData() {
 
     getIdentityKeys(sinnerId).forEach((identityKey) => {
       const [cardCount, uniqueCount] = getIdentityCounts(sinnerId, identityKey);
+      const manifestIdentity = getManifestSinner(sinnerId).identities?.[identityKey] || {};
       const identityId = getIdentityId(sinnerId, identityKey);
       const identity = {
         id: identityId,
@@ -464,6 +465,9 @@ export function buildLimbusData() {
         sinnerId,
         identityKey,
         image: getIdentityImagePath(sinnerId, identityKey),
+        backImage: manifestIdentity.hasIdentityBackImage
+          ? `assets/sinners/${sinnerId}/${identityKey}/identity_back.png`
+          : null,
         tags: tagsByIdentityId[identityId] || []
       };
 

@@ -121,7 +121,6 @@ const codexPreviewReferences = document.querySelector("#codex-preview-references
 const mobileCodexNav = document.querySelector(".mobile-codex-nav");
 const mobileCodexCardCount = document.querySelector("#mobile-codex-card-count");
 const mobileCodexFilterCount = document.querySelector("#mobile-codex-filter-count");
-const saveImportCode = document.querySelector("#save-import-code");
 const saveImportFile = document.querySelector("#save-import-file");
 const saveImportStatus = document.querySelector("#save-import-status");
 const savedDeckCount = document.querySelector("#saved-deck-count");
@@ -139,6 +138,9 @@ const savedViewPreviewFilters = document.querySelector("#saved-view-preview-filt
 const savedViewActions = document.querySelector("#saved-view-actions");
 const mobileSavedViewNav = document.querySelector(".mobile-saved-view-nav");
 const savedViewStatus = document.querySelector("#saved-view-status");
+const deckOverviewOverlay = document.querySelector("#deck-overview-overlay");
+const deckOverviewTitle = document.querySelector("#deck-overview-title");
+const deckOverviewContent = document.querySelector("#deck-overview-content");
 const feedbackForm = document.querySelector("#feedback-form");
 const feedbackTarget = document.querySelector("#feedback-target");
 const feedbackDetail = document.querySelector("#feedback-detail");
@@ -243,6 +245,7 @@ const builderState = {
   isDeckReviewing: false,
   mobileDeckPane: "cards",
   mobileIdentityLayout: "detail",
+  flippedIdentityIds: new Set(),
   deckSave: {
     featuredFilters: {
       sins: [],
@@ -557,11 +560,13 @@ document.querySelector("[data-action='next-deck-step']").addEventListener("click
   handleDeckNextStep();
 });
 
-document.querySelector("[data-action='edit-deck']").addEventListener("click", () => {
-  builderState.isDeckReviewing = false;
-  builderState.mobileDeckPane = "cards";
-  syncDeckMode();
-  renderDeckPreview(null);
+document.querySelectorAll("[data-action='edit-deck']").forEach((button) => {
+  button.addEventListener("click", () => {
+    builderState.isDeckReviewing = false;
+    builderState.mobileDeckPane = "cards";
+    syncDeckMode();
+    renderDeckPreview(null);
+  });
 });
 
 document.querySelectorAll("[data-action='open-card-search']").forEach((button) => {
@@ -589,9 +594,9 @@ document.querySelectorAll("[data-action='save-deck-local']").forEach((button) =>
   });
 });
 
-document.querySelectorAll("[data-action='copy-deck-code']").forEach((button) => {
+document.querySelectorAll("[data-action='copy-tts-code']").forEach((button) => {
   button.addEventListener("click", async () => {
-    await copyCurrentDeckCode();
+    await copyCurrentTtsCode();
   });
 });
 
@@ -611,12 +616,20 @@ document.querySelectorAll("[data-action='view-current-deck']").forEach((button) 
   });
 });
 
-document.querySelector("[data-action='reset-save-import']").addEventListener("click", () => {
-  resetSaveImport();
+document.querySelectorAll("[data-action='open-current-deck-overview']").forEach((button) => {
+  button.addEventListener("click", () => {
+    openDeckOverview(buildCurrentDeckPayload());
+  });
 });
 
-document.querySelector("[data-action='import-deck-code']").addEventListener("click", async () => {
-  await importDeckCodeToSaves();
+document.querySelector("[data-action='close-deck-overview']")?.addEventListener("click", closeDeckOverview);
+
+deckOverviewOverlay?.addEventListener("click", (event) => {
+  if (event.target === deckOverviewOverlay) closeDeckOverview();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !deckOverviewOverlay?.hidden) closeDeckOverview();
 });
 
 document.querySelector("[data-action='select-deck-file']").addEventListener("click", () => {
@@ -674,6 +687,11 @@ mobileCodexNav?.addEventListener("click", (event) => {
 });
 
 nextStepButton.addEventListener("click", () => {
+  if (builderState.identityPickerReturnView === "deck") {
+    closeDeckIdentityPicker();
+    return;
+  }
+
   if (!builderState.selected.front || !builderState.selected.back) return;
 
   builderState.identityPickerReturnView = null;
@@ -683,6 +701,15 @@ nextStepButton.addEventListener("click", () => {
 });
 
 deckSideSummary.addEventListener("click", (event) => {
+  const flipControl = event.target.closest(".identity-flip-control");
+  if (flipControl) {
+    event.stopPropagation();
+    toggleIdentityFlip(flipControl.dataset.flipIdentityId);
+    renderDeckSideSummary();
+    renderMobileDeckSummary();
+    return;
+  }
+
   const selector = event.target.closest("[data-deck-identity-slot]");
   if (!selector) return;
 
@@ -690,7 +717,13 @@ deckSideSummary.addEventListener("click", (event) => {
 });
 
 identitySlots.forEach((slot) => {
-  slot.addEventListener("click", () => {
+  slot.addEventListener("click", (event) => {
+    if (event.target.closest(".identity-flip-control")) {
+      event.stopPropagation();
+      toggleIdentityFlip(builderState.selected[slot.dataset.slot]);
+      return;
+    }
+
     builderState.activeSlot = slot.dataset.slot;
     const identity = getIdentity(builderState.selected[slot.dataset.slot]);
     if (identity) builderState.hovered = identity.id;
@@ -1018,11 +1051,12 @@ function renderCodexGrid() {
         title="${item.title}"
         data-codex-item-id="${item.id}"
         ${item.shape === "folder" ? `data-codex-folder-id="${item.id}"` : ""}
-        data-preview-image="${item.previewImage || item.image}"
+        data-preview-image="${getCodexItemDisplayImage(item)}"
         data-preview-alt="${item.title}"
         data-preview-code="${itemCode || ""}"
       >
-        <img src="${item.image}" alt="" onerror="this.closest('button').hidden=true;" />
+        <img src="${getCodexItemDisplayImage(item)}" alt="" onerror="this.closest('button').hidden=true;" />
+        ${item.category === "identity" ? renderIdentityFlipControl(getIdentity(item.id)) : ""}
         ${itemCode ? `<span class="codex-item-number">${itemCode}</span>` : ""}
         ${item.shape === "folder" ? `<span class="codex-folder-label">${item.title}</span>` : ""}
       </button>
@@ -1149,6 +1183,7 @@ function getCodexItems(isFolderExpanded = isCodexFolderExpanded) {
         category: "identity",
         sinnerId: identity.sinnerId,
         image: identity.image,
+        backImage: identity.backImage,
         tags: identity.tags,
         sin: null,
         attackType: null,
@@ -1506,6 +1541,16 @@ function attachCodexPreviewListeners(root) {
     };
 
     const selectPreview = (event) => {
+      const flipControl = event.target.closest(".identity-flip-control");
+      if (flipControl) {
+        event.stopPropagation();
+        toggleIdentityFlip(flipControl.dataset.flipIdentityId);
+        renderCodexGrid();
+        const selectedItem = findAnyCodexItem(codexState.previewItemId);
+        if (selectedItem) selectCodexItem(selectedItem);
+        return;
+      }
+
       const codexItem = button.dataset.codexItemId
         ? getCodexItems().find((item) => item.id === button.dataset.codexItemId)
         : null;
@@ -1536,7 +1581,7 @@ function renderCodexPreview(item) {
     return;
   }
 
-  codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
+  codexPreview.innerHTML = renderPreviewImageWithCode(getCodexItemDisplayImage(item), item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
   renderCodexPreviewReferences(item.id || item.alt);
 }
@@ -1553,7 +1598,7 @@ function renderCodexPreviewLegacy(item) {
     return;
   }
 
-  codexPreview.innerHTML = renderPreviewImageWithCode(item.image, item.alt, item.code);
+  codexPreview.innerHTML = renderPreviewImageWithCode(getCodexItemDisplayImage(item), item.alt, item.code);
   renderCodexPreviewFilters(item.filters);
   renderCodexPreviewReferences(item.id || item.alt);
 }
@@ -1562,7 +1607,7 @@ function renderCodexPreviewSurface(item) {
   if (!item) return;
 
   codexPreview.innerHTML = renderPreviewImageWithCode(
-    item.previewImage || item.image,
+    getCodexItemDisplayImage(item),
     item.title || item.alt || item.id,
     item.code || getStableCode(item.id || item.alt)
   );
@@ -1627,7 +1672,7 @@ function selectCodexItem(item) {
 
   renderCodexPreviewLegacy({
     id: item.id,
-    image: item.previewImage || item.image,
+    image: getCodexItemDisplayImage(item),
     alt: item.title,
     code: item.code || getStableCode(item.id),
     filters: getCodexPreviewFilters(item)
@@ -1793,6 +1838,56 @@ function getIdentity(identityId) {
   return identityId ? LIMBUS_DATA.identityById[identityId] : null;
 }
 
+function hasIdentityBack(identity) {
+  return Boolean(identity?.backImage);
+}
+
+function isIdentityFlipped(identityId) {
+  return builderState.flippedIdentityIds.has(identityId);
+}
+
+function getIdentityDisplayImage(identity) {
+  if (!identity) return "";
+
+  return hasIdentityBack(identity) && isIdentityFlipped(identity.id)
+    ? identity.backImage
+    : identity.image;
+}
+
+function getCodexItemDisplayImage(item) {
+  if (!item) return "";
+  const identity = item.category === "identity" ? getIdentity(item.id) : null;
+
+  return identity ? getIdentityDisplayImage(identity) : (item.previewImage || item.image);
+}
+
+function toggleIdentityFlip(identityId) {
+  const identity = getIdentity(identityId);
+  if (!hasIdentityBack(identity)) return;
+
+  if (isIdentityFlipped(identityId)) {
+    builderState.flippedIdentityIds.delete(identityId);
+  } else {
+    builderState.flippedIdentityIds.add(identityId);
+  }
+
+  if (builderState.hovered === identityId) renderPreview(identityId);
+  renderSlots();
+  renderIdentities();
+}
+
+function renderIdentityFlipControl(identity) {
+  if (!hasIdentityBack(identity)) return "";
+
+  return `
+    <span
+      class="identity-flip-control"
+      data-flip-identity-id="${identity.id}"
+      aria-label="인격 앞뒤 전환"
+    >↻</span>
+  `;
+}
+
 function getSelectedSlotForSinner(sinnerId) {
   return Object.entries(builderState.selected).find(([, identityId]) => {
     const identity = getIdentity(identityId);
@@ -1889,7 +1984,7 @@ function renderBuilderChrome() {
   if (builderTitle) builderTitle.textContent = isDeckPicker ? `${slotLabel} 인격 선택` : "전방 / 후방 인격 선택";
   if (builderResetIdentities) builderResetIdentities.hidden = isDeckPicker;
   if (swapSlotButton) swapSlotButton.hidden = isDeckPicker;
-  if (nextStepButton) nextStepButton.hidden = isDeckPicker;
+  if (nextStepButton) nextStepButton.hidden = false;
   syncMobileIdentityLayout();
 }
 
@@ -1914,9 +2009,16 @@ function syncMobileIdentityLayout() {
 function updateNextStepButton() {
   if (!nextStepButton) return;
 
+  const isDeckPicker = builderState.identityPickerReturnView === "deck";
   const canProceed = Boolean(builderState.selected.front && builderState.selected.back);
   const canSwap = Boolean(builderState.selected.front || builderState.selected.back);
   if (swapSlotButton) swapSlotButton.disabled = !canSwap;
+  if (isDeckPicker) {
+    nextStepButton.disabled = false;
+    nextStepButton.textContent = "다음";
+    return;
+  }
+
   nextStepButton.disabled = !canProceed;
   nextStepButton.textContent = canProceed ? "다음" : "전방/후방 선택 필요";
 }
@@ -1993,7 +2095,8 @@ function renderSlots() {
     }
 
     slot.innerHTML = `
-      <img class="slot-image" src="${identity.image}" alt="${identity.id}" />
+      <img class="slot-image" src="${getIdentityDisplayImage(identity)}" alt="${identity.id}" />
+      ${renderIdentityFlipControl(identity)}
     `;
     slotExtra.innerHTML = renderSlotExtra(identity);
   });
@@ -2076,13 +2179,22 @@ function renderIdentities() {
         data-identity-id="${identity.id}"
         aria-label="${identity.id}"
       >
-        <img src="${identity.image}" alt="" />
+        <img src="${getIdentityDisplayImage(identity)}" alt="" />
+        ${renderIdentityFlipControl(identity)}
       </button>
     `;
   }).join("");
 
   identityGrid.querySelectorAll(".identity-card").forEach((card) => {
-    card.addEventListener("click", () => chooseIdentity(card.dataset.identityId));
+    card.addEventListener("click", (event) => {
+      if (event.target.closest(".identity-flip-control")) {
+        event.stopPropagation();
+        toggleIdentityFlip(card.dataset.identityId);
+        return;
+      }
+
+      chooseIdentity(card.dataset.identityId);
+    });
   });
 }
 
@@ -2199,7 +2311,7 @@ function renderMobileDeckIdentitySlot(slotName, label) {
     >
       <span class="mobile-deck-identity-label">${label}</span>
       <span class="mobile-deck-identity-image">
-        ${identity ? `<img src="${identity.image}" alt="" />` : "+"}
+        ${identity ? `<img src="${getIdentityDisplayImage(identity)}" alt="" />` : "+"}
       </span>
     </button>
   `;
@@ -2234,12 +2346,13 @@ function renderDeckSideSummary() {
           class="deck-side-card-select deck-preview-source"
           type="button"
           data-deck-identity-slot="${slotName}"
-          data-preview-image="${identity.image}"
+          data-preview-image="${getIdentityDisplayImage(identity)}"
           data-preview-alt="${identity.id}"
           aria-label="${label} 인격 변경"
         ></button>
         <div class="deck-side-image">
-          <img src="${identity.image}" alt="${identity.id}" />
+          <img src="${getIdentityDisplayImage(identity)}" alt="${identity.id}" />
+          ${renderIdentityFlipControl(identity)}
         </div>
         <div class="deck-side-body">
           <span class="deck-side-label">${label}</span>
@@ -2400,6 +2513,10 @@ function renderDeckCardPool() {
   attachDeckPreviewListeners(deckCardPool);
   deckCardPool.querySelectorAll("[data-deck-card-id]").forEach((button) => {
     button.addEventListener("click", () => toggleDeckCard(button.dataset.deckCardId));
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      removeSelectedDeckItem(button.dataset.deckCardId);
+    });
   });
   restoreDeckCardPoolScroll(scrollTop, scrollLeft);
 }
@@ -2511,6 +2628,10 @@ function renderDeckIncludedGrid() {
   attachDeckPreviewListeners(deckIncludedGrid);
   deckIncludedGrid.querySelectorAll("[data-remove-deck-card]").forEach((button) => {
     button.addEventListener("click", () => removeDeckCard(button.dataset.removeDeckCard));
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      removeDeckCard(button.dataset.removeDeckCard);
+    });
   });
 }
 
@@ -2523,13 +2644,13 @@ function renderDeckExtraGrid() {
     .map((cardId) => availableCards.get(cardId))
     .filter(Boolean);
   const availableUpgrades = Array.from(availableCards.values()).filter((card) => card.category === "upgrade");
-  const selectedKeywordItems = getSelectedDeckKeywordItems(availableCards);
+  const referencedExtraCards = getSelectedIdentityReferencedExtraCards();
 
   deckExtraGrid.innerHTML = `
     <section class="deck-extra-group">
       <div class="deck-extra-heading">
         <span>EGO</span>
-        <small>1장 선택</small>
+        <small>${selectedEgo ? 1 : 0} / 1</small>
       </div>
       <div class="deck-extra-card-row">
         ${selectedEgo ? renderDeckExtraCard(selectedEgo) : `<div class="deck-extra-slot">선택 없음</div>`}
@@ -2538,7 +2659,7 @@ function renderDeckExtraGrid() {
     <section class="deck-extra-group">
       <div class="deck-extra-heading">
         <span>강화</span>
-        <small>${selectedUpgrades.length} / ${availableUpgrades.length}</small>
+        <small>${selectedUpgrades.length}</small>
       </div>
       <div class="deck-extra-card-row">
         ${selectedUpgrades.length
@@ -2548,12 +2669,12 @@ function renderDeckExtraGrid() {
     </section>
     <section class="deck-extra-group">
       <div class="deck-extra-heading">
-        <span>추가 키워드</span>
-        <small>${selectedKeywordItems.length}</small>
+        <span>추가 카드</span>
+        <small>${referencedExtraCards.length}</small>
       </div>
       <div class="deck-extra-card-row deck-extra-keyword-row">
-        ${selectedKeywordItems.length
-          ? selectedKeywordItems.map((item) => renderDeckExtraKeywordToken(item)).join("")
+        ${referencedExtraCards.length
+          ? referencedExtraCards.map((card) => renderDeckExtraCard(card, { removable: false })).join("")
           : `<div class="deck-extra-slot deck-extra-keyword-empty">없음</div>`}
       </div>
     </section>
@@ -2562,16 +2683,22 @@ function renderDeckExtraGrid() {
   attachDeckPreviewListeners(deckExtraGrid);
   deckExtraGrid.querySelectorAll("[data-remove-extra-card]").forEach((button) => {
     button.addEventListener("click", () => removeDeckExtraCard(button.dataset.removeExtraCard));
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      removeDeckExtraCard(button.dataset.removeExtraCard);
+    });
   });
 }
 
-function renderDeckExtraCard(card) {
+function renderDeckExtraCard(card, { removable = true } = {}) {
+  const removeAttribute = removable ? `data-remove-extra-card="${card.id}"` : "";
+
   return `
     <button
       class="deck-extra-card deck-preview-source"
       type="button"
       title="${card.id}"
-      data-remove-extra-card="${card.id}"
+      ${removeAttribute}
       data-preview-image="${card.image}"
       data-preview-alt="${card.id}"
     >
@@ -3157,12 +3284,6 @@ function setSavedDeckActionStatus(message, isError = false) {
   savedViewStatus.classList.toggle("is-error", isError);
 }
 
-function resetSaveImport() {
-  if (saveImportCode) saveImportCode.value = "";
-  if (saveImportFile) saveImportFile.value = "";
-  setSaveImportStatus("입력 내용 비움.");
-}
-
 function saveCurrentDeck() {
   const snapshot = getDeckSelectionSnapshot();
   if (!isDeckSelectionComplete(snapshot)) {
@@ -3216,19 +3337,18 @@ function getComparableDeckPayload(payload) {
   };
 }
 
-async function copyCurrentDeckCode() {
+async function copyCurrentTtsCode() {
   const snapshot = getDeckSelectionSnapshot();
   if (!isDeckSelectionComplete(snapshot)) {
-    setDeckSaveStatus("전방/후방 인격과 20장 구성 후 코드 복사 가능.", true);
+    setDeckSaveStatus("전방/후방 인격과 20장 구성 후 TTS 코드 복사 가능.", true);
     return;
   }
 
   try {
-    const code = await encodeDeckPayload(buildCurrentDeckPayload());
-    await copyTextToClipboard(code);
-    setDeckSaveStatus("코드 복사됨.");
+    await copyTextToClipboard(buildTtsDeckCode(buildCurrentDeckPayload()));
+    setDeckSaveStatus("TTS 코드 복사됨.");
   } catch {
-    setDeckSaveStatus("코드 복사 실패.", true);
+    setDeckSaveStatus("TTS 코드 복사 실패.", true);
   }
 }
 
@@ -3319,6 +3439,113 @@ function encodeLegacyDeckPayload(payload) {
     binary += String.fromCharCode(byte);
   });
   return `LTDB2:${btoa(binary)}`;
+}
+
+function buildTtsDeckCode(payload) {
+  const normalizedPayload = normalizeDeckPayload(payload);
+  const accessoryCodes = buildTtsAccessoryCodes(normalizedPayload);
+  const parts = [
+    "LTTS1",
+    `F:${getRequiredStableCode(normalizedPayload.identities.front, "front identity")}`,
+    `B:${getRequiredStableCode(normalizedPayload.identities.back, "back identity")}`,
+    `M:${compactTtsCardCounts(normalizedPayload.cards)}`
+  ];
+
+  if (normalizedPayload.ego) {
+    parts.push(`E:${getRequiredStableCode(normalizedPayload.ego, "ego")}`);
+  }
+
+  if (normalizedPayload.upgrades.length) {
+    parts.push(`U:${normalizedPayload.upgrades.map((cardId) => getRequiredStableCode(cardId, "upgrade")).join(",")}`);
+  }
+
+  if (accessoryCodes.length) {
+    parts.push(`A:${accessoryCodes.join(",")}`);
+  }
+
+  return parts.join("|");
+}
+
+function buildTtsAccessoryCodes(payload) {
+  const accessoryCardIds = [];
+
+  [payload.identities.front, payload.identities.back].forEach((identityId) => {
+    (LIMBUS_DATA.uniqueCardsByIdentityId?.[identityId] || []).forEach((card) => {
+      accessoryCardIds.push(card.id);
+    });
+  });
+
+  if (payload.ego) {
+    (LIMBUS_DATA.egoUniqueCardsByEgoId?.[payload.ego] || []).forEach((card) => {
+      accessoryCardIds.push(card.id);
+    });
+  }
+
+  const keywordCodes = collectTtsKeywordCodes(payload);
+  const referencedExtraCodes = getReferencedExtraCardsForSnapshot(getSavedDeckSnapshot(payload))
+    .map(getRequiredTtsAccessoryCode);
+  const accessoryCodes = accessoryCardIds
+    .map((cardId) => getRequiredStableCode(cardId, "accessory card"));
+
+  return uniqueValues([...accessoryCodes, ...keywordCodes, ...referencedExtraCodes]).sort(compareStableCodes);
+}
+
+function getRequiredTtsAccessoryCode(card) {
+  const keywordTag = card?.id?.startsWith("keyword_")
+    ? card.id.slice("keyword_".length)
+    : null;
+  const code = getStableCode(card?.id)
+    || (keywordTag ? LIMBUS_DATA.keywordStableCodes?.[keywordTag] : null)
+    || card?.code;
+
+  if (!code) throw new Error(`missing referenced extra card stable code: ${card?.id || "unknown"}`);
+  return code;
+}
+
+function collectTtsKeywordCodes(payload) {
+  const cardIds = [
+    ...payload.cards,
+    ...payload.upgrades,
+    payload.ego,
+    payload.identities.front,
+    payload.identities.back
+  ].filter(Boolean);
+  const tags = new Set();
+
+  cardIds.forEach((itemId) => {
+    (LIMBUS_DATA.tagsByCardId?.[itemId] || LIMBUS_DATA.tagsByIdentityId?.[itemId] || []).forEach((tag) => {
+      if (LIMBUS_DATA.keywordStableCodes?.[tag]) tags.add(tag);
+    });
+  });
+
+  return [...tags].map((tag) => LIMBUS_DATA.keywordStableCodes[tag]);
+}
+
+function compactTtsCardCounts(cardIds) {
+  const counts = new Map();
+
+  cardIds.forEach((cardId) => {
+    const stableCode = getRequiredStableCode(cardId, "main card");
+    counts.set(stableCode, (counts.get(stableCode) || 0) + 1);
+  });
+
+  return [...counts.entries()]
+    .map(([stableCode, count]) => count > 1 ? `${stableCode}*${count}` : stableCode)
+    .join(",");
+}
+
+function getRequiredStableCode(cardId, label) {
+  const stableCode = getStableCode(cardId);
+  if (!stableCode) throw new Error(`missing ${label} stable code: ${cardId}`);
+  return stableCode;
+}
+
+function compareStableCodes(left, right) {
+  return left.localeCompare(right, "en", { numeric: true });
+}
+
+function uniqueValues(values) {
+  return [...new Set(values.filter((value) => typeof value === "string" && value))];
 }
 
 async function decodeDeckPayload(code) {
@@ -3738,19 +3965,6 @@ function createSavedDeckId() {
   return `deck_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-async function importDeckCodeToSaves() {
-  try {
-    const payload = await decodeDeckPayload(saveImportCode?.value || "");
-    addImportedDeckToSaves(payload);
-    savedListState.mobilePane = "preview";
-    if (saveImportCode) saveImportCode.value = "";
-    setSaveImportStatus("저장목록에 추가됨.");
-    renderSavedDecks();
-  } catch {
-    setSaveImportStatus("덱 코드 확인 필요.", true);
-  }
-}
-
 async function importDeckFileToSaves(file) {
   try {
     if (file.size > 2 * 1024 * 1024) throw new Error("deck file too large");
@@ -4003,20 +4217,18 @@ function setDeckSaveInputs(payload) {
   if (deckSaveNotes) deckSaveNotes.value = payload.notes || "";
 }
 
-async function copySavedDeckCode(deckId) {
+async function copySavedDeckTtsCode(deckId) {
   const deck = getSavedDeckById(deckId);
   if (!deck) {
     setSavedDeckActionStatus("저장 덱을 찾을 수 없음.", true);
     return;
   }
 
-  const payload = normalizeDeckPayload(deck);
-
   try {
-    await copyTextToClipboard(await encodeDeckPayload(payload));
-    setSavedDeckActionStatus("덱 코드 복사됨.");
+    await copyTextToClipboard(buildTtsDeckCode(deck));
+    setSavedDeckActionStatus("TTS 코드 복사됨.");
   } catch {
-    setSavedDeckActionStatus("코드 복사 실패.", true);
+    setSavedDeckActionStatus("TTS 코드 복사 실패.", true);
   }
 }
 
@@ -4118,13 +4330,19 @@ function handleSavedDeckAction(event) {
     return;
   }
 
+  if (action === "overview") {
+    const deck = getSavedDeckById(deckId);
+    if (deck) openDeckOverview(deck);
+    return;
+  }
+
   if (action === "edit") {
     loadSavedDeckForEdit(deckId);
     return;
   }
 
-  if (action === "copy") {
-    copySavedDeckCode(deckId);
+  if (action === "tts") {
+    copySavedDeckTtsCode(deckId);
     return;
   }
 
@@ -4259,11 +4477,12 @@ function renderSavedDeckPreviewPanel(deck) {
 
 function renderSavedDeckPreviewActions(deck) {
   return `
+    <button type="button" data-saved-action="overview" data-saved-deck-id="${escapeHtml(deck.id)}">한눈에 보기</button>
+    <button type="button" data-saved-action="edit" data-saved-deck-id="${escapeHtml(deck.id)}">설명 수정</button>
     <button type="button" data-saved-action="view" data-saved-deck-id="${escapeHtml(deck.id)}">보기</button>
-    <button type="button" data-saved-action="edit" data-saved-deck-id="${escapeHtml(deck.id)}">수정</button>
-    <button type="button" data-saved-action="duplicate" data-saved-deck-id="${escapeHtml(deck.id)}">복사</button>
-    <button type="button" data-saved-action="copy" data-saved-deck-id="${escapeHtml(deck.id)}">코드 복사</button>
+    <button type="button" data-saved-action="tts" data-saved-deck-id="${escapeHtml(deck.id)}">TTS 코드</button>
     <button type="button" data-saved-action="file" data-saved-deck-id="${escapeHtml(deck.id)}">파일 저장</button>
+    <button type="button" data-saved-action="duplicate" data-saved-deck-id="${escapeHtml(deck.id)}">복사</button>
     <button type="button" data-saved-action="delete" data-saved-deck-id="${escapeHtml(deck.id)}">삭제</button>
   `;
 }
@@ -4326,6 +4545,56 @@ function openCurrentDeckView() {
   savedViewState.activeDeckId = null;
   showView("savedDeck");
   renderSavedDeckView(previewDeck, { mode: "current" });
+}
+
+function openDeckOverview(deck) {
+  if (!deckOverviewOverlay || !deckOverviewContent) return;
+
+  const normalizedDeck = normalizeDeckPayload(deck);
+  const snapshot = getSavedDeckSnapshot(normalizedDeck);
+  const extraCards = getReferencedExtraCardsForSnapshot(snapshot);
+
+  if (deckOverviewTitle) {
+    const name = normalizedDeck.name?.trim();
+    deckOverviewTitle.textContent = name ? `${name} · 한눈에 보기` : "한눈에 보기";
+  }
+
+  deckOverviewContent.innerHTML = renderDeckOverview(snapshot, extraCards);
+  deckOverviewOverlay.hidden = false;
+  document.body.classList.add("is-deck-overview-open");
+}
+
+function closeDeckOverview() {
+  if (!deckOverviewOverlay) return;
+  deckOverviewOverlay.hidden = true;
+  document.body.classList.remove("is-deck-overview-open");
+}
+
+function renderDeckOverview(snapshot, extraCards) {
+  const cards = [
+    snapshot.front ? { image: getIdentityDisplayImage(snapshot.front) } : null,
+    snapshot.back ? { image: getIdentityDisplayImage(snapshot.back) } : null,
+    ...snapshot.mainCards,
+    ...snapshot.selectedUpgrades,
+    snapshot.selectedEgo,
+    ...extraCards
+  ].filter(Boolean);
+
+  return `
+    <section class="deck-overview-grid">
+      ${cards.map((card) => renderDeckOverviewCard(card)).join("")}
+    </section>
+  `;
+}
+
+function renderDeckOverviewCard(card) {
+  if (!card) return "";
+
+  return `
+    <article class="deck-overview-card">
+      <img src="${card.image}" alt="" />
+    </article>
+  `;
 }
 
 function closeSavedDeckView() {
@@ -4433,25 +4702,33 @@ function renderSavedDeckViewSummary(deck, snapshot, extraCards) {
 
 function renderSavedDeckViewActions(deck) {
   return `
+    <button type="button" data-saved-action="overview" data-saved-deck-id="${escapeHtml(deck.id)}">한눈에 보기</button>
     <button type="button" data-saved-action="edit" data-saved-deck-id="${escapeHtml(deck.id)}">수정</button>
-    <button type="button" data-saved-action="copy" data-saved-deck-id="${escapeHtml(deck.id)}">코드 복사</button>
-    <button type="button" data-saved-action="duplicate" data-saved-deck-id="${escapeHtml(deck.id)}">복사</button>
+    <button type="button" data-saved-action="view" data-saved-deck-id="${escapeHtml(deck.id)}">보기</button>
+    <button type="button" data-saved-action="tts" data-saved-deck-id="${escapeHtml(deck.id)}">TTS 코드</button>
     <button type="button" data-saved-action="file" data-saved-deck-id="${escapeHtml(deck.id)}">파일 저장</button>
+    <button type="button" data-saved-action="duplicate" data-saved-deck-id="${escapeHtml(deck.id)}">복사</button>
     <button type="button" data-saved-action="delete" data-saved-deck-id="${escapeHtml(deck.id)}">삭제</button>
   `;
 }
 
 function renderCurrentDeckViewActions() {
   return `
+    <button type="button" data-current-view-action="overview">한눈에 보기</button>
     <button type="button" data-current-view-action="edit">수정</button>
     <button type="button" data-current-view-action="save">저장</button>
-    <button type="button" data-current-view-action="copy">코드 복사</button>
+    <button type="button" data-current-view-action="tts">TTS 코드</button>
     <button type="button" data-current-view-action="file">파일 저장</button>
     <button type="button" data-current-view-action="open-saves">저장 목록</button>
   `;
 }
 
 async function handleCurrentDeckViewAction(action) {
+  if (action === "overview") {
+    openDeckOverview(buildCurrentDeckPayload());
+    return;
+  }
+
   if (action === "edit") {
     showView("deck");
     renderDeckBuilder();
@@ -4464,8 +4741,8 @@ async function handleCurrentDeckViewAction(action) {
     return;
   }
 
-  if (action === "copy") {
-    await copyCurrentDeckCodeFromView();
+  if (action === "tts") {
+    await copyCurrentTtsCodeFromView();
     return;
   }
 
@@ -4479,19 +4756,18 @@ async function handleCurrentDeckViewAction(action) {
   }
 }
 
-async function copyCurrentDeckCodeFromView() {
+async function copyCurrentTtsCodeFromView() {
   const snapshot = getDeckSelectionSnapshot();
   if (!isDeckSelectionComplete(snapshot)) {
-    setSavedDeckActionStatus("전방/후방 인격과 20장 구성 후 코드 복사 가능.", true);
+    setSavedDeckActionStatus("전방/후방 인격과 20장 구성 후 TTS 코드 복사 가능.", true);
     return;
   }
 
   try {
-    const code = await encodeDeckPayload(buildCurrentDeckPayload());
-    await copyTextToClipboard(code);
-    setSavedDeckActionStatus("코드 복사됨.");
+    await copyTextToClipboard(buildTtsDeckCode(buildCurrentDeckPayload()));
+    setSavedDeckActionStatus("TTS 코드 복사됨.");
   } catch {
-    setSavedDeckActionStatus("코드 복사 실패.", true);
+    setSavedDeckActionStatus("TTS 코드 복사 실패.", true);
   }
 }
 
@@ -4636,11 +4912,52 @@ function getSelectedDeckKeywordItems(availableCards = getDeckCardMap()) {
   return getKeywordItemsFromTags(tags);
 }
 
+function getSelectedIdentityReferencedExtraCards() {
+  return getReferencedExtraCardsForSnapshot(getDeckSelectionSnapshot());
+}
+
+function getReferencedExtraCardsForSnapshot(snapshot) {
+  const selectedIdentities = [snapshot.front, snapshot.back].filter(Boolean);
+  const ownedUniqueCardIds = new Set(
+    selectedIdentities.flatMap((identity) => (identity.uniqueCards || []).map((card) => card.id))
+  );
+  const sourceIds = [
+    ...selectedIdentities.map((identity) => identity.id),
+    ...snapshot.mainCards.map((card) => card.id),
+    ...(snapshot.selectedEgo ? [snapshot.selectedEgo.id] : []),
+    ...snapshot.selectedUpgrades.map((card) => card.id)
+  ];
+  const codexItemsById = new Map(
+    getCodexItems(() => false).map((item) => [item.id, item])
+  );
+  const referencedCardIds = new Set();
+
+  sourceIds.forEach((sourceId) => {
+    const referenceIds = LIMBUS_DATA.cardReferenceIdsById?.[sourceId]
+      || LIMBUS_DATA.raw?.cardReferences?.[sourceId]
+      || [];
+
+    referenceIds.forEach((referenceId) => {
+      if (!ownedUniqueCardIds.has(referenceId)) referencedCardIds.add(referenceId);
+    });
+  });
+
+  return [...referencedCardIds]
+    .map((cardId) => codexItemsById.get(cardId))
+    .filter((card) => card && (
+      card.category === "stack"
+      || card.category === "status"
+      || card.category === "keyword"
+    ))
+    .filter(isVisibleDataItem)
+    .sort((left, right) => compareStableCodes(left.code || left.id, right.code || right.id));
+}
+
 function getKeywordItemsFromTags(tags = []) {
   const items = tags
     .map((tag) => {
       const keywordFilter = getKeywordFilter(tag);
-      if (!keywordFilter) return null;
+      if (!keywordFilter?.image) return null;
 
       return {
         label: tag,
@@ -4805,7 +5122,7 @@ function toggleDeckCard(cardId) {
   if (getSelectedDeckCardCount(cardId) >= getDeckCardCopyLimit(card)) return;
   if (builderState.deckCards.length >= DECK_LIMIT) return;
 
-  builderState.deckCards = [...builderState.deckCards, cardId];
+  builderState.deckCards = groupMatchingDeckCards([...builderState.deckCards, cardId]);
   renderDeckCardPool();
   renderDeckIncludedGrid();
   renderDeckExtraGrid();
@@ -4823,6 +5140,18 @@ function removeDeckCard(cardId) {
   renderDeckIncludedGrid();
   renderDeckExtraGrid();
   renderDeckStatus();
+}
+
+function removeSelectedDeckItem(cardId) {
+  const card = getDeckCardMap().get(cardId);
+  if (!card) return;
+
+  if (card.countsTowardDeck) {
+    removeDeckCard(cardId);
+    return;
+  }
+
+  removeDeckExtraCard(cardId);
 }
 
 function toggleDeckExtraCard(card) {
@@ -4859,13 +5188,25 @@ function getSelectedDeckCardCount(cardId) {
   return builderState.deckCards.filter((activeCardId) => activeCardId === cardId).length;
 }
 
+function groupMatchingDeckCards(cardIds) {
+  const counts = new Map();
+
+  cardIds.forEach((cardId) => {
+    counts.set(cardId, (counts.get(cardId) || 0) + 1);
+  });
+
+  return [...counts.entries()].flatMap(([cardId, count]) => Array(count).fill(cardId));
+}
+
 function getDeckCardCopyLimit(card) {
   return card.category === "sinner" || card.category === "identity" ? 2 : 1;
 }
 
 function syncDeckCardsWithAvailableCards() {
   const availableCards = getDeckCardMap();
-  builderState.deckCards = builderState.deckCards.filter((cardId) => availableCards.has(cardId));
+  builderState.deckCards = groupMatchingDeckCards(
+    builderState.deckCards.filter((cardId) => availableCards.has(cardId))
+  );
   if (builderState.selectedEgo && !availableCards.has(builderState.selectedEgo)) builderState.selectedEgo = null;
   builderState.upgradeCards = builderState.upgradeCards.filter((cardId) => availableCards.has(cardId));
 }
@@ -5003,7 +5344,7 @@ function renderPreview(identityId) {
     return;
   }
 
-  identityPreview.innerHTML = renderPreviewImageWithCode(identity.image, identity.id, identity.code || getStableCode(identity.id));
+  identityPreview.innerHTML = renderPreviewImageWithCode(getIdentityDisplayImage(identity), identity.id, identity.code || getStableCode(identity.id));
   renderIdentityPreviewFilters(getPreviewFiltersForId(identity.id));
 }
 

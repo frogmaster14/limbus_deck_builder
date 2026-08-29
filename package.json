@@ -4,6 +4,7 @@
     "assets:init": "node scripts/create-asset-placeholders.mjs",
     "assets:manifest": "node scripts/generate-limbus-asset-manifest.mjs",
     "scan:assets": "node scripts/scan-limbus-assets.mjs",
+    "tts:map": "node scripts/generate-tts-card-map.mjs",
     "validate:data": "node scripts/validate-limbus-data.mjs"
   }
 }

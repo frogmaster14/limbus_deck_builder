@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex" />
     <title>림딱 빌더 2.0</title>
-    <link rel="stylesheet" href="./style.css?v=2.1.7.0-filter-reset-1" />
+    <link rel="stylesheet" href="./style.css?v=2.1.7.0-deck-edit-action-1" />
   </head>
   <body>
     <main class="app-shell view is-active" id="home-view">
@@ -208,7 +208,6 @@
                 <p class="eyebrow">Deck Check</p>
                 <h3>덱 확인</h3>
               </div>
-              <button class="deck-action-button" type="button" data-action="edit-deck">수정</button>
             </div>
             <div class="deck-review-summary">
               <div class="deck-review-block deck-review-identities-block">
@@ -264,8 +263,10 @@
               <div class="deck-save-footer">
                 <output class="deck-save-status" id="deck-save-status"></output>
                 <div class="mobile-deck-save-actions">
-                  <button class="deck-action-button" type="button" data-action="view-current-deck">보기</button>
                   <button class="deck-action-button primary" type="button" data-action="save-deck-local">저장하기</button>
+                  <button class="deck-action-button" type="button" data-action="edit-deck">덱 수정</button>
+                  <button class="deck-action-button" type="button" data-action="view-current-deck">보기</button>
+                  <button class="deck-action-button" type="button" data-action="open-current-deck-overview">한눈에 보기</button>
                 </div>
               </div>
             </section>
@@ -343,8 +344,10 @@
           </div>
           <div class="deck-action-row deck-review-action-row">
             <button class="deck-action-button primary" type="button" data-action="save-deck-local">저장</button>
+            <button class="deck-action-button" type="button" data-action="edit-deck">덱 수정</button>
             <button class="deck-action-button" type="button" data-action="view-current-deck">보기</button>
-            <button class="deck-action-button" type="button" data-action="copy-deck-code">코드 복사</button>
+            <button class="deck-action-button" type="button" data-action="open-current-deck-overview">한눈에 보기</button>
+            <button class="deck-action-button" type="button" data-action="copy-tts-code">TTS 코드</button>
             <button class="deck-action-button" type="button" data-action="export-deck-file">파일 저장</button>
             <button class="deck-action-button" type="button" data-action="open-saves-from-deck">저장 목록</button>
           </div>
@@ -451,7 +454,6 @@
           <p class="eyebrow">Saved Decks</p>
           <h2>저장 목록</h2>
         </div>
-        <button class="topbar-button danger" type="button" data-action="reset-save-import">입력 비우기</button>
       </header>
 
       <section class="saves-layout" aria-label="저장 목록 화면">
@@ -459,9 +461,7 @@
           <div class="deck-section-heading">
             <h3>덱 불러오기</h3>
           </div>
-          <textarea id="save-import-code" rows="8" placeholder="LTDB 코드 입력"></textarea>
-          <button class="deck-action-button primary" type="button" data-action="import-deck-code">코드 추가</button>
-          <button class="deck-action-button" type="button" data-action="select-deck-file">파일 불러오기</button>
+          <button class="deck-action-button primary" type="button" data-action="select-deck-file">파일 불러오기</button>
           <input id="save-import-file" type="file" accept=".ltdeck,text/plain" hidden />
           <output class="deck-save-status" id="save-import-status"></output>
         </aside>
@@ -582,9 +582,20 @@
       </section>
     </main>
 
+    <section class="deck-overview-overlay" id="deck-overview-overlay" aria-label="덱 한눈에 보기" hidden>
+      <header class="deck-overview-header">
+        <div>
+          <p class="eyebrow">Deck Overview</p>
+          <h2 id="deck-overview-title">한눈에 보기</h2>
+        </div>
+        <button class="topbar-button" type="button" data-action="close-deck-overview">닫기</button>
+      </header>
+      <div class="deck-overview-content" id="deck-overview-content"></div>
+    </section>
+
     <script src="./version-history.js?v=2.1.7.0-mobile-deck-save-panel-fix"></script>
     <script src="./data/limbus-asset-manifest.js?v=2.1.8.0-asset-manifest"></script>
     <script src="./data/limbus-browser-data.js?v=2.1.7.0-card-references-1"></script>
-    <script src="./script.js?v=2.1.7.0-card-references-1"></script>
+    <script src="./script.js?v=2.1.7.0-mobile-deck-edit-action-1"></script>
   </body>
 </html>

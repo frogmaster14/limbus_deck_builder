@@ -1,0 +1,2417 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "code": "1-B-1",
+      "id": "yi_sang_base_1",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/01.png"
+    },
+    {
+      "code": "1-B-2",
+      "id": "yi_sang_base_2",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/02.png"
+    },
+    {
+      "code": "1-B-3",
+      "id": "yi_sang_base_3",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/03.png"
+    },
+    {
+      "code": "1-B-4",
+      "id": "yi_sang_base_4",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/04.png"
+    },
+    {
+      "code": "1-B-5",
+      "id": "yi_sang_base_5",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/05.png"
+    },
+    {
+      "code": "1-B-6",
+      "id": "yi_sang_base_6",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/06.png"
+    },
+    {
+      "code": "1-B-7",
+      "id": "yi_sang_base_7",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/07.png"
+    },
+    {
+      "code": "1-B-8",
+      "id": "yi_sang_base_8",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/08.png"
+    },
+    {
+      "code": "1-B-9",
+      "id": "yi_sang_base_9",
+      "type": "base",
+      "image": "assets/sinners/yi_sang/base/09.png"
+    },
+    {
+      "code": "1-C-1-1",
+      "id": "yi_sang_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/lcb/01.png"
+    },
+    {
+      "code": "1-C-1-2",
+      "id": "yi_sang_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/lcb/02.png"
+    },
+    {
+      "code": "1-C-1-3",
+      "id": "yi_sang_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/lcb/03.png"
+    },
+    {
+      "code": "1-C-2-1",
+      "id": "yi_sang_mourning_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/mourning/01.png"
+    },
+    {
+      "code": "1-C-2-2",
+      "id": "yi_sang_mourning_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/mourning/02.png"
+    },
+    {
+      "code": "1-C-2-3",
+      "id": "yi_sang_mourning_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/mourning/03.png"
+    },
+    {
+      "code": "1-C-3-1",
+      "id": "yi_sang_bullet_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/bullet/01.png"
+    },
+    {
+      "code": "1-C-3-2",
+      "id": "yi_sang_bullet_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/bullet/02.png"
+    },
+    {
+      "code": "1-C-3-3",
+      "id": "yi_sang_bullet_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/bullet/03.png"
+    },
+    {
+      "code": "1-C-4-1",
+      "id": "yi_sang_ring_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/ring/01.png"
+    },
+    {
+      "code": "1-C-4-2",
+      "id": "yi_sang_ring_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/ring/02.png"
+    },
+    {
+      "code": "1-C-4-3",
+      "id": "yi_sang_ring_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/ring/03.png"
+    },
+    {
+      "code": "1-C-5-1",
+      "id": "yi_sang_heishou_wu_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/heishou_wu/01.png"
+    },
+    {
+      "code": "1-C-5-2",
+      "id": "yi_sang_heishou_wu_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/heishou_wu/02.png"
+    },
+    {
+      "code": "1-C-5-3",
+      "id": "yi_sang_heishou_wu_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/yi_sang/heishou_wu/03.png"
+    },
+    {
+      "code": "1-E-1",
+      "id": "yi_sang_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/yi_sang/ego/00.png"
+    },
+    {
+      "code": "1-E-2",
+      "id": "yi_sang_fell_bullet_ego",
+      "type": "ego",
+      "image": "assets/sinners/yi_sang/ego/01.png"
+    },
+    {
+      "code": "1-U-5-1",
+      "id": "yi_sang_heishou_wu_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/yi_sang/heishou_wu/unique/upgrade/01.png"
+    },
+    {
+      "code": "1-X-2-1",
+      "id": "yi_sang_mourning_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/yi_sang/mourning/unique/01.png"
+    },
+    {
+      "code": "1-X-2-2",
+      "id": "yi_sang_mourning_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/yi_sang/mourning/unique/02.png"
+    },
+    {
+      "code": "1-X-3-1",
+      "id": "yi_sang_bullet_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/yi_sang/bullet/unique/01.png"
+    },
+    {
+      "code": "1-X-5-1",
+      "id": "yi_sang_heishou_wu_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/yi_sang/heishou_wu/unique/01.png"
+    },
+    {
+      "code": "1-X-5-2",
+      "id": "yi_sang_heishou_wu_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/yi_sang/heishou_wu/unique/02.png"
+    },
+    {
+      "code": "2-B-1",
+      "id": "faust_base_1",
+      "type": "base",
+      "image": "assets/sinners/faust/base/01.png"
+    },
+    {
+      "code": "2-B-2",
+      "id": "faust_base_2",
+      "type": "base",
+      "image": "assets/sinners/faust/base/02.png"
+    },
+    {
+      "code": "2-B-3",
+      "id": "faust_base_3",
+      "type": "base",
+      "image": "assets/sinners/faust/base/03.png"
+    },
+    {
+      "code": "2-B-4",
+      "id": "faust_base_4",
+      "type": "base",
+      "image": "assets/sinners/faust/base/04.png"
+    },
+    {
+      "code": "2-B-5",
+      "id": "faust_base_5",
+      "type": "base",
+      "image": "assets/sinners/faust/base/05.png"
+    },
+    {
+      "code": "2-B-6",
+      "id": "faust_base_6",
+      "type": "base",
+      "image": "assets/sinners/faust/base/06.png"
+    },
+    {
+      "code": "2-B-7",
+      "id": "faust_base_7",
+      "type": "base",
+      "image": "assets/sinners/faust/base/07.png"
+    },
+    {
+      "code": "2-B-8",
+      "id": "faust_base_8",
+      "type": "base",
+      "image": "assets/sinners/faust/base/08.png"
+    },
+    {
+      "code": "2-B-9",
+      "id": "faust_base_9",
+      "type": "base",
+      "image": "assets/sinners/faust/base/09.png"
+    },
+    {
+      "code": "2-BX-1",
+      "id": "faust_base_unique_1",
+      "type": "baseUnique",
+      "image": "assets/sinners/faust/base/unique/지식.png"
+    },
+    {
+      "code": "2-C-1-1",
+      "id": "faust_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/faust/lcb/01.png"
+    },
+    {
+      "code": "2-C-1-2",
+      "id": "faust_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/faust/lcb/02.png"
+    },
+    {
+      "code": "2-C-1-3",
+      "id": "faust_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/faust/lcb/03.png"
+    },
+    {
+      "code": "2-C-2-1",
+      "id": "faust_gripper_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/faust/gripper/01.png"
+    },
+    {
+      "code": "2-C-2-2",
+      "id": "faust_gripper_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/faust/gripper/02.png"
+    },
+    {
+      "code": "2-C-2-3",
+      "id": "faust_gripper_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/faust/gripper/03.png"
+    },
+    {
+      "code": "2-C-3-1",
+      "id": "faust_seven_south_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/faust/seven_south/01.png"
+    },
+    {
+      "code": "2-C-3-2",
+      "id": "faust_seven_south_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/faust/seven_south/02.png"
+    },
+    {
+      "code": "2-C-3-3",
+      "id": "faust_seven_south_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/faust/seven_south/03.png"
+    },
+    {
+      "code": "2-C-4-1",
+      "id": "faust_index_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/faust/index/01.png"
+    },
+    {
+      "code": "2-C-4-2",
+      "id": "faust_index_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/faust/index/02.png"
+    },
+    {
+      "code": "2-C-4-3",
+      "id": "faust_index_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/faust/index/03.png"
+    },
+    {
+      "code": "2-C-5-1",
+      "id": "faust_lobotomy_remnant_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/faust/lobotomy_remnant/01.png"
+    },
+    {
+      "code": "2-C-5-2",
+      "id": "faust_lobotomy_remnant_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/faust/lobotomy_remnant/02.png"
+    },
+    {
+      "code": "2-C-5-3",
+      "id": "faust_lobotomy_remnant_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/faust/lobotomy_remnant/03.png"
+    },
+    {
+      "code": "2-E-1",
+      "id": "faust_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/faust/ego/00.png"
+    },
+    {
+      "code": "2-E-2",
+      "id": "faust_ardor_blossom_ego",
+      "type": "ego",
+      "image": "assets/sinners/faust/ego/01.png"
+    },
+    {
+      "code": "2-X-1-1",
+      "id": "faust_lcb_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/faust/lcb/unique/01.png"
+    },
+    {
+      "code": "2-X-2-1",
+      "id": "faust_gripper_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/faust/gripper/unique/01.png"
+    },
+    {
+      "code": "2-X-4-1",
+      "id": "faust_index_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/faust/index/unique/01.png"
+    },
+    {
+      "code": "2-X-4-2",
+      "id": "faust_index_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/faust/index/unique/02.png"
+    },
+    {
+      "code": "3-B-1",
+      "id": "don_quixote_base_1",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/01.png"
+    },
+    {
+      "code": "3-B-2",
+      "id": "don_quixote_base_2",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/02.png"
+    },
+    {
+      "code": "3-B-3",
+      "id": "don_quixote_base_3",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/03.png"
+    },
+    {
+      "code": "3-B-4",
+      "id": "don_quixote_base_4",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/04.png"
+    },
+    {
+      "code": "3-B-5",
+      "id": "don_quixote_base_5",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/05.png"
+    },
+    {
+      "code": "3-B-6",
+      "id": "don_quixote_base_6",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/06.png"
+    },
+    {
+      "code": "3-B-7",
+      "id": "don_quixote_base_7",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/07.png"
+    },
+    {
+      "code": "3-B-8",
+      "id": "don_quixote_base_8",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/08.png"
+    },
+    {
+      "code": "3-B-9",
+      "id": "don_quixote_base_9",
+      "type": "base",
+      "image": "assets/sinners/don_quixote/base/09.png"
+    },
+    {
+      "code": "3-C-1-1",
+      "id": "don_quixote_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/lcb/01.png"
+    },
+    {
+      "code": "3-C-1-2",
+      "id": "don_quixote_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/lcb/02.png"
+    },
+    {
+      "code": "3-C-1-3",
+      "id": "don_quixote_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/lcb/03.png"
+    },
+    {
+      "code": "3-C-2-1",
+      "id": "don_quixote_blade_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/blade/01.png"
+    },
+    {
+      "code": "3-C-2-2",
+      "id": "don_quixote_blade_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/blade/02.png"
+    },
+    {
+      "code": "3-C-2-3",
+      "id": "don_quixote_blade_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/blade/03.png"
+    },
+    {
+      "code": "3-C-3-1",
+      "id": "don_quixote_cinq_east_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/cinq_east/01.png"
+    },
+    {
+      "code": "3-C-3-2",
+      "id": "don_quixote_cinq_east_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/cinq_east/02.png"
+    },
+    {
+      "code": "3-C-3-3",
+      "id": "don_quixote_cinq_east_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/cinq_east/03.png"
+    },
+    {
+      "code": "3-C-4-1",
+      "id": "don_quixote_wcorp_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/wcorp/01.png"
+    },
+    {
+      "code": "3-C-4-2",
+      "id": "don_quixote_wcorp_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/wcorp/02.png"
+    },
+    {
+      "code": "3-C-4-3",
+      "id": "don_quixote_wcorp_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/wcorp/03.png"
+    },
+    {
+      "code": "3-C-5-1",
+      "id": "don_quixote_love_and_hate_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/01.png"
+    },
+    {
+      "code": "3-C-5-2",
+      "id": "don_quixote_love_and_hate_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/02.png"
+    },
+    {
+      "code": "3-C-5-3",
+      "id": "don_quixote_love_and_hate_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/03.png"
+    },
+    {
+      "code": "3-C-5-4",
+      "id": "don_quixote_love_and_hate_cards_4",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/04.png"
+    },
+    {
+      "code": "3-C-5-5",
+      "id": "don_quixote_love_and_hate_cards_5",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/05.png"
+    },
+    {
+      "code": "3-C-5-6",
+      "id": "don_quixote_love_and_hate_cards_6",
+      "type": "identity",
+      "image": "assets/sinners/don_quixote/love_and_hate/06.png"
+    },
+    {
+      "code": "3-E-1",
+      "id": "don_quixote_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/don_quixote/ego/00.png"
+    },
+    {
+      "code": "3-E-2",
+      "id": "don_quixote_fluid_sac_ego",
+      "type": "ego",
+      "image": "assets/sinners/don_quixote/ego/01.png"
+    },
+    {
+      "code": "3-X-3-1",
+      "id": "don_quixote_cinq_east_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/cinq_east/unique/01.png"
+    },
+    {
+      "code": "3-X-4-1",
+      "id": "don_quixote_wcorp_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/wcorp/unique/01.png"
+    },
+    {
+      "code": "3-X-5-1",
+      "id": "don_quixote_love_and_hate_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/love_and_hate/unique/01.png"
+    },
+    {
+      "code": "3-X-5-2",
+      "id": "don_quixote_love_and_hate_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/love_and_hate/unique/02.png"
+    },
+    {
+      "code": "3-X-5-3",
+      "id": "don_quixote_love_and_hate_unique_3",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/love_and_hate/unique/03.png"
+    },
+    {
+      "code": "3-X-5-4",
+      "id": "don_quixote_love_and_hate_unique_4",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/love_and_hate/unique/04.png"
+    },
+    {
+      "code": "3-X-5-5",
+      "id": "don_quixote_love_and_hate_unique_5",
+      "type": "identityUnique",
+      "image": "assets/sinners/don_quixote/love_and_hate/unique/05.png"
+    },
+    {
+      "code": "4-B-1",
+      "id": "ryoshu_base_1",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/01.png"
+    },
+    {
+      "code": "4-B-2",
+      "id": "ryoshu_base_2",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/02.png"
+    },
+    {
+      "code": "4-B-3",
+      "id": "ryoshu_base_3",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/03.png"
+    },
+    {
+      "code": "4-B-4",
+      "id": "ryoshu_base_4",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/04.png"
+    },
+    {
+      "code": "4-B-5",
+      "id": "ryoshu_base_5",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/05.png"
+    },
+    {
+      "code": "4-B-6",
+      "id": "ryoshu_base_6",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/06.png"
+    },
+    {
+      "code": "4-B-7",
+      "id": "ryoshu_base_7",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/07.png"
+    },
+    {
+      "code": "4-B-8",
+      "id": "ryoshu_base_8",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/08.png"
+    },
+    {
+      "code": "4-B-9",
+      "id": "ryoshu_base_9",
+      "type": "base",
+      "image": "assets/sinners/ryoshu/base/09.png"
+    },
+    {
+      "code": "4-C-1-1",
+      "id": "ryoshu_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/lcb/01.png"
+    },
+    {
+      "code": "4-C-1-2",
+      "id": "ryoshu_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/lcb/02.png"
+    },
+    {
+      "code": "4-C-1-3",
+      "id": "ryoshu_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/lcb/03.png"
+    },
+    {
+      "code": "4-C-2-1",
+      "id": "ryoshu_wcorp_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/wcorp/01.png"
+    },
+    {
+      "code": "4-C-2-2",
+      "id": "ryoshu_wcorp_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/wcorp/02.png"
+    },
+    {
+      "code": "4-C-2-3",
+      "id": "ryoshu_wcorp_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/wcorp/03.png"
+    },
+    {
+      "code": "4-C-3-1",
+      "id": "ryoshu_edgar_butler_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/edgar_butler/01.png"
+    },
+    {
+      "code": "4-C-3-2",
+      "id": "ryoshu_edgar_butler_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/edgar_butler/02.png"
+    },
+    {
+      "code": "4-C-3-3",
+      "id": "ryoshu_edgar_butler_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/edgar_butler/03.png"
+    },
+    {
+      "code": "4-C-4-1",
+      "id": "ryoshu_chef_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/chef/01.png"
+    },
+    {
+      "code": "4-C-4-2",
+      "id": "ryoshu_chef_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/chef/02.png"
+    },
+    {
+      "code": "4-C-4-3",
+      "id": "ryoshu_chef_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/chef/03.png"
+    },
+    {
+      "code": "4-C-5-1",
+      "id": "ryoshu_red_eyes_penance_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/01.png"
+    },
+    {
+      "code": "4-C-5-2",
+      "id": "ryoshu_red_eyes_penance_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/02.png"
+    },
+    {
+      "code": "4-C-5-3",
+      "id": "ryoshu_red_eyes_penance_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/03.png"
+    },
+    {
+      "code": "4-E-1",
+      "id": "ryoshu_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/ryoshu/ego/00.png"
+    },
+    {
+      "code": "4-E-2",
+      "id": "ryoshu_red_eyes_ego",
+      "type": "ego",
+      "image": "assets/sinners/ryoshu/ego/01.png"
+    },
+    {
+      "code": "4-U-5-1",
+      "id": "ryoshu_red_eyes_penance_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/unique/upgrade/01.png"
+    },
+    {
+      "code": "4-X-1-1",
+      "id": "ryoshu_lcb_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/lcb/unique/01.png"
+    },
+    {
+      "code": "4-X-3-1",
+      "id": "ryoshu_edgar_butler_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/edgar_butler/unique/01.png"
+    },
+    {
+      "code": "4-X-3-2",
+      "id": "ryoshu_edgar_butler_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/edgar_butler/unique/02.png"
+    },
+    {
+      "code": "4-X-4-1",
+      "id": "ryoshu_chef_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/chef/unique/01.png"
+    },
+    {
+      "code": "4-X-4-2",
+      "id": "ryoshu_chef_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/chef/unique/02.png"
+    },
+    {
+      "code": "4-X-5-1",
+      "id": "ryoshu_red_eyes_penance_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/unique/01.png"
+    },
+    {
+      "code": "4-X-5-2",
+      "id": "ryoshu_red_eyes_penance_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/unique/02.png"
+    },
+    {
+      "code": "4-X-5-3",
+      "id": "ryoshu_red_eyes_penance_unique_3",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/unique/03.png"
+    },
+    {
+      "code": "4-X-5-4",
+      "id": "ryoshu_red_eyes_penance_unique_4",
+      "type": "identityUnique",
+      "image": "assets/sinners/ryoshu/red_eyes_penance/unique/04.png"
+    },
+    {
+      "code": "5-B-1",
+      "id": "meursault_base_1",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/01.png"
+    },
+    {
+      "code": "5-B-2",
+      "id": "meursault_base_2",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/02.png"
+    },
+    {
+      "code": "5-B-3",
+      "id": "meursault_base_3",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/03.png"
+    },
+    {
+      "code": "5-B-4",
+      "id": "meursault_base_4",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/04.png"
+    },
+    {
+      "code": "5-B-5",
+      "id": "meursault_base_5",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/05.png"
+    },
+    {
+      "code": "5-B-6",
+      "id": "meursault_base_6",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/06.png"
+    },
+    {
+      "code": "5-B-7",
+      "id": "meursault_base_7",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/07.png"
+    },
+    {
+      "code": "5-B-8",
+      "id": "meursault_base_8",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/08.png"
+    },
+    {
+      "code": "5-B-9",
+      "id": "meursault_base_9",
+      "type": "base",
+      "image": "assets/sinners/meursault/base/09.png"
+    },
+    {
+      "code": "5-C-1-1",
+      "id": "meursault_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/meursault/lcb/01.png"
+    },
+    {
+      "code": "5-C-1-2",
+      "id": "meursault_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/meursault/lcb/02.png"
+    },
+    {
+      "code": "5-C-1-3",
+      "id": "meursault_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/meursault/lcb/03.png"
+    },
+    {
+      "code": "5-C-2-1",
+      "id": "meursault_cinq_west_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/meursault/cinq_west/01.png"
+    },
+    {
+      "code": "5-C-2-2",
+      "id": "meursault_cinq_west_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/meursault/cinq_west/02.png"
+    },
+    {
+      "code": "5-C-2-3",
+      "id": "meursault_cinq_west_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/meursault/cinq_west/03.png"
+    },
+    {
+      "code": "5-C-3-1",
+      "id": "meursault_thumb_east_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/meursault/thumb_east/01.png"
+    },
+    {
+      "code": "5-C-3-2",
+      "id": "meursault_thumb_east_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/meursault/thumb_east/02.png"
+    },
+    {
+      "code": "5-C-3-3",
+      "id": "meursault_thumb_east_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/meursault/thumb_east/03.png"
+    },
+    {
+      "code": "5-C-4-1",
+      "id": "meursault_dead_rabbits_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/meursault/dead_rabbits/01.png"
+    },
+    {
+      "code": "5-C-4-2",
+      "id": "meursault_dead_rabbits_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/meursault/dead_rabbits/02.png"
+    },
+    {
+      "code": "5-C-4-3",
+      "id": "meursault_dead_rabbits_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/meursault/dead_rabbits/03.png"
+    },
+    {
+      "code": "5-C-5-1",
+      "id": "meursault_blade_mentor_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/meursault/blade_mentor/01.png"
+    },
+    {
+      "code": "5-C-5-2",
+      "id": "meursault_blade_mentor_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/meursault/blade_mentor/02.png"
+    },
+    {
+      "code": "5-C-5-3",
+      "id": "meursault_blade_mentor_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/meursault/blade_mentor/03.png"
+    },
+    {
+      "code": "5-C-5-4",
+      "id": "meursault_blade_mentor_cards_4",
+      "type": "identity",
+      "image": "assets/sinners/meursault/blade_mentor/04.png"
+    },
+    {
+      "code": "5-E-1",
+      "id": "meursault_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/meursault/ego/00.png"
+    },
+    {
+      "code": "5-E-2",
+      "id": "meursault_pursuance_ego",
+      "type": "ego",
+      "image": "assets/sinners/meursault/ego/01.png"
+    },
+    {
+      "code": "5-U-3-1",
+      "id": "meursault_thumb_east_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/meursault/thumb_east/unique/upgrade/01.png"
+    },
+    {
+      "code": "5-X-1-1",
+      "id": "meursault_lcb_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/lcb/unique/01.png"
+    },
+    {
+      "code": "5-X-2-1",
+      "id": "meursault_cinq_west_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/cinq_west/unique/01.png"
+    },
+    {
+      "code": "5-X-3-1",
+      "id": "meursault_thumb_east_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/thumb_east/unique/01.png"
+    },
+    {
+      "code": "5-X-3-2",
+      "id": "meursault_thumb_east_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/thumb_east/unique/02.png"
+    },
+    {
+      "code": "5-X-3-3",
+      "id": "meursault_thumb_east_unique_3",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/thumb_east/unique/03.png"
+    },
+    {
+      "code": "5-X-5-1",
+      "id": "meursault_blade_mentor_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/blade_mentor/unique/01.png"
+    },
+    {
+      "code": "5-X-5-2",
+      "id": "meursault_blade_mentor_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/meursault/blade_mentor/unique/02.png"
+    },
+    {
+      "code": "6-B-1",
+      "id": "hong_lu_base_1",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/01.png"
+    },
+    {
+      "code": "6-B-2",
+      "id": "hong_lu_base_2",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/02.png"
+    },
+    {
+      "code": "6-B-3",
+      "id": "hong_lu_base_3",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/03.png"
+    },
+    {
+      "code": "6-B-4",
+      "id": "hong_lu_base_4",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/04.png"
+    },
+    {
+      "code": "6-B-5",
+      "id": "hong_lu_base_5",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/05.png"
+    },
+    {
+      "code": "6-B-6",
+      "id": "hong_lu_base_6",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/06.png"
+    },
+    {
+      "code": "6-B-7",
+      "id": "hong_lu_base_7",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/07.png"
+    },
+    {
+      "code": "6-B-8",
+      "id": "hong_lu_base_8",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/08.png"
+    },
+    {
+      "code": "6-B-9",
+      "id": "hong_lu_base_9",
+      "type": "base",
+      "image": "assets/sinners/hong_lu/base/09.png"
+    },
+    {
+      "code": "6-C-1-1",
+      "id": "hong_lu_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/lcb/01.png"
+    },
+    {
+      "code": "6-C-1-2",
+      "id": "hong_lu_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/lcb/02.png"
+    },
+    {
+      "code": "6-C-1-3",
+      "id": "hong_lu_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/lcb/03.png"
+    },
+    {
+      "code": "6-C-2-1",
+      "id": "hong_lu_kk_boss_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kk_boss/01.png"
+    },
+    {
+      "code": "6-C-2-2",
+      "id": "hong_lu_kk_boss_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kk_boss/02.png"
+    },
+    {
+      "code": "6-C-2-3",
+      "id": "hong_lu_kk_boss_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kk_boss/03.png"
+    },
+    {
+      "code": "6-C-3-1",
+      "id": "hong_lu_rcorp_reindeer_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/rcorp_reindeer/01.png"
+    },
+    {
+      "code": "6-C-3-2",
+      "id": "hong_lu_rcorp_reindeer_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/rcorp_reindeer/02.png"
+    },
+    {
+      "code": "6-C-3-3",
+      "id": "hong_lu_rcorp_reindeer_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/rcorp_reindeer/03.png"
+    },
+    {
+      "code": "6-C-4-1",
+      "id": "hong_lu_full_stop_office_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/full_stop_office/01.png"
+    },
+    {
+      "code": "6-C-4-2",
+      "id": "hong_lu_full_stop_office_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/full_stop_office/02.png"
+    },
+    {
+      "code": "6-C-4-3",
+      "id": "hong_lu_full_stop_office_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/full_stop_office/03.png"
+    },
+    {
+      "code": "6-C-4-4",
+      "id": "hong_lu_full_stop_office_cards_4",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/full_stop_office/04.png"
+    },
+    {
+      "code": "6-C-5-1",
+      "id": "hong_lu_kcorp_excision_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kcorp_excision/01.png"
+    },
+    {
+      "code": "6-C-5-2",
+      "id": "hong_lu_kcorp_excision_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kcorp_excision/02.png"
+    },
+    {
+      "code": "6-C-5-3",
+      "id": "hong_lu_kcorp_excision_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/hong_lu/kcorp_excision/03.png"
+    },
+    {
+      "code": "6-E-1",
+      "id": "hong_lu_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/hong_lu/ego/00.png"
+    },
+    {
+      "code": "6-E-2",
+      "id": "hong_lu_snare_ego",
+      "type": "ego",
+      "image": "assets/sinners/hong_lu/ego/01.png"
+    },
+    {
+      "code": "6-EX-2-1",
+      "id": "hong_lu_snare_ego_unique_1",
+      "type": "egoUnique",
+      "image": "assets/sinners/hong_lu/ego/snare_unique_01.png"
+    },
+    {
+      "code": "6-X-3-1",
+      "id": "hong_lu_rcorp_reindeer_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/rcorp_reindeer/unique/01.png"
+    },
+    {
+      "code": "6-X-3-2",
+      "id": "hong_lu_rcorp_reindeer_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/rcorp_reindeer/unique/02.png"
+    },
+    {
+      "code": "6-X-4-1",
+      "id": "hong_lu_full_stop_office_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/full_stop_office/unique/01.png"
+    },
+    {
+      "code": "6-X-4-2",
+      "id": "hong_lu_full_stop_office_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/full_stop_office/unique/02.png"
+    },
+    {
+      "code": "6-X-5-1",
+      "id": "hong_lu_kcorp_excision_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/kcorp_excision/unique/01.png"
+    },
+    {
+      "code": "6-X-5-2",
+      "id": "hong_lu_kcorp_excision_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/hong_lu/kcorp_excision/unique/02.png"
+    },
+    {
+      "code": "7-B-1",
+      "id": "heathcliff_base_1",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/01.png"
+    },
+    {
+      "code": "7-B-2",
+      "id": "heathcliff_base_2",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/02.png"
+    },
+    {
+      "code": "7-B-3",
+      "id": "heathcliff_base_3",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/03.png"
+    },
+    {
+      "code": "7-B-4",
+      "id": "heathcliff_base_4",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/04.png"
+    },
+    {
+      "code": "7-B-5",
+      "id": "heathcliff_base_5",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/05.png"
+    },
+    {
+      "code": "7-B-6",
+      "id": "heathcliff_base_6",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/06.png"
+    },
+    {
+      "code": "7-B-7",
+      "id": "heathcliff_base_7",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/07.png"
+    },
+    {
+      "code": "7-B-8",
+      "id": "heathcliff_base_8",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/08.png"
+    },
+    {
+      "code": "7-B-9",
+      "id": "heathcliff_base_9",
+      "type": "base",
+      "image": "assets/sinners/heathcliff/base/09.png"
+    },
+    {
+      "code": "7-C-1-1",
+      "id": "heathcliff_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/lcb/01.png"
+    },
+    {
+      "code": "7-C-1-2",
+      "id": "heathcliff_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/lcb/02.png"
+    },
+    {
+      "code": "7-C-1-3",
+      "id": "heathcliff_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/lcb/03.png"
+    },
+    {
+      "code": "7-C-2-1",
+      "id": "heathcliff_fox_rain_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/fox_rain/01.png"
+    },
+    {
+      "code": "7-C-2-2",
+      "id": "heathcliff_fox_rain_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/fox_rain/02.png"
+    },
+    {
+      "code": "7-C-2-3",
+      "id": "heathcliff_fox_rain_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/fox_rain/03.png"
+    },
+    {
+      "code": "7-C-3-1",
+      "id": "heathcliff_kurokumo_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/kurokumo/01.png"
+    },
+    {
+      "code": "7-C-3-2",
+      "id": "heathcliff_kurokumo_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/kurokumo/02.png"
+    },
+    {
+      "code": "7-C-3-3",
+      "id": "heathcliff_kurokumo_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/kurokumo/03.png"
+    },
+    {
+      "code": "7-C-4-1",
+      "id": "heathcliff_shi_south_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/shi_south/01.png"
+    },
+    {
+      "code": "7-C-4-2",
+      "id": "heathcliff_shi_south_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/shi_south/02.png"
+    },
+    {
+      "code": "7-C-4-3",
+      "id": "heathcliff_shi_south_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/shi_south/03.png"
+    },
+    {
+      "code": "7-C-5-1",
+      "id": "heathcliff_full_stop_office_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/full_stop_office/01.png"
+    },
+    {
+      "code": "7-C-5-2",
+      "id": "heathcliff_full_stop_office_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/full_stop_office/02.png"
+    },
+    {
+      "code": "7-C-5-3",
+      "id": "heathcliff_full_stop_office_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/heathcliff/full_stop_office/03.png"
+    },
+    {
+      "code": "7-E-1",
+      "id": "heathcliff_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/heathcliff/ego/00.png"
+    },
+    {
+      "code": "7-E-2",
+      "id": "heathcliff_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/heathcliff/ego/01.png"
+    },
+    {
+      "code": "7-U-5-1",
+      "id": "heathcliff_full_stop_office_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/heathcliff/full_stop_office/unique/upgrade/01.png"
+    },
+    {
+      "code": "7-X-2-1",
+      "id": "heathcliff_fox_rain_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/heathcliff/fox_rain/unique/01.png"
+    },
+    {
+      "code": "7-X-2-2",
+      "id": "heathcliff_fox_rain_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/heathcliff/fox_rain/unique/02.png"
+    },
+    {
+      "code": "7-X-3-1",
+      "id": "heathcliff_kurokumo_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/heathcliff/kurokumo/unique/01.png"
+    },
+    {
+      "code": "7-X-5-1",
+      "id": "heathcliff_full_stop_office_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/heathcliff/full_stop_office/unique/01.png"
+    },
+    {
+      "code": "7-X-5-2",
+      "id": "heathcliff_full_stop_office_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/heathcliff/full_stop_office/unique/02.png"
+    },
+    {
+      "code": "8-B-1",
+      "id": "ishmael_base_1",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/01.png"
+    },
+    {
+      "code": "8-B-2",
+      "id": "ishmael_base_2",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/02.png"
+    },
+    {
+      "code": "8-B-3",
+      "id": "ishmael_base_3",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/03.png"
+    },
+    {
+      "code": "8-B-4",
+      "id": "ishmael_base_4",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/04.png"
+    },
+    {
+      "code": "8-B-5",
+      "id": "ishmael_base_5",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/05.png"
+    },
+    {
+      "code": "8-B-6",
+      "id": "ishmael_base_6",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/06.png"
+    },
+    {
+      "code": "8-B-7",
+      "id": "ishmael_base_7",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/07.png"
+    },
+    {
+      "code": "8-B-8",
+      "id": "ishmael_base_8",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/08.png"
+    },
+    {
+      "code": "8-B-9",
+      "id": "ishmael_base_9",
+      "type": "base",
+      "image": "assets/sinners/ishmael/base/09.png"
+    },
+    {
+      "code": "8-C-1-1",
+      "id": "ishmael_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/lcb/01.png"
+    },
+    {
+      "code": "8-C-1-2",
+      "id": "ishmael_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/lcb/02.png"
+    },
+    {
+      "code": "8-C-1-3",
+      "id": "ishmael_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/lcb/03.png"
+    },
+    {
+      "code": "8-C-2-1",
+      "id": "ishmael_kurokumo_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/kurokumo/01.png"
+    },
+    {
+      "code": "8-C-2-2",
+      "id": "ishmael_kurokumo_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/kurokumo/02.png"
+    },
+    {
+      "code": "8-C-2-3",
+      "id": "ishmael_kurokumo_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/kurokumo/03.png"
+    },
+    {
+      "code": "8-C-3-1",
+      "id": "ishmael_edgar_butler_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/edgar_butler/01.png"
+    },
+    {
+      "code": "8-C-3-2",
+      "id": "ishmael_edgar_butler_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/edgar_butler/02.png"
+    },
+    {
+      "code": "8-C-3-3",
+      "id": "ishmael_edgar_butler_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/edgar_butler/03.png"
+    },
+    {
+      "code": "8-C-4-1",
+      "id": "ishmael_office_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/office/01.png"
+    },
+    {
+      "code": "8-C-4-2",
+      "id": "ishmael_office_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/office/02.png"
+    },
+    {
+      "code": "8-C-4-3",
+      "id": "ishmael_office_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/office/03.png"
+    },
+    {
+      "code": "8-C-4-4",
+      "id": "ishmael_office_cards_4",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/office/04.png"
+    },
+    {
+      "code": "8-C-5-1",
+      "id": "ishmael_zwei_west_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/zwei_west/01.png"
+    },
+    {
+      "code": "8-C-5-2",
+      "id": "ishmael_zwei_west_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/zwei_west/02.png"
+    },
+    {
+      "code": "8-C-5-3",
+      "id": "ishmael_zwei_west_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/ishmael/zwei_west/03.png"
+    },
+    {
+      "code": "8-E-1",
+      "id": "ishmael_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/ishmael/ego/00.png"
+    },
+    {
+      "code": "8-E-2",
+      "id": "ishmael_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/ishmael/ego/01.png"
+    },
+    {
+      "code": "8-X-2-1",
+      "id": "ishmael_kurokumo_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ishmael/kurokumo/unique/01.png"
+    },
+    {
+      "code": "8-X-4-1",
+      "id": "ishmael_office_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ishmael/office/unique/01.png"
+    },
+    {
+      "code": "8-X-5-1",
+      "id": "ishmael_zwei_west_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/ishmael/zwei_west/unique/01.png"
+    },
+    {
+      "code": "9-B-1",
+      "id": "rodion_base_1",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/01.png"
+    },
+    {
+      "code": "9-B-2",
+      "id": "rodion_base_2",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/02.png"
+    },
+    {
+      "code": "9-B-3",
+      "id": "rodion_base_3",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/03.png"
+    },
+    {
+      "code": "9-B-4",
+      "id": "rodion_base_4",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/04.png"
+    },
+    {
+      "code": "9-B-5",
+      "id": "rodion_base_5",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/05.png"
+    },
+    {
+      "code": "9-B-6",
+      "id": "rodion_base_6",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/06.png"
+    },
+    {
+      "code": "9-B-7",
+      "id": "rodion_base_7",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/07.png"
+    },
+    {
+      "code": "9-B-8",
+      "id": "rodion_base_8",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/08.png"
+    },
+    {
+      "code": "9-B-9",
+      "id": "rodion_base_9",
+      "type": "base",
+      "image": "assets/sinners/rodion/base/09.png"
+    },
+    {
+      "code": "9-C-1-1",
+      "id": "rodion_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lcb/01.png"
+    },
+    {
+      "code": "9-C-1-2",
+      "id": "rodion_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lcb/02.png"
+    },
+    {
+      "code": "9-C-1-3",
+      "id": "rodion_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lcb/03.png"
+    },
+    {
+      "code": "9-C-2-1",
+      "id": "rodion_lamancha_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lamancha/01.png"
+    },
+    {
+      "code": "9-C-2-2",
+      "id": "rodion_lamancha_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lamancha/02.png"
+    },
+    {
+      "code": "9-C-2-3",
+      "id": "rodion_lamancha_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lamancha/03.png"
+    },
+    {
+      "code": "9-C-3-1",
+      "id": "rodion_lobotomy_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/01.png"
+    },
+    {
+      "code": "9-C-3-2",
+      "id": "rodion_lobotomy_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/02.png"
+    },
+    {
+      "code": "9-C-3-3",
+      "id": "rodion_lobotomy_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/03.png"
+    },
+    {
+      "code": "9-C-3-4",
+      "id": "rodion_lobotomy_cards_4",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/04.png"
+    },
+    {
+      "code": "9-C-3-5",
+      "id": "rodion_lobotomy_cards_5",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/05.png"
+    },
+    {
+      "code": "9-C-3-6",
+      "id": "rodion_lobotomy_cards_6",
+      "type": "identity",
+      "image": "assets/sinners/rodion/lobotomy/06.png"
+    },
+    {
+      "code": "9-C-4-1",
+      "id": "rodion_liu_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/rodion/liu/01.png"
+    },
+    {
+      "code": "9-C-4-2",
+      "id": "rodion_liu_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/rodion/liu/02.png"
+    },
+    {
+      "code": "9-C-4-3",
+      "id": "rodion_liu_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/rodion/liu/03.png"
+    },
+    {
+      "code": "9-C-5-1",
+      "id": "rodion_devyat_north_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/rodion/devyat_north/01.png"
+    },
+    {
+      "code": "9-C-5-2",
+      "id": "rodion_devyat_north_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/rodion/devyat_north/02.png"
+    },
+    {
+      "code": "9-C-5-3",
+      "id": "rodion_devyat_north_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/rodion/devyat_north/03.png"
+    },
+    {
+      "code": "9-E-1",
+      "id": "rodion_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/rodion/ego/00.png"
+    },
+    {
+      "code": "9-E-2",
+      "id": "rodion_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/rodion/ego/01.png"
+    },
+    {
+      "code": "9-U-2-1",
+      "id": "rodion_lamancha_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/rodion/lamancha/unique/upgrade/01.png"
+    },
+    {
+      "code": "9-X-2-1",
+      "id": "rodion_lamancha_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/lamancha/unique/01.png"
+    },
+    {
+      "code": "9-X-2-2",
+      "id": "rodion_lamancha_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/lamancha/unique/02.png"
+    },
+    {
+      "code": "9-X-3-1",
+      "id": "rodion_lobotomy_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/lobotomy/unique/01.png"
+    },
+    {
+      "code": "9-X-3-2",
+      "id": "rodion_lobotomy_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/lobotomy/unique/02.png"
+    },
+    {
+      "code": "9-X-5-1",
+      "id": "rodion_devyat_north_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/devyat_north/unique/01.png"
+    },
+    {
+      "code": "9-X-5-2",
+      "id": "rodion_devyat_north_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/devyat_north/unique/02.png"
+    },
+    {
+      "code": "9-X-5-3",
+      "id": "rodion_devyat_north_unique_3",
+      "type": "identityUnique",
+      "image": "assets/sinners/rodion/devyat_north/unique/03.png"
+    },
+    {
+      "code": "10-B-1",
+      "id": "sinclair_base_1",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/01.png"
+    },
+    {
+      "code": "10-B-2",
+      "id": "sinclair_base_2",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/02.png"
+    },
+    {
+      "code": "10-B-3",
+      "id": "sinclair_base_3",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/03.png"
+    },
+    {
+      "code": "10-B-4",
+      "id": "sinclair_base_4",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/04.png"
+    },
+    {
+      "code": "10-B-5",
+      "id": "sinclair_base_5",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/05.png"
+    },
+    {
+      "code": "10-B-6",
+      "id": "sinclair_base_6",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/06.png"
+    },
+    {
+      "code": "10-B-7",
+      "id": "sinclair_base_7",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/07.png"
+    },
+    {
+      "code": "10-B-8",
+      "id": "sinclair_base_8",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/08.png"
+    },
+    {
+      "code": "10-B-9",
+      "id": "sinclair_base_9",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/09.png"
+    },
+    {
+      "code": "10-B-10",
+      "id": "sinclair_base_10",
+      "type": "base",
+      "image": "assets/sinners/sinclair/base/10.png"
+    },
+    {
+      "code": "10-C-1-1",
+      "id": "sinclair_grip_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/grip/01.png"
+    },
+    {
+      "code": "10-C-1-2",
+      "id": "sinclair_grip_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/grip/02.png"
+    },
+    {
+      "code": "10-C-1-3",
+      "id": "sinclair_grip_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/grip/03.png"
+    },
+    {
+      "code": "10-C-2-1",
+      "id": "sinclair_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/lcb/01.png"
+    },
+    {
+      "code": "10-C-2-2",
+      "id": "sinclair_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/lcb/02.png"
+    },
+    {
+      "code": "10-C-2-3",
+      "id": "sinclair_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/lcb/03.png"
+    },
+    {
+      "code": "10-C-3-1",
+      "id": "sinclair_mariachi_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/mariachi/01.png"
+    },
+    {
+      "code": "10-C-3-2",
+      "id": "sinclair_mariachi_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/mariachi/02.png"
+    },
+    {
+      "code": "10-C-3-3",
+      "id": "sinclair_mariachi_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/mariachi/03.png"
+    },
+    {
+      "code": "10-C-4-1",
+      "id": "sinclair_middle_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/middle/01.png"
+    },
+    {
+      "code": "10-C-4-2",
+      "id": "sinclair_middle_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/middle/02.png"
+    },
+    {
+      "code": "10-C-4-3",
+      "id": "sinclair_middle_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/middle/03.png"
+    },
+    {
+      "code": "10-C-5-1",
+      "id": "sinclair_southern_shank_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/southern_shank/01.png"
+    },
+    {
+      "code": "10-C-5-2",
+      "id": "sinclair_southern_shank_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/southern_shank/02.png"
+    },
+    {
+      "code": "10-C-5-3",
+      "id": "sinclair_southern_shank_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/southern_shank/03.png"
+    },
+    {
+      "code": "10-C-6-1",
+      "id": "sinclair_dawn_office_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/dawn_office/01.png"
+    },
+    {
+      "code": "10-C-6-2",
+      "id": "sinclair_dawn_office_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/dawn_office/02.png"
+    },
+    {
+      "code": "10-C-6-3",
+      "id": "sinclair_dawn_office_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/sinclair/dawn_office/03.png"
+    },
+    {
+      "code": "10-E-1",
+      "id": "sinclair_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/sinclair/ego/00.png"
+    },
+    {
+      "code": "10-E-2",
+      "id": "sinclair_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/sinclair/ego/01.png"
+    },
+    {
+      "code": "10-U-6-1",
+      "id": "sinclair_dawn_office_upgrade_1",
+      "type": "identityUpgrade",
+      "image": "assets/sinners/sinclair/dawn_office/unique/upgrade/01.png"
+    },
+    {
+      "code": "10-X-1-1",
+      "id": "sinclair_grip_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/grip/unique/01.png"
+    },
+    {
+      "code": "10-X-3-1",
+      "id": "sinclair_mariachi_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/mariachi/unique/01.png"
+    },
+    {
+      "code": "10-X-4-1",
+      "id": "sinclair_middle_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/middle/unique/01.png"
+    },
+    {
+      "code": "10-X-4-2",
+      "id": "sinclair_middle_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/middle/unique/02.png"
+    },
+    {
+      "code": "10-X-5-1",
+      "id": "sinclair_southern_shank_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/southern_shank/unique/01.png"
+    },
+    {
+      "code": "10-X-6-1",
+      "id": "sinclair_dawn_office_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/sinclair/dawn_office/unique/01.png"
+    },
+    {
+      "code": "11-B-1",
+      "id": "outis_base_1",
+      "type": "base",
+      "image": "assets/sinners/outis/base/01.png"
+    },
+    {
+      "code": "11-B-2",
+      "id": "outis_base_2",
+      "type": "base",
+      "image": "assets/sinners/outis/base/02.png"
+    },
+    {
+      "code": "11-B-3",
+      "id": "outis_base_3",
+      "type": "base",
+      "image": "assets/sinners/outis/base/03.png"
+    },
+    {
+      "code": "11-B-4",
+      "id": "outis_base_4",
+      "type": "base",
+      "image": "assets/sinners/outis/base/04.png"
+    },
+    {
+      "code": "11-B-5",
+      "id": "outis_base_5",
+      "type": "base",
+      "image": "assets/sinners/outis/base/05.png"
+    },
+    {
+      "code": "11-B-6",
+      "id": "outis_base_6",
+      "type": "base",
+      "image": "assets/sinners/outis/base/06.png"
+    },
+    {
+      "code": "11-B-7",
+      "id": "outis_base_7",
+      "type": "base",
+      "image": "assets/sinners/outis/base/07.png"
+    },
+    {
+      "code": "11-B-8",
+      "id": "outis_base_8",
+      "type": "base",
+      "image": "assets/sinners/outis/base/08.png"
+    },
+    {
+      "code": "11-B-9",
+      "id": "outis_base_9",
+      "type": "base",
+      "image": "assets/sinners/outis/base/09.png"
+    },
+    {
+      "code": "11-BX-1",
+      "id": "outis_base_unique_1",
+      "type": "baseUnique",
+      "image": "assets/sinners/outis/base/unique/흑심.png"
+    },
+    {
+      "code": "11-C-1-1",
+      "id": "outis_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/outis/lcb/01.png"
+    },
+    {
+      "code": "11-C-1-2",
+      "id": "outis_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/outis/lcb/02.png"
+    },
+    {
+      "code": "11-C-1-3",
+      "id": "outis_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/outis/lcb/03.png"
+    },
+    {
+      "code": "11-C-2-1",
+      "id": "outis_wuthering_butler_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/outis/wuthering_butler/01.png"
+    },
+    {
+      "code": "11-C-2-2",
+      "id": "outis_wuthering_butler_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/outis/wuthering_butler/02.png"
+    },
+    {
+      "code": "11-C-2-3",
+      "id": "outis_wuthering_butler_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/outis/wuthering_butler/03.png"
+    },
+    {
+      "code": "11-C-3-1",
+      "id": "outis_blade_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/outis/blade/01.png"
+    },
+    {
+      "code": "11-C-3-2",
+      "id": "outis_blade_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/outis/blade/02.png"
+    },
+    {
+      "code": "11-C-3-3",
+      "id": "outis_blade_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/outis/blade/03.png"
+    },
+    {
+      "code": "11-C-4-1",
+      "id": "outis_molars_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/outis/molars/01.png"
+    },
+    {
+      "code": "11-C-4-2",
+      "id": "outis_molars_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/outis/molars/02.png"
+    },
+    {
+      "code": "11-C-4-3",
+      "id": "outis_molars_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/outis/molars/03.png"
+    },
+    {
+      "code": "11-C-5-1",
+      "id": "outis_magic_bullet_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/outis/magic_bullet/01.png"
+    },
+    {
+      "code": "11-C-5-2",
+      "id": "outis_magic_bullet_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/outis/magic_bullet/02.png"
+    },
+    {
+      "code": "11-C-5-3",
+      "id": "outis_magic_bullet_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/outis/magic_bullet/03.png"
+    },
+    {
+      "code": "11-E-1",
+      "id": "outis_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/outis/ego/00.png"
+    },
+    {
+      "code": "11-E-2",
+      "id": "outis_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/outis/ego/01.png"
+    },
+    {
+      "code": "11-X-2-1",
+      "id": "outis_wuthering_butler_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/outis/wuthering_butler/unique/01.png"
+    },
+    {
+      "code": "11-X-5-1",
+      "id": "outis_magic_bullet_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/outis/magic_bullet/unique/01.png"
+    },
+    {
+      "code": "12-B-1",
+      "id": "gregor_base_1",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/01.png"
+    },
+    {
+      "code": "12-B-2",
+      "id": "gregor_base_2",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/02.png"
+    },
+    {
+      "code": "12-B-3",
+      "id": "gregor_base_3",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/03.png"
+    },
+    {
+      "code": "12-B-4",
+      "id": "gregor_base_4",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/04.png"
+    },
+    {
+      "code": "12-B-5",
+      "id": "gregor_base_5",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/05.png"
+    },
+    {
+      "code": "12-B-6",
+      "id": "gregor_base_6",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/06.png"
+    },
+    {
+      "code": "12-B-7",
+      "id": "gregor_base_7",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/07.png"
+    },
+    {
+      "code": "12-B-8",
+      "id": "gregor_base_8",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/08.png"
+    },
+    {
+      "code": "12-B-9",
+      "id": "gregor_base_9",
+      "type": "base",
+      "image": "assets/sinners/gregor/base/09.png"
+    },
+    {
+      "code": "12-C-1-1",
+      "id": "gregor_lcb_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lcb/01.png"
+    },
+    {
+      "code": "12-C-1-2",
+      "id": "gregor_lcb_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lcb/02.png"
+    },
+    {
+      "code": "12-C-1-3",
+      "id": "gregor_lcb_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lcb/03.png"
+    },
+    {
+      "code": "12-C-2-1",
+      "id": "gregor_zwei_south_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/gregor/zwei_south/01.png"
+    },
+    {
+      "code": "12-C-2-2",
+      "id": "gregor_zwei_south_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/gregor/zwei_south/02.png"
+    },
+    {
+      "code": "12-C-2-3",
+      "id": "gregor_zwei_south_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/gregor/zwei_south/03.png"
+    },
+    {
+      "code": "12-C-3-1",
+      "id": "gregor_survivor_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/gregor/survivor/01.png"
+    },
+    {
+      "code": "12-C-3-2",
+      "id": "gregor_survivor_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/gregor/survivor/02.png"
+    },
+    {
+      "code": "12-C-3-3",
+      "id": "gregor_survivor_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/gregor/survivor/03.png"
+    },
+    {
+      "code": "12-C-4-1",
+      "id": "gregor_tides_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/gregor/tides/01.png"
+    },
+    {
+      "code": "12-C-4-2",
+      "id": "gregor_tides_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/gregor/tides/02.png"
+    },
+    {
+      "code": "12-C-4-3",
+      "id": "gregor_tides_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/gregor/tides/03.png"
+    },
+    {
+      "code": "12-C-5-1",
+      "id": "gregor_lamp_cards_1",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lamp/01.png"
+    },
+    {
+      "code": "12-C-5-2",
+      "id": "gregor_lamp_cards_2",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lamp/02.png"
+    },
+    {
+      "code": "12-C-5-3",
+      "id": "gregor_lamp_cards_3",
+      "type": "identity",
+      "image": "assets/sinners/gregor/lamp/03.png"
+    },
+    {
+      "code": "12-E-1",
+      "id": "gregor_base_ego",
+      "type": "ego",
+      "image": "assets/sinners/gregor/ego/00.png"
+    },
+    {
+      "code": "12-E-2",
+      "id": "gregor_e01_ego",
+      "type": "ego",
+      "image": "assets/sinners/gregor/ego/01.png"
+    },
+    {
+      "code": "12-X-2-1",
+      "id": "gregor_zwei_south_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/zwei_south/unique/01.png"
+    },
+    {
+      "code": "12-X-2-2",
+      "id": "gregor_zwei_south_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/zwei_south/unique/02.png"
+    },
+    {
+      "code": "12-X-3-1",
+      "id": "gregor_survivor_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/survivor/unique/01.png"
+    },
+    {
+      "code": "12-X-3-2",
+      "id": "gregor_survivor_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/survivor/unique/02.png"
+    },
+    {
+      "code": "12-X-4-1",
+      "id": "gregor_tides_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/tides/unique/01.png"
+    },
+    {
+      "code": "12-X-5-1",
+      "id": "gregor_lamp_unique_1",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/lamp/unique/01.png"
+    },
+    {
+      "code": "12-X-5-2",
+      "id": "gregor_lamp_unique_2",
+      "type": "identityUnique",
+      "image": "assets/sinners/gregor/lamp/unique/02.png"
+    }
+  ]
+}
