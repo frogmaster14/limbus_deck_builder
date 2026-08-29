@@ -3530,7 +3530,7 @@ function compactTtsCardCounts(cardIds) {
   });
 
   return [...counts.entries()]
-    .map(([stableCode, count]) => count > 1 ? `${stableCode}*${count}` : stableCode)
+    .map(([stableCode, count]) => count > 1 ? `${stableCode}x${count}` : stableCode)
     .join(",");
 }
 

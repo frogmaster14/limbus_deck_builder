@@ -1,4 +1,4 @@
-deckCode = "LTTS1|F:1-I-1|B:6-I-1|M:1-B-1*2,2-B-1*2,3-B-1*2,4-B-1*2,5-B-1*2,6-B-1*2,1-C-1-1*2,2-C-1-1*2,3-C-1-1*2,6-C-1-1*2|E:1-E-1"
+deckCode = "LTTS1|F:1-I-1|B:6-I-1|M:1-B-1x2,2-B-1x2,3-B-1x2,4-B-1x2,5-B-1x2,6-B-1x2,1-C-1-1x2,2-C-1-1x2,3-C-1-1x2,6-C-1-1x2|E:1-E-1"
 sourceZoneGuid = "90ab8e"
 
 sourceIndex = {}
@@ -290,7 +290,13 @@ function expandCodes(text)
   local result = {}
   for _, token in ipairs(splitText(text, ",")) do
     local clean = trim(token)
-    local rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    local rawCode, rawCount = clean:match("^(.+)[xX](%d+)$")
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^~]+)~(%d+)$")
+    end
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    end
     local code = normalize(rawCode or clean)
     local count = tonumber(rawCount or "1") or 1
     if code ~= "" and code ~= "LTTS1" then

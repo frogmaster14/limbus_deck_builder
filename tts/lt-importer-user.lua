@@ -18,7 +18,6 @@ relativeLayout = {
   sharedExtraOffset = {3.0, 0.0, 12.3},
   mainOffset = {3.0, 0.0, 5.4},
   extraOffset = {3.0, 0.0, 12.3},
-  singleCardOffset = {3.0, 0.0, 5.4},
   noCodeOffset = {3.0, 0.0, -5.0},
   dupCodeOffset = {3.0, 0.0, -11.9},
   cardStepX = 2.45,
@@ -36,13 +35,12 @@ function onLoad()
     self.clearInputs()
   end
 
-  makeButton("덱 불러오기", "buttonImport", 1.0)
-  makeButton("카드찾기", "buttonCard", -1.0)
+  makeButton("덱 불러오기", "buttonImport", 0, 1950)
   makeDeckInput()
   print("LT importer user loaded.")
 end
 
-function makeButton(label, clickFunction, x)
+function makeButton(label, clickFunction, x, width)
   if self == nil or type(self.createButton) ~= "function" then
     print("Button unavailable.")
     return
@@ -54,7 +52,7 @@ function makeButton(label, clickFunction, x)
     function_owner = self,
     position = {x, 1.4, 2.0},
     rotation = {0, 180, 0},
-    width = 950,
+    width = width or 950,
     height = 300,
     font_size = 125
   })
@@ -98,32 +96,6 @@ end
 
 function buttonImport()
   importDeck(readDeckCode(), relativeLayout)
-end
-
-function buttonCard()
-  spawnSingleCard(readDescription(self), relativeLayout)
-end
-
-function spawnSingleCard(codeText, layout)
-  local code = normalize(codeText)
-  if code == "" then
-    print("Enter a card code.")
-    return
-  end
-
-  rebuildIndex()
-  if sourceIndex[code] == nil then
-    print("Missing source card: " .. code)
-    return
-  end
-
-  layout = layout or relativeLayout
-  local base = getOriginPosition()
-  local yaw = getOriginYaw()
-  local position = offsetPosition(base, layout.singleCardOffset, yaw)
-  cloneOne(code, position, getCardYaw(yaw), function()
-    print("LT single card complete: " .. code)
-  end)
 end
 
 function readDeckCode()
@@ -775,8 +747,14 @@ function expandCodes(text)
   local result = {}
 
   for _, token in ipairs(splitText(text, ",")) do
-    local clean = normalize(token)
-    local rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    local clean = trim(token)
+    local rawCode, rawCount = clean:match("^(.+)[xX](%d+)$")
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^~]+)~(%d+)$")
+    end
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    end
     local code = normalize(rawCode or clean)
     local count = tonumber(rawCount or "1") or 1
 

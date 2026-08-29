@@ -18,7 +18,6 @@ relativeLayout = {
   sharedExtraOffset = {3.0, 0.0, 12.3},
   mainOffset = {3.0, 0.0, 5.4},
   extraOffset = {3.0, 0.0, 12.3},
-  singleCardOffset = {3.0, 0.0, 5.4},
   noCodeOffset = {3.0, 0.0, -5.0},
   dupCodeOffset = {3.0, 0.0, -11.9},
   cardStepX = 2.45,
@@ -45,20 +44,9 @@ function onLoad()
     label = "덱 불러오기",
     click_function = "buttonImport",
     function_owner = self,
-    position = {1.0, 1.4, 2.55},
+    position = {0, 1.4, 2.55},
     rotation = {0, 180, 0},
-    width = 850,
-    height = 300,
-    font_size = 100
-  })
-
-  self.createButton({
-    label = "카드찾기",
-    click_function = "buttonCard",
-    function_owner = self,
-    position = {-1.0, 1.4, 2.55},
-    rotation = {0, 180, 0},
-    width = 850,
+    width = 1950,
     height = 300,
     font_size = 100
   })
@@ -106,7 +94,7 @@ function onLoad()
   end)
 
   if inputOk then
-    print("LT developer UI loaded: IMPORT / CARD / NO CODE / DUP CODE + DECK CODE")
+    print("LT developer UI loaded: IMPORT / NO CODE / DUP CODE + DECK CODE")
   else
     print("LT DECK CODE input error: " .. tostring(inputError))
   end
@@ -130,32 +118,6 @@ end
 
 function buttonImport()
   importDeck(readDeckCode(), relativeLayout)
-end
-
-function buttonCard()
-  spawnSingleCard(readDescription(self), relativeLayout)
-end
-
-function spawnSingleCard(codeText, layout)
-  local code = normalize(codeText)
-  if code == "" then
-    print("Enter a card code.")
-    return
-  end
-
-  rebuildIndex()
-  if sourceIndex[code] == nil then
-    print("Missing source card: " .. code)
-    return
-  end
-
-  layout = layout or relativeLayout
-  local base = getOriginPosition()
-  local yaw = getOriginYaw()
-  local position = offsetPosition(base, layout.singleCardOffset, yaw)
-  cloneOne(code, position, getCardYaw(yaw), function()
-    print("LT single card complete: " .. code)
-  end)
 end
 
 function readDeckCode()
@@ -807,8 +769,14 @@ function expandCodes(text)
   local result = {}
 
   for _, token in ipairs(splitText(text, ",")) do
-    local clean = normalize(token)
-    local rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    local clean = trim(token)
+    local rawCode, rawCount = clean:match("^(.+)[xX](%d+)$")
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^~]+)~(%d+)$")
+    end
+    if rawCode == nil then
+      rawCode, rawCount = clean:match("^([^%*]+)%*(%d+)$")
+    end
     local code = normalize(rawCode or clean)
     local count = tonumber(rawCount or "1") or 1
 
