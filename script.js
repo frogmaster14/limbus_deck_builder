@@ -3467,20 +3467,10 @@ function buildTtsDeckCode(payload) {
 }
 
 function buildTtsAccessoryCodes(payload) {
-  const accessoryCardIds = [];
-
-  [payload.identities.front, payload.identities.back].forEach((identityId) => {
-    (LIMBUS_DATA.uniqueCardsByIdentityId?.[identityId] || []).forEach((card) => {
-      accessoryCardIds.push(card.id);
-    });
-  });
-
-  if (payload.ego) {
-    (LIMBUS_DATA.egoUniqueCardsByEgoId?.[payload.ego] || []).forEach((card) => {
-      accessoryCardIds.push(card.id);
-    });
-  }
-
+  const accessoryCardIds = getAutomaticAccessoryCardIds(
+    [payload.identities.front, payload.identities.back],
+    payload.ego
+  );
   const keywordCodes = collectTtsKeywordCodes(payload);
   const referencedExtraCodes = getReferencedExtraCardsForSnapshot(getSavedDeckSnapshot(payload))
     .map(getRequiredTtsAccessoryCode);
@@ -3488,6 +3478,38 @@ function buildTtsAccessoryCodes(payload) {
     .map((cardId) => getRequiredStableCode(cardId, "accessory card"));
 
   return uniqueValues([...accessoryCodes, ...keywordCodes, ...referencedExtraCodes]).sort(compareStableCodes);
+}
+
+function getAutomaticAccessoryCardIds(identityIds, egoId) {
+  const accessoryCardIds = [];
+  const selectedSinnerIds = new Set();
+
+  identityIds.filter(Boolean).forEach((identityId) => {
+    const identity = LIMBUS_DATA.identityById?.[identityId];
+    if (!identity) return;
+
+    selectedSinnerIds.add(identity.sinnerId);
+    for (let number = 1; number <= getSinnerBaseUniqueCount(identity.sinnerId); number += 1) {
+      accessoryCardIds.push(`${identity.sinnerId}_base_unique_${number}`);
+    }
+    (identity.uniqueCards || []).forEach((card) => {
+      accessoryCardIds.push(card.id);
+    });
+  });
+
+  if (egoId) {
+    selectedSinnerIds.forEach((sinnerId) => {
+      getEgoKeysForSinner(sinnerId).forEach((egoKey) => {
+        if (`${sinnerId}_${egoKey}_ego` !== egoId) return;
+
+        for (let number = 1; number <= getEgoUniqueCountForSinner(sinnerId, egoKey); number += 1) {
+          accessoryCardIds.push(`${egoId}_unique_${number}`);
+        }
+      });
+    });
+  }
+
+  return uniqueValues(accessoryCardIds);
 }
 
 function getRequiredTtsAccessoryCode(card) {
@@ -4552,7 +4574,7 @@ function openDeckOverview(deck) {
 
   const normalizedDeck = normalizeDeckPayload(deck);
   const snapshot = getSavedDeckSnapshot(normalizedDeck);
-  const extraCards = getReferencedExtraCardsForSnapshot(snapshot);
+  const extraCards = getDeckOverviewExtraCards(snapshot);
 
   if (deckOverviewTitle) {
     const name = normalizedDeck.name?.trim();
@@ -4562,6 +4584,23 @@ function openDeckOverview(deck) {
   deckOverviewContent.innerHTML = renderDeckOverview(snapshot, extraCards);
   deckOverviewOverlay.hidden = false;
   document.body.classList.add("is-deck-overview-open");
+}
+
+function getDeckOverviewExtraCards(snapshot) {
+  const automaticCards = getAutomaticAccessoryCardIds(
+    [snapshot.front?.id, snapshot.back?.id],
+    snapshot.selectedEgo?.id
+  ).map((cardId) => getCodexItemById(cardId));
+  const referencedCards = getReferencedExtraCardsForSnapshot(snapshot);
+  const cardsById = new Map();
+
+  [...automaticCards, ...referencedCards].forEach((card) => {
+    if (!card?.id || card.category === "keyword") return;
+    cardsById.set(card.id, card);
+  });
+
+  return [...cardsById.values()]
+    .sort((left, right) => compareStableCodes(left.code || left.id, right.code || right.id));
 }
 
 function closeDeckOverview() {

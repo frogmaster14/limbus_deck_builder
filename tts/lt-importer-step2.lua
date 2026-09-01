@@ -769,7 +769,7 @@ function expandCodes(text)
   local result = {}
 
   for _, token in ipairs(splitText(text, ",")) do
-    local clean = trim(token)
+    local clean = normalize(token)
     local rawCode, rawCount = clean:match("^(.+)[xX](%d+)$")
     if rawCode == nil then
       rawCode, rawCount = clean:match("^([^~]+)~(%d+)$")
